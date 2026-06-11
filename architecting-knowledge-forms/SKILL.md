@@ -150,6 +150,10 @@ Each sub-agent writes to its OWN temp directory — no collisions. The orchestra
 6. DISPATCH 1 sub-agent with the resolved prompt
 ```
 
+The sub-agent reads all blocks, normalizes entities (with old→new ID mapping), then extracts relations from entity co-occurrence patterns (≥3 shared blocks). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
+
+**Relation quality gate:** Stage 2 output MUST have ≥50% of entities with at least one relation. If not, the Between-Stages check flags it and the orchestrator asks whether to re-extract or proceed with sparse relations.
+
 The sub-agent reads `pipeline-output/blocks/` (the orchestrator tells it the files are there, with the block count inlined in the prompt). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
 
 ### Step 3: Stage 3 — Wiki Compilation (prioritized, parallel)
@@ -203,6 +207,7 @@ After each stage completes, before dispatching the next stage:
 2. **Sample.** Pick 3 output files at random. Check required fields are present and non-empty.
 3. **Stage-specific checks:**
    - Stage 1: Verify entity IDs use descriptive names (reject hash-based UUIDs like `ent_ea6cc483bf7d` — stop and require re-extraction).
+   - Stage 2: Verify ≥50% of entities have at least one relation. If <50%, flag as sparse graph — ask user whether to re-extract relations or proceed.
    - Stage 3: Verify wiki frontmatter has all required fields (`entity_id`, `title`, `compilation.version`, `compilation.status`). Check filenames match frontmatter `entity_id`.
 4. **Confidence scan.** If >20% of outputs have `quality.confidence < 0.5`, pause and ask the user whether to continue or fix the low-confidence outputs first.
 5. **If checks pass** → dispatch next stage.

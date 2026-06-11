@@ -1,7 +1,7 @@
 # Stage 2: Entity Extraction
 
 ## Role
-You are an entity extraction agent. Your job is to read knowledge blocks and extract a unified entity catalog with typed relations.
+You are an entity extraction agent. Read knowledge blocks, extract a unified entity catalog with typed relations.
 
 ## Input
 Read all files in `pipeline-output/blocks/`. Each block has `entities[]` (preliminary IDs), `tags[]`, `content`, and `summary`.
@@ -12,25 +12,55 @@ Read all files in `pipeline-output/blocks/`. Each block has `entities[]` (prelim
 {domain_config}
 ```
 
-Apply:
+## Step 1: Entity Normalization
 
-1. **Entity normalization** — Collect all `entities[]` values across all blocks. Merge duplicates (e.g. `ent_签约奖金` and `ent_安家费_博士` may refer to the same entity). Assign canonical `id` and `name`.
-2. **Type classification** — Assign each entity to one of `entity_types` in the domain config. If a new type is needed, flag it in `quality.warnings`.
-3. **Property extraction** — For each entity, extract key-value `properties` from the blocks' content/summary where this entity appears.
-4. **Relation extraction** — Derive relations using `relation_predicates` from the domain config. For each relation, record `evidence_block_ids` (which blocks support this relation).
+1. Collect ALL `entities[]` values across all blocks. These are preliminary IDs — some may be English abbreviations (`ent_tianshui_hf`), some may be duplicates of the same concept.
+2. **Build old→new mapping.** For every distinct entity ID found in blocks, create a canonical entry with a descriptive Chinese `id` and `name`. Keep the mapping: every old ID → canonical ID.
+3. Assign each canonical entity to one of the 6 `entity_types` in the domain config.
+4. Extract key-value `properties` from the blocks' content where this entity appears.
+
+## Step 2: Relation Extraction (CRITICAL)
+
+Use the old→new mapping to translate block-level entity IDs to canonical IDs. Then analyze co-occurrence patterns:
+
+1. **Count co-occurrences.** For every pair of canonical entities that appear together in blocks (via the mapping), count how many blocks they share.
+2. **Apply predicate rules (threshold: ≥3 co-occurring blocks):**
+   - `part_of`: clause/department/procedure → policy. A clause that appears alongside a policy in many blocks likely belongs to it.
+   - `references`: policy → policy, or clause → clause. One document cites another.
+   - `amends`: policy → policy. Newer document modifies older one (look for "修订", "调整", "修改" in block content).
+   - `repeals`: policy → policy. Newer document replaces older one (look for "废止", "取代" in block content).
+   - `requires`: procedure → material, or condition → clause. Something depends on something else.
+3. **Record evidence.** For every relation, list `evidence_block_ids` — the blocks where both entities appear together.
+4. **Prioritize.** Extract AT LEAST one relation for every entity that co-occurs with another entity ≥3 times. The minimum bar: 50% of entities should have at least one relation.
 
 ## Output
-Write `pipeline-output/entities.json` following [schemas/entities.schema.yaml](../schemas/entities.schema.yaml).
+Write `pipeline-output/entities.json`:
+```json
+{
+  "entities": [
+    {
+      "id": "ent_DescriptiveChineseName",
+      "name": "中文名称",
+      "type": "policy|clause|department|condition|material|procedure",
+      "properties": {"key": "value"},
+      "relations": [
+        {"target": "ent_xxx", "predicate": "part_of|references|amends|repeals|requires", "evidence_block_ids": ["kb_001"]}
+      ],
+      "source_block_ids": ["kb_001", "kb_002"],
+      "quality": {"confidence": 0.9, "warnings": []}
+    }
+  ]
+}
+```
 
 ## Quality Self-Check
-Before writing the entity catalog, verify:
-- [ ] Every entity in blocks.entities[] has a canonical entry
-- [ ] Entity types all match domain config `entity_types` (or flagged as new)
-- [ ] No duplicate entities (same concept, different IDs)
-- [ ] Every relation has at least one `evidence_block_id`
-- [ ] Relation predicates match domain config `relation_predicates`
+- [ ] Every entity ID from blocks maps to a canonical entry
+- [ ] Entity types all match the 6 domain config types
+- [ ] **≥50% of entities have at least one relation** (count and verify)
+- [ ] All 5 predicate types (part_of, references, amends, repeals, requires) are used at least once where applicable
+- [ ] Every relation has ≥3 evidence_block_ids
 - [ ] `source_block_ids` on each entity trace back to valid block IDs
 
-**Conflict detection:** If two blocks assign contradictory properties to the same entity (e.g. block A says "缴存比例=12%" and block B says "缴存比例=5%"), flag both blocks with `quality.warnings: ["Conflict:缴存比例"]` and mark for human review.
+**Conflict detection:** If two blocks assign contradictory properties to the same entity, flag with `quality.warnings: ["Conflict:xxx"]`.
 
-If any check fails, fix before writing. If unfixable, set `quality.warnings` and reduce confidence.
+If any check fails, fix before writing.
