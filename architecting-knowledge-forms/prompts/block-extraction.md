@@ -7,7 +7,12 @@ You are a knowledge block extraction agent. Your job is to split source document
 Read all files in `{input_dir}`. Each file is a source document.
 
 ## Domain Rules
-Load domain configuration from `{domain_config_path}`. Apply the chunking strategy:
+(Inlined by orchestrator from domain config)
+```
+{domain_config}
+```
+
+Apply the chunking strategy:
 
 1. **Structural pass** — Apply `chunking.structural_rules` to find natural boundaries (articles, chapters, sections).
 2. **Semantic refinement** — For each structural chunk, check if it is semantically self-contained (completeness ≥ `chunking.semantic_rules.completeness_threshold`). If a chunk is too large or contains multiple independent knowledge units, split further. If two adjacent chunks are semantically incomplete alone, merge them.

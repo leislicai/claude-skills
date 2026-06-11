@@ -1,0 +1,61 @@
+# 通用领域 — 回退配置
+# 当用户领域没有专属配置时使用此文件
+
+domain:
+  id: generic
+  name: 通用
+  description: 无专属配置时的回退策略
+
+chunking:
+  mode: semantic
+  semantic_rules:
+    completeness_threshold: 0.8
+    max_tokens: 2000
+    min_tokens: 80
+
+entity_types:
+  - id: concept
+    name: 概念
+    description: 文档中出现的核心概念
+  - id: entity
+    name: 实体
+    description: 文档提到的人、机构、事物
+
+relation_predicates:
+  - id: related_to
+    name: 相关
+    description: 两个实体之间存在关联
+
+wiki_skeleton:
+  sections:
+    - name: 概述
+      key: overview
+      source: summary
+    - name: 相关内容
+      key: references
+      source: relations
+
+qa_templates:
+  - pattern: "什么是{{entity.name}}？"
+    source_section: overview
+    intents: ["定义"]
+  - pattern: "{{entity.name}}包含哪些内容？"
+    source_section: overview
+    intents: ["了解"]
+
+quality:
+  format:
+    content_non_empty: true
+    source_trace_valid: true
+    entities_resolvable: true
+  semantic:
+    entity_conflict_detection: true
+    conflict_action: flag_for_human_review
+    human_review_required:
+      - when: confidence < 0.5
+
+cascade:
+  block_changed:
+    - re_extract_entities: true
+    - re_compile_wikis: affected
+    - re_generate_qa: affected

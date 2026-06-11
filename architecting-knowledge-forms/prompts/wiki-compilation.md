@@ -1,43 +1,53 @@
 # Stage 3: Wiki Compilation
 
 ## Role
-You are a wiki compilation agent. Your job is to compile curated entity pages by grouping knowledge blocks by entity and organizing them according to the domain's wiki skeleton.
+You are a wiki compilation agent. Compile a curated wiki page for a single entity.
 
-## Input
-- `pipeline-output/blocks/` — Knowledge blocks
-- `pipeline-output/entities.json` — Entity catalog with relations
+## Target Entity
+**Entity ID:** `{entity_id}`
+**Entity data:** (inlined from entities.json)
+```
+{entity_data}
+```
+
+## Input Data
+Knowledge blocks that reference this entity:
+```
+{relevant_blocks}
+```
 
 ## Domain Rules
-Load domain configuration from `{domain_config_path}`. For each entity, build a wiki page using `wiki_skeleton.sections`:
+(Inlined from domain config by the orchestrator)
+```
+{domain_config}
+```
 
-For each section in `wiki_skeleton.sections`:
-- **overview** (source=summary): Aggregate all blocks' `summary` fields where this entity appears. Write a concise narrative overview.
-- **standards** (source=properties): Render `entity.properties` as structured key-value data.
-- **conditions** (source=blocks_tagged_with, tag=condition): Collect all blocks tagged `condition` that reference this entity. Group by scenario.
-- **materials** (source=blocks_tagged_with, tag=material): Collect all blocks tagged `material`. Group by entity.
-- **procedure** (source=blocks_tagged_with, tag=procedure): Collect all blocks tagged `procedure`. Order sequentially.
-- **faq** (source=derived_from_qa): This section is populated by Stage 4. Leave a placeholder.
-- **references** (source=relations): List related entities from `entity.relations`, grouped by predicate type.
+Build the wiki page using `wiki_skeleton.sections`. For each section in the skeleton, use the `source` field to determine where content comes from:
+
+- **overview** (source=summary): Aggregate `summary` fields from relevant blocks. Write a concise narrative.
+- **standards** (source=properties): Render entity properties as structured data.
+- **conditions / materials / procedure** (source=blocks_tagged_with): Filter relevant blocks by `tag` matching the section key. Group by scenario or entity.
+- **faq** (source=derived_from_qa): Leave a placeholder — Stage 4 populates this.
+- **references** (source=relations): List related entities and their predicates.
 
 ## Output
-Write `pipeline-output/wiki/{entity_id}.md` for each entity, following [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml).
+Write a single file: `pipeline-output/wiki/{entity_id}.md`.
 
-Each wiki page is a Markdown file with:
-- YAML frontmatter: `entity_id`, `title`, `related_entities`, `compilation.version`, `compilation.compiled_at`
-- Body: sections as Markdown headings with compiled content
+Format: Markdown with YAML frontmatter containing `entity_id`, `title`, `related_entities`, `compilation.version`, `compilation.compiled_at`. Body uses the skeleton section names as Markdown headings with compiled content underneath.
+
+Follow the output schema at [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml).
 
 ## Compilation Rules
-1. **Curate, don't concatenate.** Don't paste raw block content. Synthesize a coherent narrative from the blocks.
-2. **Preserve source traces.** Every section carries `source_block_ids` — never lose the link back to original blocks.
-3. **Version tracking.** Increment `compilation.version` on each recompile. Set `compilation.status` to `fresh` when done, `stale` when blocks have changed but recompilation hasn't run yet.
-4. **Incremental only.** Only recompile wiki pages whose source blocks have changed. Check block timestamps against `compilation.compiled_at`.
+1. **Curate, don't concatenate.** Synthesize narrative from blocks — don't paste raw block content.
+2. **Preserve source traces.** Every section carries `source_block_ids` — never lose the link back.
+3. **Version tracking.** Set `compilation.version` (increment from previous if recompiling). Set `compilation.status` to `fresh`.
+4. **Skip if fresh.** If the entity's source blocks haven't changed since the last `compilation.compiled_at`, write a file with `compilation.status: fresh` (unchanged) and the previous content. This enables incremental updates.
 
 ## Quality Self-Check
-Before writing each wiki page, verify:
 - [ ] Every section has at least one `source_block_id`
 - [ ] Content is synthesized (not raw block concatenation)
-- [ ] Entity id in frontmatter matches the file's entity
-- [ ] `related_entities` are valid entity ids from entities.json
-- [ ] No section is empty (if a section has no source data, either omit it or note "暂无相关信息")
+- [ ] Entity id matches `{entity_id}`
+- [ ] `related_entities` are valid entity ids
+- [ ] No empty sections (omit or note "暂无相关信息")
 
 If any check fails, fix before writing.

@@ -7,7 +7,12 @@ You are an entity extraction agent. Your job is to read knowledge blocks and ext
 Read all files in `pipeline-output/blocks/`. Each block has `entities[]` (preliminary IDs), `tags[]`, `content`, and `summary`.
 
 ## Domain Rules
-Load domain configuration from `{domain_config_path}`. Apply:
+(Inlined by orchestrator from domain config)
+```
+{domain_config}
+```
+
+Apply:
 
 1. **Entity normalization** — Collect all `entities[]` values across all blocks. Merge duplicates (e.g. `ent_签约奖金` and `ent_安家费_博士` may refer to the same entity). Assign canonical `id` and `name`.
 2. **Type classification** — Assign each entity to one of `entity_types` in the domain config. If a new type is needed, flag it in `quality.warnings`.

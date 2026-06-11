@@ -9,7 +9,12 @@ You are a QA generation agent. Your job is to generate question-answer pairs fro
 - `pipeline-output/blocks/` — Source blocks (for anchoring)
 
 ## Domain Rules
-Load domain configuration from `{domain_config_path}`. Use `qa_templates` to generate questions:
+(Inlined by orchestrator from domain config)
+```
+{domain_config}
+```
+
+Use `qa_templates` to generate questions:
 
 For each entity's wiki page, apply every matching template:
 1. Substitute `{{entity.name}}` with the actual entity name.
