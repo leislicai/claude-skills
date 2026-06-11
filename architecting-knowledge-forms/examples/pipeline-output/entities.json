@@ -1,1085 +1,3285 @@
 {
   "entities": [
     {
+      "id": "ent_001",
+      "name": "天水市2025年度住房公积金缴存基数调整通知",
+      "type": "policy",
+      "properties": {
+        "description": "调整2025年度住房公积金缴存基数,上限21429元,下限秦州区麦积区1910元,其他县1850元"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_252"
+      ],
+      "quality": {
+        "confidence": 0.85,
+        "warnings": [
+          "placeholder_id"
+        ]
+      }
+    },
+    {
+      "id": "ent_002",
+      "name": "天水市2025年度住房公积金缴存比例调整通知",
+      "type": "policy",
+      "properties": {
+        "description": "调整2025年度住房公积金缴存比例,单位和个人各5%-12%,灵活就业人员5%-24%"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_252"
+      ],
+      "quality": {
+        "confidence": 0.85,
+        "warnings": [
+          "placeholder_id"
+        ]
+      }
+    },
+    {
+      "id": "ent_003",
+      "name": "天水市2025年度住房公积金月缴存额调整规定",
+      "type": "policy",
+      "properties": {
+        "description": "月缴存额=缴存基数×缴存比例,最高5142元,最低185-191元(按区域)"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_252"
+      ],
+      "quality": {
+        "confidence": 0.85,
+        "warnings": [
+          "placeholder_id"
+        ]
+      }
+    },
+    {
+      "id": "ent_004",
+      "name": "天水市2025年度灵活就业人员缴存规定",
+      "type": "policy",
+      "properties": {
+        "description": "灵活就业人员月缴存基数最高21429元,缴存比例5%-24%"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_252"
+      ],
+      "quality": {
+        "confidence": 0.85,
+        "warnings": [
+          "placeholder_id"
+        ]
+      }
+    },
+    {
+      "id": "ent_30年期限",
+      "name": "30年期限",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_249"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_不动产权证书",
+      "name": "不动产权证书",
+      "type": "material",
+      "properties": {
+        "description": "不动产权证书原件及复印件"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_丧失劳动能力",
+      "name": "丧失劳动能力",
+      "type": "clause",
+      "properties": {
+        "description": "完全丧失劳动能力并与单位终止劳动关系可提取"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_028"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_中国人民银行",
+      "name": "中国人民银行",
+      "type": "department",
+      "properties": {
+        "description": "中央银行,负责利率政策等"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_001",
+        "kb_007",
+        "kb_011",
+        "kb_015"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_事业单位",
+      "name": "事业单位",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_044"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_二套利率上浮",
+      "name": "二套利率上浮",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_249"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_京津冀",
+      "name": "京津冀",
+      "type": "condition",
+      "properties": {
+        "description": "人员跨地区流动频繁的城市群,率先建立信息协查机制"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_008"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_人力资源社会保障部",
+      "name": "人力资源社会保障部",
+      "type": "department",
+      "properties": {
+        "description": "负责社会保障相关事务"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_007"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_代扣代缴",
+      "name": "代扣代缴",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_017"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住建部通知",
+      "name": "住建部通知",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_242"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金",
+      "name": "住房公积金",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住建部通知",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_242"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_001",
+        "kb_002",
+        "kb_003",
+        "kb_004",
+        "kb_005",
+        "kb_006",
+        "kb_007",
+        "kb_008",
+        "kb_009",
+        "kb_010",
+        "kb_015",
+        "kb_032",
+        "kb_033",
+        "kb_034",
+        "kb_035",
+        "kb_036",
+        "kb_037",
+        "kb_038",
+        "kb_039",
+        "kb_242",
+        "kb_254"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金专户",
+      "name": "住房公积金专户",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_017"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金业务管理制度",
+      "name": "住房公积金业务管理制度",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_055",
+        "kb_235"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金会计核算",
+      "name": "住房公积金会计核算",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_021"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金增值收益",
+      "name": "住房公积金增值收益",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_018"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金委托扣款协议",
+      "name": "住房公积金委托扣款协议",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金归集业务",
+      "name": "住房公积金归集业务",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_056",
+        "kb_057",
+        "kb_058",
+        "kb_059",
+        "kb_060",
+        "kb_061",
+        "kb_062",
+        "kb_063",
+        "kb_064",
+        "kb_065",
+        "kb_066",
+        "kb_067",
+        "kb_068",
+        "kb_069",
+        "kb_070",
+        "kb_071",
+        "kb_072",
+        "kb_073",
+        "kb_074",
+        "kb_075",
+        "kb_076",
+        "kb_077",
+        "kb_078",
+        "kb_079",
+        "kb_080",
+        "kb_081",
+        "kb_082",
+        "kb_083",
+        "kb_084",
+        "kb_085",
+        "kb_086"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金担保",
+      "name": "住房公积金担保",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_018"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金提取",
+      "name": "住房公积金提取",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_015",
+        "kb_018"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金提取业务",
+      "name": "住房公积金提取业务",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_161",
+        "kb_162",
+        "kb_163",
+        "kb_164",
+        "kb_165",
+        "kb_166",
+        "kb_167",
+        "kb_168",
+        "kb_169",
+        "kb_170",
+        "kb_171",
+        "kb_172",
+        "kb_173",
+        "kb_174",
+        "kb_175",
+        "kb_176",
+        "kb_177",
+        "kb_178",
+        "kb_179",
+        "kb_180",
+        "kb_181",
+        "kb_182",
+        "kb_183",
+        "kb_184",
+        "kb_185",
+        "kb_186",
+        "kb_187",
+        "kb_188",
+        "kb_189",
+        "kb_190",
+        "kb_191",
+        "kb_192",
+        "kb_193",
+        "kb_194",
+        "kb_195",
+        "kb_196",
+        "kb_197",
+        "kb_198",
+        "kb_199",
+        "kb_200",
+        "kb_201",
+        "kb_202",
+        "kb_203",
+        "kb_204",
+        "kb_205",
+        "kb_206",
+        "kb_207",
+        "kb_208",
+        "kb_209",
+        "kb_210",
+        "kb_211",
+        "kb_212",
+        "kb_213",
+        "kb_214",
+        "kb_215",
+        "kb_216",
+        "kb_217",
+        "kb_218",
+        "kb_219",
+        "kb_220",
+        "kb_221",
+        "kb_222",
+        "kb_223",
+        "kb_224",
+        "kb_225",
+        "kb_226",
+        "kb_227",
+        "kb_228",
+        "kb_229",
+        "kb_230",
+        "kb_231",
+        "kb_232",
+        "kb_233",
+        "kb_234"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金提取业务操作规程",
+      "name": "住房公积金提取业务操作规程",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_256"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_256",
+        "kb_257"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金提取业务标准",
+      "name": "住房公积金提取业务标准",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金提取业务操作规程",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_256"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金提取业务标准(GB/T51353-2019)",
+      "name": "住房公积金提取业务标准(GB/T51353-2019)",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金提取业务操作规程",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_256"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金监督",
+      "name": "住房公积金监督",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_019"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金管理",
+      "name": "住房公积金管理",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_016"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金管理中心",
+      "name": "住房公积金管理中心",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_001",
+        "kb_002",
+        "kb_003",
+        "kb_004",
+        "kb_005",
+        "kb_006",
+        "kb_007",
+        "kb_008",
+        "kb_009",
+        "kb_010",
+        "kb_015",
+        "kb_016"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金管理委员会",
+      "name": "住房公积金管理委员会",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_015",
+        "kb_016",
+        "kb_031"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
       "id": "ent_住房公积金管理条例",
       "name": "住房公积金管理条例",
       "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_015"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_015",
+        "kb_022",
+        "kb_040",
+        "kb_041",
+        "kb_048",
+        "kb_256",
+        "kb_259"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金缴存",
+      "name": "住房公积金缴存",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_015",
+        "kb_017"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金缴存登记",
+      "name": "住房公积金缴存登记",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_017"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金罚则",
+      "name": "住房公积金罚则",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_020"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金计息",
+      "name": "住房公积金计息",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_017"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金财务管理",
+      "name": "住房公积金财务管理",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金会计核算",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_021"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_021"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金账户",
+      "name": "住房公积金账户",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_017"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金贷款",
+      "name": "住房公积金贷款",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_018"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金贷款业务",
+      "name": "住房公积金贷款业务",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_087",
+        "kb_088",
+        "kb_089",
+        "kb_090",
+        "kb_091",
+        "kb_092",
+        "kb_093",
+        "kb_094",
+        "kb_095",
+        "kb_096",
+        "kb_097",
+        "kb_098",
+        "kb_099",
+        "kb_100",
+        "kb_101",
+        "kb_102",
+        "kb_103",
+        "kb_104",
+        "kb_105",
+        "kb_106",
+        "kb_107",
+        "kb_108",
+        "kb_109",
+        "kb_110",
+        "kb_111",
+        "kb_112",
+        "kb_113",
+        "kb_114",
+        "kb_115",
+        "kb_116",
+        "kb_117",
+        "kb_118",
+        "kb_119",
+        "kb_120",
+        "kb_121",
+        "kb_122",
+        "kb_123",
+        "kb_124",
+        "kb_125",
+        "kb_126",
+        "kb_127",
+        "kb_128",
+        "kb_129",
+        "kb_130",
+        "kb_131",
+        "kb_132",
+        "kb_133",
+        "kb_134",
+        "kb_135",
+        "kb_136",
+        "kb_137",
+        "kb_138",
+        "kb_139",
+        "kb_140",
+        "kb_141",
+        "kb_142",
+        "kb_143",
+        "kb_144",
+        "kb_145",
+        "kb_146",
+        "kb_147",
+        "kb_148",
+        "kb_149",
+        "kb_150",
+        "kb_151",
+        "kb_152",
+        "kb_153",
+        "kb_154",
+        "kb_155",
+        "kb_156",
+        "kb_157",
+        "kb_158",
+        "kb_159",
+        "kb_160"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房公积金阶段性支持政策2022",
+      "name": "住房公积金阶段性支持政策2022",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_254"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_254"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_住房城乡建设部",
+      "name": "住房城乡建设部",
+      "type": "department",
       "properties": {
-        "issuing_authority": "中华人民共和国国务院",
-        "document_number": "国务院令第262号",
-        "original_promulgation_date": "1999年4月3日",
-        "first_revision_date": "2002年3月24日",
-        "second_revision_date": "2019年3月24日",
-        "effective_date": "1999年4月3日",
-        "revision_basis": "《国务院关于修改〈住房公积金管理条例〉的决定》、《国务院关于修改部分行政法规的决定》（国令第710号）",
-        "chapters": "7章（总则、机构及其职责、缴存、提取和使用、监督、罚则、附则）"
+        "description": "国务院住房城乡建设行政主管部门"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_001",
+        "kb_007",
+        "kb_011"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_保障性租赁住房",
+      "name": "保障性租赁住房",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_026"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_偿还贷款",
+      "name": "偿还贷款",
+      "type": "clause",
+      "properties": {
+        "description": "偿还购买自住住房贷款本息可提取住房公积金"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_025"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_催收通知书",
+      "name": "催收通知书",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_250"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_公共租赁住房",
+      "name": "公共租赁住房",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_026"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_公安部",
+      "name": "公安部",
+      "type": "department",
+      "properties": {
+        "description": "全国公安机关,参与违规提取治理"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_001",
+        "kb_007",
+        "kb_009",
+        "kb_011"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_公积金贷款",
+      "name": "公积金贷款",
+      "type": "clause",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金贷款",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_025"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_025",
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_再交易住房",
+      "name": "再交易住房",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_农业转移人员",
+      "name": "农业转移人员",
+      "type": "clause",
+      "properties": {
+        "description": "农业转移人口可自愿缴存住房公积金"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_出境定居",
+      "name": "出境定居",
+      "type": "clause",
+      "properties": {
+        "description": "出境定居或赴港、澳、台地区定居可提取住房公积金"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_027"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_利率调整",
+      "name": "利率调整",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_249"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_加装电梯",
+      "name": "加装电梯",
+      "type": "clause",
+      "properties": {
+        "description": "未配备电梯的老旧住宅小区自住住房加装电梯可提取"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_单位自建住房",
+      "name": "单位自建住房",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_受托银行",
+      "name": "受托银行",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_016",
+        "kb_248"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_合并计算额度",
+      "name": "合并计算额度",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_251"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_周六不打烊",
+      "name": "周六不打烊",
+      "type": "clause",
+      "properties": {
+        "description": "每周六上午8:30-12:00,下午2:30-6:00提供延时服务"
       },
       "relations": [
-        {"target": "ent_建金2018_46号通知", "predicate": "references", "evidence_block_ids": ["kb_009"]},
-        {"target": "ent_天水公积金异地贷款细则", "predicate": "references", "evidence_block_ids": ["kb_019"]},
-        {"target": "ent_天水公积金归集业务操作规程", "predicate": "references", "evidence_block_ids": ["kb_027"]},
-        {"target": "ent_天水公积金提取业务操作规程", "predicate": "references", "evidence_block_ids": ["kb_048"]},
-        {"target": "ent_天水公积金贷款政策调整", "predicate": "references", "evidence_block_ids": ["kb_082"]},
-        {"target": "ent_天水农业转移人员缴存办法", "predicate": "references", "evidence_block_ids": ["kb_084"]},
-        {"target": "ent_天水公积金归集管理办法", "predicate": "references", "evidence_block_ids": ["kb_146"]},
-        {"target": "ent_天水公积金提取管理办法", "predicate": "references", "evidence_block_ids": ["kb_197"]},
-        {"target": "ent_天水公积金组合贷款操作规程", "predicate": "references", "evidence_block_ids": ["kb_064"]},
-        {"target": "ent_天水公积金2021年缴存基数调整", "predicate": "references", "evidence_block_ids": ["kb_098"]},
-        {"target": "ent_天水公积金2025年缴存基数调整", "predicate": "references", "evidence_block_ids": ["kb_104"]},
-        {"target": "ent_天水公积金提取贷款调整通知", "predicate": "references", "evidence_block_ids": ["kb_109"]}
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_012",
+            "kb_013"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_001", "kb_002", "kb_003", "kb_004", "kb_005", "kb_006", "kb_007", "kb_008", "kb_027", "kb_028", "kb_029", "kb_036", "kb_037", "kb_038", "kb_039", "kb_048", "kb_049", "kb_050", "kb_051", "kb_052", "kb_064", "kb_065", "kb_082", "kb_084", "kb_085", "kb_086", "kb_087", "kb_088", "kb_089", "kb_090", "kb_091", "kb_092", "kb_093", "kb_094", "kb_095", "kb_096", "kb_097", "kb_098", "kb_104", "kb_115", "kb_116", "kb_117", "kb_127", "kb_129", "kb_131", "kb_146", "kb_147", "kb_148", "kb_149", "kb_150", "kb_163", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168", "kb_175", "kb_176", "kb_178", "kb_179", "kb_180", "kb_181", "kb_195", "kb_196", "kb_197", "kb_198", "kb_199", "kb_208", "kb_209"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "source_block_ids": [
+        "kb_013"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_商业贷款",
+      "name": "商业贷款",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_025",
+        "kb_032",
+        "kb_033",
+        "kb_034",
+        "kb_035",
+        "kb_036",
+        "kb_037",
+        "kb_038",
+        "kb_039"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_商品房买卖合同",
+      "name": "商品房买卖合同",
+      "type": "material",
+      "properties": {
+        "description": "商品房买卖合同原件"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_回执反馈",
+      "name": "回执反馈",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_248"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_国务院建设行政主管部门",
+      "name": "国务院建设行政主管部门",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_015"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_国家机关",
+      "name": "国家机关",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_044"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_国有企业",
+      "name": "国有企业",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_044"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天公积金发202053号",
+      "name": "天公积金发202053号",
+      "type": "policy",
+      "properties": {
+        "document_number": "天公积金〔2020〕20号"
+      },
+      "relations": [
+        {
+          "target": "ent_住房公积金提取业务操作规程",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_257"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_257"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水住房公积金",
+      "name": "天水住房公积金",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金业务管理制度",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_055",
+            "kb_235"
+          ]
+        },
+        {
+          "target": "ent_住房公积金归集业务",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_056",
+            "kb_057",
+            "kb_058"
+          ]
+        },
+        {
+          "target": "ent_住房公积金提取业务",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_161",
+            "kb_162",
+            "kb_163"
+          ]
+        },
+        {
+          "target": "ent_住房公积金贷款业务",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_087",
+            "kb_088",
+            "kb_089"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_055",
+        "kb_056",
+        "kb_057",
+        "kb_058",
+        "kb_059",
+        "kb_060",
+        "kb_061",
+        "kb_062",
+        "kb_063",
+        "kb_064",
+        "kb_065",
+        "kb_066",
+        "kb_067",
+        "kb_068",
+        "kb_069",
+        "kb_070",
+        "kb_071",
+        "kb_072",
+        "kb_073",
+        "kb_074",
+        "kb_075",
+        "kb_076",
+        "kb_077",
+        "kb_078",
+        "kb_079",
+        "kb_080",
+        "kb_081",
+        "kb_082",
+        "kb_083",
+        "kb_084",
+        "kb_085",
+        "kb_086",
+        "kb_087",
+        "kb_088",
+        "kb_089",
+        "kb_090",
+        "kb_091",
+        "kb_092",
+        "kb_093",
+        "kb_094",
+        "kb_095",
+        "kb_096",
+        "kb_097",
+        "kb_098",
+        "kb_099",
+        "kb_100",
+        "kb_101",
+        "kb_102",
+        "kb_103",
+        "kb_104",
+        "kb_105",
+        "kb_106",
+        "kb_107",
+        "kb_108",
+        "kb_109",
+        "kb_110",
+        "kb_111",
+        "kb_112",
+        "kb_113",
+        "kb_114",
+        "kb_115",
+        "kb_116",
+        "kb_117",
+        "kb_118",
+        "kb_119",
+        "kb_120",
+        "kb_121",
+        "kb_122",
+        "kb_123",
+        "kb_124",
+        "kb_125",
+        "kb_126",
+        "kb_127",
+        "kb_128",
+        "kb_129",
+        "kb_130",
+        "kb_131",
+        "kb_132",
+        "kb_133",
+        "kb_134",
+        "kb_135",
+        "kb_136",
+        "kb_137",
+        "kb_138",
+        "kb_139",
+        "kb_140",
+        "kb_141",
+        "kb_142",
+        "kb_143",
+        "kb_144",
+        "kb_145",
+        "kb_146",
+        "kb_147",
+        "kb_148",
+        "kb_149",
+        "kb_150",
+        "kb_151",
+        "kb_152",
+        "kb_153",
+        "kb_154",
+        "kb_155",
+        "kb_156",
+        "kb_157",
+        "kb_158",
+        "kb_159",
+        "kb_160",
+        "kb_161",
+        "kb_162",
+        "kb_163",
+        "kb_164",
+        "kb_165",
+        "kb_166",
+        "kb_167",
+        "kb_168",
+        "kb_169",
+        "kb_170",
+        "kb_171",
+        "kb_172",
+        "kb_173",
+        "kb_174",
+        "kb_175",
+        "kb_176",
+        "kb_177",
+        "kb_178",
+        "kb_179",
+        "kb_180",
+        "kb_181",
+        "kb_182",
+        "kb_183",
+        "kb_184",
+        "kb_185",
+        "kb_186",
+        "kb_187",
+        "kb_188",
+        "kb_189",
+        "kb_190",
+        "kb_191",
+        "kb_192",
+        "kb_193",
+        "kb_194",
+        "kb_195",
+        "kb_196",
+        "kb_197",
+        "kb_198",
+        "kb_199",
+        "kb_200",
+        "kb_201",
+        "kb_202",
+        "kb_203",
+        "kb_204",
+        "kb_205",
+        "kb_206",
+        "kb_207",
+        "kb_208",
+        "kb_209",
+        "kb_210",
+        "kb_211",
+        "kb_212",
+        "kb_213",
+        "kb_214",
+        "kb_215",
+        "kb_216",
+        "kb_217",
+        "kb_218",
+        "kb_219",
+        "kb_220",
+        "kb_221",
+        "kb_222",
+        "kb_223",
+        "kb_224",
+        "kb_225",
+        "kb_226",
+        "kb_227",
+        "kb_228",
+        "kb_229",
+        "kb_230",
+        "kb_231",
+        "kb_232",
+        "kb_233",
+        "kb_234",
+        "kb_235"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水公积金",
+      "name": "天水公积金",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_254"
+          ]
+        },
+        {
+          "target": "ent_住房公积金阶段性支持政策2022",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_254"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_254"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水公积金管理部",
+      "name": "天水公积金管理部",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_236",
+        "kb_237",
+        "kb_238",
+        "kb_239"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水市住房公积金",
+      "name": "天水市住房公积金",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金管理条例",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_259"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_259"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水市住房公积金归集管理办法",
+      "name": "天水市住房公积金归集管理办法",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_056"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_041"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水市住房公积金流动性风险预警管理办法",
+      "name": "天水市住房公积金流动性风险预警管理办法",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_258"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_258"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
       "id": "ent_天水市住房公积金管理中心",
       "name": "天水市住房公积金管理中心",
       "type": "department",
       "properties": {
-        "location": "天水市",
-        "role": "负责天水市住房公积金的管理运作",
-        "organization_type": "直属城市人民政府的不以营利为目的的独立事业单位"
+        "description": "天水市住房公积金管理机构,负责全市住房公积金归集、提取、贷款等业务管理"
       },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_027", "kb_048", "kb_064", "kb_082", "kb_084", "kb_098", "kb_104", "kb_109", "kb_115", "kb_146", "kb_178", "kb_197"]},
-        {"target": "ent_公积金管理部", "predicate": "references", "evidence_block_ids": ["kb_117", "kb_118", "kb_119"]},
-        {"target": "ent_受委托银行", "predicate": "references", "evidence_block_ids": ["kb_006", "kb_074"]},
-        {"target": "ent_公积金管理委员会", "predicate": "references", "evidence_block_ids": ["kb_148"]}
+      "relations": [],
+      "source_block_ids": [
+        "kb_012",
+        "kb_022",
+        "kb_031",
+        "kb_040",
+        "kb_041",
+        "kb_042",
+        "kb_043",
+        "kb_045",
+        "kb_052",
+        "kb_054",
+        "kb_236",
+        "kb_237",
+        "kb_240",
+        "kb_241",
+        "kb_245",
+        "kb_248",
+        "kb_254",
+        "kb_256",
+        "kb_257",
+        "kb_258"
       ],
-      "source_block_ids": ["kb_027", "kb_048", "kb_064", "kb_082", "kb_083", "kb_084", "kb_098", "kb_104", "kb_109", "kb_110", "kb_111", "kb_112", "kb_113", "kb_114", "kb_115", "kb_116", "kb_117", "kb_118", "kb_119", "kb_120", "kb_121", "kb_122", "kb_123", "kb_124", "kb_125", "kb_126", "kb_127", "kb_128", "kb_129", "kb_130", "kb_131", "kb_132", "kb_133", "kb_134", "kb_135", "kb_136", "kb_137", "kb_138", "kb_139", "kb_140", "kb_141", "kb_142", "kb_143", "kb_144", "kb_145", "kb_146", "kb_147", "kb_148", "kb_149", "kb_150", "kb_151", "kb_152", "kb_153", "kb_154", "kb_155", "kb_156", "kb_157", "kb_158", "kb_159", "kb_160", "kb_161", "kb_162", "kb_163", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168", "kb_169", "kb_170", "kb_171", "kb_172", "kb_173", "kb_174", "kb_175", "kb_176", "kb_177", "kb_178", "kb_179", "kb_180", "kb_181", "kb_182", "kb_183", "kb_184", "kb_185", "kb_186", "kb_187", "kb_188", "kb_189", "kb_190", "kb_191", "kb_192", "kb_193", "kb_194", "kb_195", "kb_196", "kb_197", "kb_198", "kb_199", "kb_200", "kb_201", "kb_202", "kb_203", "kb_204", "kb_205", "kb_206", "kb_207", "kb_208", "kb_209", "kb_210"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_住房公积金缴存职工",
-      "name": "住房公积金缴存职工",
-      "type": "condition",
-      "properties": {
-        "definition": "国家机关、事业单位、企业等单位在职职工",
-        "coverage": "包括港、澳、台人员，不包括外国国籍人员"
-      },
+      "id": "ent_天水市住房公积金管理中心个人住房异地贷款实施细则",
+      "name": "天水市住房公积金管理中心个人住房异地贷款实施细则",
+      "type": "policy",
+      "properties": {},
       "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "part_of", "evidence_block_ids": ["kb_002"]},
-        {"target": "ent_缴存比例", "predicate": "references", "evidence_block_ids": ["kb_004"]},
-        {"target": "ent_提取条件", "predicate": "references", "evidence_block_ids": ["kb_005"]},
-        {"target": "ent_贷款条件", "predicate": "references", "evidence_block_ids": ["kb_065"]}
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_258"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_002", "kb_004", "kb_005", "kb_006", "kb_007", "kb_008", "kb_011", "kb_014", "kb_017", "kb_018", "kb_019", "kb_020", "kb_021", "kb_022", "kb_023", "kb_024", "kb_025", "kb_026", "kb_027", "kb_028", "kb_029", "kb_030", "kb_031", "kb_032", "kb_033", "kb_034", "kb_035", "kb_036", "kb_037", "kb_038", "kb_039", "kb_040", "kb_041", "kb_042", "kb_043", "kb_044", "kb_045", "kb_046", "kb_047", "kb_048", "kb_049", "kb_050", "kb_051", "kb_052", "kb_053", "kb_054", "kb_055", "kb_056", "kb_057", "kb_058", "kb_059", "kb_063", "kb_064", "kb_065", "kb_066", "kb_067", "kb_068", "kb_069", "kb_070", "kb_071", "kb_072", "kb_073", "kb_074", "kb_075", "kb_076", "kb_077", "kb_081", "kb_082", "kb_083", "kb_085", "kb_086", "kb_087", "kb_088", "kb_089", "kb_090", "kb_091", "kb_092", "kb_093", "kb_094", "kb_095", "kb_096", "kb_097", "kb_103", "kb_105", "kb_108", "kb_110", "kb_112", "kb_113", "kb_114", "kb_117", "kb_118", "kb_119", "kb_121", "kb_122", "kb_123", "kb_124", "kb_125", "kb_126", "kb_127", "kb_128", "kb_129", "kb_130", "kb_131", "kb_132", "kb_133", "kb_134", "kb_135", "kb_136", "kb_140", "kb_141", "kb_142", "kb_143", "kb_144", "kb_145", "kb_148", "kb_149", "kb_150", "kb_153", "kb_154", "kb_158", "kb_159", "kb_160", "kb_161", "kb_162", "kb_163", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168", "kb_169", "kb_170", "kb_175", "kb_176", "kb_180", "kb_181", "kb_183", "kb_186", "kb_187", "kb_189", "kb_190", "kb_191", "kb_192", "kb_199", "kb_205", "kb_210"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "source_block_ids": [
+        "kb_257",
+        "kb_258"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_提取条件",
-      "name": "住房公积金提取条件",
-      "type": "condition",
-      "properties": {
-        "extraction_scenarios": [
-          "购买、建造、翻建、大修自住住房",
-          "偿还购房贷款本息",
-          "租赁住房支付房租",
-          "离休、退休",
-          "出境定居",
-          "职工死亡或被宣告死亡",
-          "与单位解除劳动关系",
-          "享受城镇最低生活保障",
-          "老旧住宅小区加装电梯"
-        ],
-        "extraction_limit": "累计提取金额不超过所购房屋总价或实际费用",
-        "extraction_frequency": "一年只能提取一次（销户提取除外）"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "part_of", "evidence_block_ids": ["kb_005"]},
-        {"target": "ent_天水公积金提取业务操作规程", "predicate": "references", "evidence_block_ids": ["kb_053", "kb_054"]},
-        {"target": "ent_提取材料", "predicate": "requires", "evidence_block_ids": ["kb_054", "kb_055"]}
-      ],
-      "source_block_ids": ["kb_002", "kb_005", "kb_011", "kb_026", "kb_065", "kb_066", "kb_082", "kb_109", "kb_112", "kb_181", "kb_182", "kb_183", "kb_184", "kb_185", "kb_186", "kb_187", "kb_200", "kb_201", "kb_202", "kb_203", "kb_210"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金管理部",
-      "name": "天水市住房公积金管理中心管理部",
+      "id": "ent_天水市住房公积金管理委员会",
+      "name": "天水市住房公积金管理委员会",
       "type": "department",
       "properties": {
-        "role": "办理住房公积金具体业务的管理部门",
-        "counties": ["秦州", "麦积", "秦安", "甘谷", "武山", "清水", "张家川"]
+        "description": "天水市住房公积金管理决策机构"
       },
-      "relations": [
-        {"target": "ent_天水市住房公积金管理中心", "predicate": "part_of", "evidence_block_ids": ["kb_003", "kb_050"]}
+      "relations": [],
+      "source_block_ids": [
+        "kb_251",
+        "kb_258"
       ],
-      "source_block_ids": ["kb_002", "kb_003", "kb_004", "kb_005", "kb_006", "kb_007", "kb_008", "kb_010", "kb_027", "kb_028", "kb_029", "kb_030", "kb_031", "kb_032", "kb_033", "kb_034", "kb_035", "kb_036", "kb_037", "kb_038", "kb_039", "kb_040", "kb_041", "kb_042", "kb_043", "kb_044", "kb_045", "kb_046", "kb_047", "kb_050", "kb_051", "kb_052", "kb_057", "kb_058", "kb_059", "kb_063", "kb_069", "kb_070", "kb_071", "kb_072", "kb_073", "kb_074", "kb_075", "kb_081", "kb_085", "kb_086", "kb_087", "kb_088", "kb_089", "kb_090", "kb_091", "kb_092", "kb_093", "kb_094", "kb_095", "kb_096", "kb_097", "kb_117", "kb_118", "kb_119", "kb_121", "kb_122", "kb_123", "kb_124", "kb_125", "kb_126", "kb_127", "kb_128", "kb_129", "kb_130", "kb_131", "kb_132", "kb_133", "kb_134", "kb_135", "kb_136", "kb_137", "kb_138", "kb_139", "kb_140", "kb_141", "kb_142", "kb_144", "kb_145", "kb_153", "kb_154", "kb_158", "kb_159", "kb_160", "kb_161", "kb_162", "kb_163", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168", "kb_169", "kb_170", "kb_175", "kb_176", "kb_182", "kb_184", "kb_185", "kb_186", "kb_187", "kb_188", "kb_189", "kb_190", "kb_191", "kb_192", "kb_200", "kb_202", "kb_203", "kb_206", "kb_207", "kb_210"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_提取材料",
-      "name": "住房公积金提取申请材料",
+      "id": "ent_天水市住房公积金网上服务大厅",
+      "name": "天水市住房公积金网上服务大厅",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_046",
+        "kb_050",
+        "kb_053"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水市住房公积金贷款业务规程",
+      "name": "天水市住房公积金贷款业务规程",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_040"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_257",
+        "kb_258"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水市房产交易监管机构",
+      "name": "天水市房产交易监管机构",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_236",
+        "kb_237",
+        "kb_238"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水市房产服务中心",
+      "name": "天水市房产服务中心",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_236",
+        "kb_241"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水户口",
+      "name": "天水户口",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_244"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_天水缴存职工",
+      "name": "天水缴存职工",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_243",
+        "kb_247"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_婚姻证明",
+      "name": "婚姻证明",
       "type": "material",
       "properties": {
-        "basic_required_documents": ["本人身份证", "银行借记卡（一类卡）", "结婚证（提取配偶时）"]
+        "description": "结婚证或夫妻关系证明"
       },
-      "relations": [
-        {"target": "ent_提取条件", "predicate": "requires", "evidence_block_ids": ["kb_054", "kb_055"]}
+      "relations": [],
+      "source_block_ids": [
+        "kb_246"
       ],
-      "source_block_ids": ["kb_016", "kb_054", "kb_055", "kb_063", "kb_184", "kb_185", "kb_186", "kb_190", "kb_193", "kb_194", "kb_195", "kb_206", "kb_207"],
-      "quality": {"confidence": 0.85, "warnings": []}
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_受委托银行",
-      "name": "受委托办理住房公积金金融业务的商业银行",
+      "id": "ent_审核审批",
+      "name": "审核审批",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_248"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_审计部门",
+      "name": "审计部门",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_019"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_家庭困难",
+      "name": "家庭困难",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_028"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_市住房公积金管理委员会",
+      "name": "市住房公积金管理委员会",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_047",
+        "kb_049"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_市场租赁",
+      "name": "市场租赁",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_026"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_市直大厅",
+      "name": "市直大厅",
       "type": "department",
       "properties": {
-        "role": "办理住房公积金贷款、结算等金融业务",
-        "requirement": "由住房公积金管理委员会指定"
+        "description": "天水市住房公积金市直服务大厅,预约电话:0938-8211197"
       },
       "relations": [
-        {"target": "ent_公积金管理委员会", "predicate": "references", "evidence_block_ids": ["kb_003"]},
-        {"target": "ent_天水市住房公积金管理中心", "predicate": "references", "evidence_block_ids": ["kb_003"]}
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_003", "kb_004", "kb_006", "kb_008", "kb_014", "kb_015", "kb_029", "kb_030", "kb_031", "kb_032", "kb_043", "kb_044", "kb_045", "kb_063", "kb_069", "kb_073", "kb_074", "kb_075", "kb_076", "kb_082", "kb_090", "kb_091", "kb_123", "kb_125", "kb_126", "kb_128", "kb_129", "kb_130", "kb_131", "kb_136", "kb_139", "kb_141", "kb_142", "kb_147", "kb_148", "kb_149", "kb_150", "kb_151", "kb_152", "kb_153", "kb_154", "kb_155", "kb_156", "kb_157", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168", "kb_169", "kb_170", "kb_171", "kb_172", "kb_173", "kb_174", "kb_176", "kb_207"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金管理委员会",
-      "name": "住房公积金管理委员会",
-      "type": "department",
-      "properties": {
-        "composition": "人民政府负责人和建设、财政、人民银行等有关部门负责人及有关专家占1/3，工会代表和职工代表占1/3，单位代表占1/3",
-        "role": "住房公积金管理的决策机构"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "part_of", "evidence_block_ids": ["kb_003"]},
-        {"target": "ent_缴存比例", "predicate": "references", "evidence_block_ids": ["kb_003", "kb_034"]},
-        {"target": "ent_受委托银行", "predicate": "references", "evidence_block_ids": ["kb_003"]}
+      "source_block_ids": [
+        "kb_014"
       ],
-      "source_block_ids": ["kb_003", "kb_004", "kb_006", "kb_007", "kb_008", "kb_009", "kb_014", "kb_017", "kb_034", "kb_037", "kb_038", "kb_039", "kb_062", "kb_067", "kb_068", "kb_069", "kb_111", "kb_148", "kb_149", "kb_150", "kb_195", "kb_197", "kb_198", "kb_199", "kb_202", "kb_203", "kb_206", "kb_207"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_国务院相关部门",
-      "name": "国务院建设行政主管部门和财政部门",
-      "type": "department",
-      "properties": {
-        "role": "拟定住房公积金政策并监督执行"
-      },
-      "source_block_ids": ["kb_003", "kb_009", "kb_014", "kb_022", "kb_068", "kb_069", "kb_091", "kb_092", "kb_093", "kb_094", "kb_095", "kb_096", "kb_097", "kb_139", "kb_146", "kb_147", "kb_148", "kb_149", "kb_150", "kb_197", "kb_198", "kb_199", "kb_210"],
-      "quality": {"confidence": 0.8, "warnings": []}
+      "id": "ent_建造翻建大修",
+      "name": "建造翻建大修",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_缴存比例",
-      "name": "住房公积金缴存比例",
+      "id": "ent_异地贷款",
+      "name": "异地贷款",
       "type": "clause",
       "properties": {
-        "min_percentage": "5%",
-        "max_percentage": "12%",
-        "flexible_workers_min_percentage": "10%",
-        "flexible_workers_max_percentage": "24%",
-        "agricultural_transfer_percentage": "20%",
-        "adjustment_frequency": "每年核定一次",
-        "special_provision": "确有困难的单位可降低缴存比例或缓缴，期限1年"
+        "description": "在缴存地以外的城市购买自住住房时申请的住房公积金贷款"
       },
       "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "part_of", "evidence_block_ids": ["kb_004"]},
-        {"target": "ent_公积金管理委员会", "predicate": "references", "evidence_block_ids": ["kb_003"]}
+        {
+          "target": "ent_住房公积金贷款",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_242"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_034", "kb_108"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "source_block_ids": [
+        "kb_242",
+        "kb_244"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_缴存基数",
-      "name": "住房公积金缴存基数",
+      "id": "ent_异地转移接续",
+      "name": "异地转移接续",
       "type": "clause",
-      "properties": {
-        "definition": "职工本人上一年度月平均工资",
-        "upper_limit": "本市非私营单位在岗职工月平均工资的3倍",
-        "lower_limit": "省政府发布的最低工资标准",
-        "adjustment_frequency": "每年核定一次（1月或7月）",
-        "2025_upper_limit_value": "21429元",
-        "2025_max_monthly_deposit": "5142元",
-        "2025_lower_limit_Qinzhou_Maiji": "1910元",
-        "2025_lower_limit_other_counties": "1850元",
-        "2021_upper_limit_value": "17124元",
-        "2021_max_monthly_deposit": "4110元",
-        "2021_lower_limit_Qinzhou_Maiji": "1520元",
-        "2021_lower_limit_other_counties": "1470元"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "part_of", "evidence_block_ids": ["kb_004"]},
-        {"target": "ent_缴存比例", "predicate": "references", "evidence_block_ids": ["kb_033"]}
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_027"
       ],
-      "source_block_ids": ["kb_033", "kb_099", "kb_105", "kb_121", "kb_122", "kb_123", "kb_124", "kb_126", "kb_128", "kb_130", "kb_159", "kb_160", "kb_161", "kb_162", "kb_163", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_贷款条件",
-      "name": "住房公积金贷款条件",
+      "id": "ent_张家川大厅",
+      "name": "张家川大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金张家川服务大厅,预约电话:0938-4988868"
+      },
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_014"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_强制划扣",
+      "name": "强制划扣",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_250"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_征信",
+      "name": "征信",
       "type": "condition",
       "properties": {
-        "continuous_deposit_months": "6个月（含）以上",
-        "credit_requirement": "不超过连续3期或累计6期违约记录",
-        "no_outstanding_housing_fund_loan": true,
-        "月供收入比": "不超过50%（政策调整后可提高至60%）"
+        "description": "借款申请人需信用良好,无严重逾期记录"
       },
-      "source_block_ids": ["kb_005", "kb_066", "kb_082", "kb_110", "kb_112", "kb_113", "kb_114"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_贷款额度",
-      "name": "住房公积金贷款额度",
-      "type": "clause",
-      "properties": {
-        "max_multiple_of_balance": "15倍（原为18倍，2021年调整）",
-        "first_house_max_ratio": "70%",
-        "second_house_max_ratio": "60%",
-        "max_loan_term": "30年",
-        "second_house_down_payment": "20%（结清后改善性住房，原30%）",
-        "account_freeze_amount": "6个月的公积金贷款应还款额"
-      },
-      "source_block_ids": ["kb_024", "kb_067", "kb_068", "kb_069", "kb_110", "kb_113", "kb_114"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_贷款利率",
-      "name": "住房公积金贷款利率",
-      "type": "clause",
-      "properties": {
-        "rate_determination": "按照国家公布的同期利率执行",
-        "second_house_rate": "不得低于同期首套利率的1.1倍",
-        "rate_adjustment": "贷款期限一年以上的，于次年1月1日起调整"
-      },
-      "source_block_ids": ["kb_024", "kb_068"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金异地贷款细则",
-      "name": "天水市住房公积金个人住房异地贷款实施细则",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "建金〔2015〕135号"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_019"]}
+      "relations": [],
+      "source_block_ids": [
+        "kb_033",
+        "kb_035"
       ],
-      "source_block_ids": ["kb_019", "kb_020", "kb_021", "kb_022", "kb_023", "kb_024", "kb_025", "kb_026"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_建金2018_46号通知",
-      "name": "关于开展治理违规提取住房公积金工作的通知（建金〔2018〕46号）",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "住房城乡建设部、财政部、人民银行、公安部",
-        "document_number": "建金〔2018〕46号"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_009"]}
-      ],
-      "source_block_ids": ["kb_009", "kb_010", "kb_011", "kb_012", "kb_013", "kb_014", "kb_015", "kb_016", "kb_017"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金归集业务操作规程",
-      "name": "天水市住房公积金归集业务操作规程（试行）",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、《天水市住房公积金归集管理办法》"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_027"]}
-      ],
-      "source_block_ids": ["kb_027", "kb_028", "kb_029", "kb_030", "kb_031", "kb_032", "kb_033", "kb_034", "kb_035", "kb_036", "kb_037", "kb_038", "kb_039", "kb_040", "kb_041", "kb_042", "kb_043", "kb_044", "kb_045", "kb_046", "kb_047"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金提取业务操作规程",
-      "name": "天水市住房公积金提取业务操作规程（试行）",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、《天水市住房公积金提取管理办法》"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_048"]}
-      ],
-      "source_block_ids": ["kb_048", "kb_049", "kb_050", "kb_051", "kb_052", "kb_053", "kb_054", "kb_055", "kb_056", "kb_057", "kb_058", "kb_059", "kb_060", "kb_061", "kb_062"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金组合贷款操作规程",
-      "name": "天水市住房公积金管理中心个人住房组合贷款操作规程",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、《贷款通则》、《天水住房公积金贷款管理办法》"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_064"]}
-      ],
-      "source_block_ids": ["kb_064", "kb_065", "kb_066", "kb_067", "kb_068", "kb_069", "kb_070", "kb_071", "kb_072", "kb_073", "kb_074", "kb_075", "kb_076", "kb_077", "kb_078", "kb_079", "kb_080", "kb_081"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金贷款政策调整",
-      "name": "天水市住房公积金管理中心优化调整住房公积金个人住房贷款政策",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "effective_date": "2024年",
-        "legal_basis": "甘建金〔2024〕24号、甘建金〔2024〕168号"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_082"]}
-      ],
-      "source_block_ids": ["kb_082"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_天水农业转移人员缴存办法",
-      "name": "天水市住房公积金管理中心关于农业转移人员缴存和使用住房公积金管理办法",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "promulgation_date": "2020年3月4日",
-        "legal_basis": "《住房公积金管理条例》、建金管〔2005〕5号"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_084"]}
-      ],
-      "source_block_ids": ["kb_084", "kb_085", "kb_086", "kb_087", "kb_088", "kb_089", "kb_090", "kb_091", "kb_092", "kb_093", "kb_094", "kb_095", "kb_096", "kb_097"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_周六不打烊服务",
-      "name": "全市住房公积金各服务大厅周六不打烊服务",
-      "type": "procedure",
-      "properties": {
-        "service_hours_saturday": "每周六上午8:30-12:00，下午2:30-6:00（法定节假日除外）",
-        "weekday_delay": "对已到下班时间尚未办结的业务延时服务",
-        "appointment_home_service": "缴存单位、缴存人有特殊情况的，可电话预约上门办理",
-        "effective_date": "2025年3月1日"
-      },
-      "source_block_ids": ["kb_018"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金月对冲还贷",
-      "name": "住房公积金月对冲还贷业务",
-      "type": "procedure",
-      "properties": {
-        "恢复日期": "2023年1月17日"
-      },
-      "source_block_ids": ["kb_083"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_贷款偿还",
-      "name": "住房公积金贷款偿还",
-      "type": "procedure",
-      "properties": {
-        "default_trigger_months": "连续3个月以上违约还款开始催收",
-        "legal_action_months": "连续6个月以上违约可起诉"
-      },
-      "source_block_ids": ["kb_025"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金异地贷款",
-      "name": "住房公积金异地贷款",
-      "type": "procedure",
-      "properties": {
-        "applicant_requirement": "非天水缴存职工购买天水自住住房",
-        "tianshui_household_requirement": "申请人或配偶具有天水市户口，或连续正常缴纳社保2年以上",
-        "deposit_requirement": "连续足额缴存6个月（含）以上",
-        "mortgage_requirement": "需提供本市现房作为抵押（非天水缴存职工）"
-      },
-      "source_block_ids": ["kb_019", "kb_020", "kb_021", "kb_022", "kb_023", "kb_110", "kb_113"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_异地贷款材料",
-      "name": "住房公积金异地贷款申请材料",
+      "id": "ent_征信报告",
+      "name": "征信报告",
       "type": "material",
       "properties": {
-        "required_documents": ["《异地贷款职工住房公积金缴存及使用证明》", "近6个月公积金缴存明细", "借款人及其配偶居民身份证", "婚姻状况证明", "收入证明", "个人征信报告", "购房首付款证明", "房屋买卖合同或协议"]
+        "description": "个人信用报告"
       },
-      "source_block_ids": ["kb_022", "kb_031", "kb_032"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "relations": [],
+      "source_block_ids": [
+        "kb_246"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_公积金提取贷款调整通知",
-      "name": "天水市住房公积金管理中心关于调整个人住房公积金提取和贷款相关政策的通知",
-      "type": "policy",
+      "id": "ent_征信要求",
+      "name": "征信要求",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_245"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_微信公众号",
+      "name": "微信公众号",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_029"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_房产套数证明",
+      "name": "房产套数证明",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_245"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_手机APP",
+      "name": "手机APP",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_029"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_抵押担保",
+      "name": "抵押担保",
+      "type": "condition",
       "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "main_changes": "贷款额度倍数从18倍调整为15倍、新增账户止付金额、新增异地贷款现房抵押要求"
+        "description": "公积金贷款需提供房产抵押或预抵押担保"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_035",
+        "kb_036",
+        "kb_038",
+        "kb_039"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_拆迁安置",
+      "name": "拆迁安置",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_按月对冲还贷",
+      "name": "按月对冲还贷",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_025",
+        "kb_054"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_挪用住房公积金",
+      "name": "挪用住房公积金",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_020"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_提取复核",
+      "name": "提取复核",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_030"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_提取管理办法",
+      "name": "提取管理办法",
+      "type": "policy",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金管理条例",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_022"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_022"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_支付购房首付款提取",
+      "name": "支付购房首付款提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_收入证明",
+      "name": "收入证明",
+      "type": "material",
+      "properties": {
+        "description": "证明还款能力的收入材料"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_246"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_放款",
+      "name": "放款",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_248"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_无房产证明",
+      "name": "无房产证明",
+      "type": "material",
+      "properties": {
+        "description": "当地房地产管理部门出具的无房产证明"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_026"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_最低生活保障",
+      "name": "最低生活保障",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_028"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_武山大厅",
+      "name": "武山大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金武山服务大厅,预约电话:0938-6865305"
       },
       "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_109"]}
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_109", "kb_110"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "source_block_ids": [
+        "kb_014"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_天水公积金政策调整说明",
-      "name": "天水市住房公积金管理中心关于调整部分政策的说明",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "approval_body": "天水市住房公积金管理委员会第四届五次会议"
-      },
-      "source_block_ids": ["kb_111", "kb_112", "kb_113", "kb_114"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金流动性预警",
-      "name": "住房公积金流动性风险预警",
+      "id": "ent_死亡",
+      "name": "死亡",
       "type": "clause",
       "properties": {
-        "risk_threshold": "个贷率超过85%风险警戒线",
-        "current_rate": "96.82%（2021年）",
-        "level_2_warning_measures": [
-          "最高贷款额×0.9（贷款系数）",
-          "二套房最高贷款额度下调5万元",
-          "暂停商转公贷款业务",
-          "暂停受理公积金月对冲还款签约业务",
-          "贷款轮候发放（首套优先）"
-        ],
-        "effective_date": "2021年6月15日"
+        "description": "职工死亡或被宣告死亡，由继承人或受遗赠人提取"
       },
-      "source_block_ids": ["kb_114", "kb_083"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_027"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_天水公积金归集管理办法",
-      "name": "天水市住房公积金管理中心归集管理办法（试行）",
-      "type": "policy",
+      "id": "ent_民政部",
+      "name": "民政部",
+      "type": "department",
       "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、建金管〔2005〕5号、GB/T51271-2017"
+        "description": "负责婚姻登记等民政事务信息共享"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_007"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_法院扣划",
+      "name": "法院扣划",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_028"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_清水大厅",
+      "name": "清水大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金清水服务大厅,预约电话:0938-8874687"
       },
       "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_146"]}
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_146", "kb_147", "kb_148", "kb_149", "kb_150", "kb_151", "kb_152", "kb_153", "kb_154", "kb_155", "kb_156", "kb_157", "kb_158", "kb_159", "kb_160", "kb_161", "kb_162", "kb_163", "kb_164", "kb_165", "kb_166", "kb_167", "kb_168", "kb_169", "kb_170", "kb_171", "kb_172", "kb_173", "kb_174", "kb_175", "kb_176", "kb_177"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金提取管理办法",
-      "name": "天水市住房公积金管理中心提取管理办法（试行）",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、GB/T51353-2019、建金〔2018〕46号"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_197"]}
+      "source_block_ids": [
+        "kb_014"
       ],
-      "source_block_ids": ["kb_197", "kb_198", "kb_199", "kb_200", "kb_201", "kb_202", "kb_203", "kb_204", "kb_205", "kb_206", "kb_207", "kb_208", "kb_209"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_天水公积金2021年缴存基数调整",
-      "name": "天水市住房公积金管理中心关于调整2021年度住房公积金缴存比例及缴存基数的通知",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "effective_period": "2021年7月1日至2022年6月30日"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_098"]}
+      "id": "ent_滥用职权",
+      "name": "滥用职权",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_031"
       ],
-      "source_block_ids": ["kb_098", "kb_099", "kb_100", "kb_101", "kb_102", "kb_103"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_天水公积金2025年缴存基数调整",
-      "name": "天水市住房公积金管理中心关于调整2025年度住房公积金缴存比例及缴存基数的通知",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "effective_date": "2025年7月1日",
-        "promulgation_date": "2025年6月30日"
-      },
-      "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_104"]}
-      ],
-      "source_block_ids": ["kb_104", "kb_105", "kb_106", "kb_107", "kb_108"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_新建房合同备案提取",
-      "name": "购买新建商品房提取住房公积金",
-      "type": "procedure",
-      "properties": {
-        "required_materials": ["经房地产管理部门登记备案的《商品房买卖（销售）合同》", "房屋付款凭证", "或《不动产权证书》和购房缴税发票"],
-        "time_limit": "购房合同生效后二年以内或不动产权证书办妥后二年以内",
-        "extraction_cap": "不超过所购房屋总价"
-      },
-      "source_block_ids": ["kb_054"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_再交易住房提取",
-      "name": "购买再交易自住住房提取住房公积金",
-      "type": "procedure",
-      "properties": {
-        "required_documents": ["已过户的《不动产权证书》", "购房缴税发票"]
-      },
-      "source_block_ids": ["kb_054"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_租赁住房提取",
-      "name": "租赁住房提取住房公积金",
-      "type": "procedure",
-      "properties": {
-        "eligibility": "连续足额缴存满3个月，本人及配偶在本市无自住住房",
-        "public_rental_housing": "按实际租房金额提取",
-        "market_rental_Qinzhou_max": "20000元/年",
-        "market_rental_Maiji_max": "15000元/年",
-        "market_rental_other_counties_max": "10000元/年",
-        "market_rental_no_restriction": "20000元/年（新市民、灵活就业人员、农业转移人员）"
-      },
-      "source_block_ids": ["kb_055", "kb_109", "kb_112"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_退休提取",
-      "name": "离休、退休提取住房公积金",
-      "type": "procedure",
-      "properties": {
-        "requirement": "先办理个人账户封存",
-        "extraction_amount": "账户全部存储余额并注销账户",
-        "age_exemption": "男满60周岁、女满55周岁免提供证明"
-      },
-      "source_block_ids": ["kb_055", "kb_187"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_单位缴存登记",
-      "name": "单位住房公积金缴存登记",
-      "type": "procedure",
-      "properties": {
-        "new_unit_deadline": "自设立之日起30日内",
-        "account_setup_deadline": "自登记之日起20日内",
-        "processing_time": "申请资料完整无误的3个工作日内办结"
-      },
-      "source_block_ids": ["kb_031", "kb_118", "kb_119"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_个人账户设立",
-      "name": "住房公积金个人账户设立",
-      "type": "procedure",
-      "properties": {
-        "new_employee_deadline": "录用之日起30日内",
-        "reopen_interval": "已销户职工在同一单位重新开户须间隔一年以上"
-      },
-      "source_block_ids": ["kb_032", "kb_119"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_缴存补缴",
-      "name": "住房公积金补缴",
-      "type": "procedure",
-      "properties": {
-        "earliest_retroactive_date": "1999年4月（条例颁布之月）",
-        "flexible_workers_limitation": "只能从开户之日起按月缴存，不允许追溯补缴",
-        "supplementary_payment_scenarios": 7
-      },
-      "source_block_ids": ["kb_036", "kb_037", "kb_038", "kb_039"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_缴存缓缴",
-      "name": "住房公积金缓缴",
-      "type": "procedure",
-      "properties": {
-        "duration": "1年",
-        "requirement": "经职工代表大会或工会讨论通过、管理中心审核、管委会审批",
-        "processing_time": "有管委会授权的10个工作日内"
-      },
-      "source_block_ids": ["kb_037", "kb_038", "kb_039", "kb_125"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_催缴程序",
-      "name": "住房公积金催缴",
-      "type": "procedure",
-      "properties": {
-        "phone_notice_period": "10日内补缴",
-        "enforcement": "可申请人民法院强制执行"
-      },
-      "source_block_ids": ["kb_038", "kb_039"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_账户信息变更",
-      "name": "住房公积金单位及个人信息变更",
-      "type": "procedure",
-      "properties": {
-        "change_deadline": "自发生变更之日起30日内",
-        "processing_time": "申请资料完整无误的3个工作日内办结"
-      },
-      "source_block_ids": ["kb_040", "kb_041", "kb_042", "kb_043", "kb_044", "kb_132", "kb_133", "kb_169", "kb_170"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_账户封存",
-      "name": "住房公积金个人账户封存",
-      "type": "procedure",
-      "properties": {
-        "condition": "单位与职工中断工资关系",
-        "deadline": "自中断工资关系之日起30日内"
-      },
-      "source_block_ids": ["kb_041", "kb_042", "kb_043", "kb_044", "kb_134", "kb_135", "kb_136"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_账户启封",
-      "name": "住房公积金个人账户启封",
-      "type": "procedure",
-      "properties": {
-        "condition": "单位与职工恢复工资关系"
-      },
-      "source_block_ids": ["kb_042", "kb_043", "kb_044"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_账户注销",
-      "name": "住房公积金单位账户注销",
-      "type": "procedure",
-      "properties": {
-        "deadline": "单位合并、分立、撤销、解散或破产之日起30日内",
-        "transfer_deadline": "自办妥变更或注销登记之日起20日内"
-      },
-      "source_block_ids": ["kb_043", "kb_044"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_账户转移",
-      "name": "住房公积金个人账户转移",
-      "type": "procedure",
-      "properties": {
-        "transfer_deadline": "劳动关系终止之日起30日内",
-        "same_city": "同城转移直接办理",
-        "cross_city": "通过全国异地转移接续平台办理",
-        "cross_city_waiting_period": "异地开立账户并稳定缴存半年以上"
-      },
-      "source_block_ids": ["kb_044", "kb_137"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_灵活就业人员缴存",
-      "name": "灵活就业人员住房公积金缴存",
-      "type": "procedure",
-      "properties": {
-        "deposit_ratio": "10%—24%",
-        "deposit_basis": "天水市上一年度城镇非私营单位在岗职工月平均工资",
-        "payment_method": "银行卡委托扣划",
-        "monthly_deduction": "中心按月扣划"
-      },
-      "source_block_ids": ["kb_045", "kb_143"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_农业转移人员缴存",
-      "name": "农业转移人员住房公积金缴存",
-      "type": "procedure",
-      "properties": {
-        "eligibility": "天水户籍或持有居住证，18岁以上，男未满60周岁、女未满55周岁",
-        "deposit_ratio": "20%",
-        "deposit_basis": "天水市上一年度在岗职工月平均工资",
-        "required_materials": ["本人身份证、户口簿或居住证", "连续缴存两年以上的养老保险手册", "《农业转移人员缴存住房公积金申请表》"],
-        "payment_method": "与中心签订委托扣款协议",
-        "loan_repayment_limit": "月还款额不得超过月缴存额",
-        "default_consequence": "欠缴三个月以上账户封存"
-      },
-      "source_block_ids": ["kb_084", "kb_085", "kb_086", "kb_087", "kb_088", "kb_089", "kb_090", "kb_091", "kb_092", "kb_093", "kb_094", "kb_095", "kb_096", "kb_097"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_公积金查询",
-      "name": "住房公积金信息查询",
-      "type": "procedure",
-      "properties": {
-        "online_channels": ["微信公众号", "网上服务大厅", "手机APP", "支付宝市民中心小程序", "一体查询机", "服务热线12329", "国家政务服务平台", "甘肃省政务服务网"],
-        "offline_channels": ["各县区管理部"]
-      },
-      "source_block_ids": ["kb_046", "kb_047", "kb_140", "kb_141", "kb_142"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_提取审核流程",
-      "name": "住房公积金提取审核流程",
-      "type": "procedure",
-      "properties": {
-        "same_day_processing": "材料齐全即时办理",
-        "extended_processing": "3个工作日内办结",
-        "approval_time": "3日内作出准予或不准确决定（提取）/ 15日内（贷款）",
-        "reconsideration_period": "5个工作日内答复"
-      },
-      "source_block_ids": ["kb_011", "kb_058", "kb_059", "kb_191", "kb_192"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_失信联合惩戒",
-      "name": "住房公积金违规提取失信联合惩戒",
+      "id": "ent_灵活就业人员",
+      "name": "灵活就业人员",
       "type": "clause",
       "properties": {
-        "penalty": "记载失信记录、责令限期全额退回、限制提取和贷款、通报所在单位",
-        "severe_cases": "列为严重失信行为、向相关管理部门报送失信信息"
+        "description": "个体工商户、自由职业者、非全日制从业人员等可自愿缴存住房公积金"
       },
-      "source_block_ids": ["kb_012", "kb_060", "kb_061", "kb_062", "kb_193", "kb_194", "kb_195"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "relations": [],
+      "source_block_ids": [
+        "kb_044",
+        "kb_048",
+        "kb_051",
+        "kb_259"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_信息共享机制",
-      "name": "住房公积金跨部门信息共享机制",
-      "type": "procedure",
+      "id": "ent_珠三角",
+      "name": "珠三角",
+      "type": "condition",
       "properties": {
-        "involved_departments": ["公安", "住房城乡建设", "人力资源社会保障", "民政", "不动产登记部门", "人民银行分支机构"],
-        "verified_information": ["个人身份", "户籍", "房产交易", "就业", "社保", "婚姻登记", "不动产登记"]
+        "description": "人员跨地区流动频繁的城市群,率先建立信息协查机制"
       },
-      "source_block_ids": ["kb_014"],
-      "quality": {"confidence": 0.8, "warnings": []}
+      "relations": [],
+      "source_block_ids": [
+        "kb_008"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_跨地协查机制",
-      "name": "住房公积金跨地协查机制",
-      "type": "procedure",
+      "id": "ent_甘建金〔2024〕168号",
+      "name": "甘建金〔2024〕168号",
+      "type": "policy",
       "properties": {
-        "priority_regions": ["京津冀", "长三角", "珠三角"]
+        "document_number": "甘建金〔2024〕168号"
       },
-      "source_block_ids": ["kb_015"],
-      "quality": {"confidence": 0.8, "warnings": []}
+      "relations": [
+        {
+          "target": "ent_住房公积金管理条例",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_040"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_040"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_房产交易公积金联审",
-      "name": "房产交易与公积金提贷业务联合审查机制",
-      "type": "procedure",
+      "id": "ent_甘建金〔2024〕24号",
+      "name": "甘建金〔2024〕24号",
+      "type": "policy",
       "properties": {
-        "issuing_authority": "天水市住房公积金管理中心、天水市房产服务中心",
-        "effective_date": "2025年7月11日"
+        "document_number": "甘建金〔2024〕24号"
       },
-      "source_block_ids": ["kb_063"],
-      "quality": {"confidence": 0.9, "warnings": []}
+      "relations": [
+        {
+          "target": "ent_住房公积金管理条例",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_040"
+          ]
+        },
+        {
+          "target": "ent_甘建金〔2024〕168号",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_040"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_040"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_甘肃省住房公积金区域一体化共享协同平台",
+      "name": "甘肃省住房公积金区域一体化共享协同平台",
+      "type": "policy",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_046"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_甘肃省住房和城乡建设厅",
+      "name": "甘肃省住房和城乡建设厅",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_040"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_甘谷大厅",
+      "name": "甘谷大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金甘谷服务大厅,预约电话:0938-6869063"
+      },
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_014"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_申请受理",
+      "name": "申请受理",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_030"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_社保缴纳",
+      "name": "社保缴纳",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_244"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_离休退休",
+      "name": "离休退休",
+      "type": "clause",
+      "properties": {
+        "description": "离休、退休人员可提取住房公积金账户全部余额并注销账户"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_027"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_租赁住房",
+      "name": "租赁住房",
+      "type": "clause",
+      "properties": {
+        "description": "无自有住房因租赁住房需要支付房租可提取"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_026"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_秦安大厅",
+      "name": "秦安大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金秦安服务大厅,预约电话:0938-6868158"
+      },
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_014"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_秦州大厅",
+      "name": "秦州大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金秦州服务大厅,预约电话:0938-8218344"
+      },
+      "relations": [
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_014"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_管理部",
+      "name": "管理部",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_029"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     },
     {
       "id": "ent_组合贷款",
-      "name": "个人住房组合贷款",
-      "type": "procedure",
-      "properties": {
-        "definition": "公积金贷款不足部分由银行商业贷款补足",
-        "max_term": "30年",
-        "repayment_options": ["等额本息", "等额本金"],
-        "first_house_max_ratio": "70%",
-        "second_house_max_ratio": "60%",
-        "月供收入比": "不超过50%",
-        "risk_allocation": "公积金部分由公积金中心承担，商业部分由银行承担"
-      },
-      "source_block_ids": ["kb_064", "kb_065", "kb_066", "kb_067", "kb_068", "kb_069", "kb_070", "kb_071", "kb_072", "kb_073", "kb_074", "kb_075", "kb_076", "kb_077", "kb_078", "kb_079", "kb_080", "kb_081"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_组合贷款担保",
-      "name": "组合贷款抵押担保",
-      "type": "condition",
-      "properties": {
-        "requirement": "所购房产办理抵押或预抵押",
-        "priority": "公积金中心和商贷银行同为第一顺位抵押权人"
-      },
-      "source_block_ids": ["kb_076"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金执法罚则",
-      "name": "住房公积金管理条例罚则",
+      "name": "组合贷款",
       "type": "clause",
       "properties": {
-        "failing_to_register_fine": "1万元以上5万元以下的罚款",
-        "overdue_or_short_payment": "责令限期缴存，可申请人民法院强制执行",
-        "misappropriation": "追究刑事责任或降级撤职处分"
-      },
-      "source_block_ids": ["kb_007", "kb_175", "kb_176"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_新市民租房提取",
-      "name": "新市民（灵活就业人员、农业转移人员）租房提取",
-      "type": "procedure",
-      "properties": {
-        "max_amount": "20000元/年",
-        "condition": "本人及配偶在本市无自住住房",
-        "effective_date": "2021年5月17日"
-      },
-      "source_block_ids": ["kb_109", "kb_112"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_偿还商业贷款提取",
-      "name": "偿还商业住房贷款本息提取住房公积金",
-      "type": "procedure",
-      "properties": {
-        "frequency": "贷款期间内每年可申请一次",
-        "cumulative_limit": "不超过偿还贷款本息总额（不含罚息）"
-      },
-      "source_block_ids": ["kb_054", "kb_112"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_偿还公积金贷款提取",
-      "name": "偿还住房公积金贷款本息提取",
-      "type": "procedure",
-      "source_block_ids": ["kb_054"],
-      "quality": {"confidence": 0.8, "warnings": []}
-    },
-    {
-      "id": "ent_公积金贷款不限制缴存地",
-      "name": "住房公积金贷款不受缴存地限制",
-      "type": "clause",
-      "properties": {
-        "provision": "异地缴存职工在天水购房与本地职工同等享有贷款权益"
-      },
-      "source_block_ids": ["kb_082"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_父母共同参贷",
-      "name": "缴存职工直系亲属共同参贷",
-      "type": "clause",
-      "properties": {
-        "provision": "单身或单方缴存职工申请贷款时，父母可作为共同借款人",
-        "account_merge": "借款人、共同借款人账户余额合并计算"
-      },
-      "source_block_ids": ["kb_082"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_释放住房消费潜力报道",
-      "name": "释放住房消费潜力 助力经济复苏系列报道之公积金贷款政策松绑",
-      "type": "policy",
-      "source_block_ids": ["kb_210"],
-      "quality": {"confidence": 0.7, "warnings": ["External news article, not official policy document"]}
-    },
-    {
-      "id": "ent_公积金管理中心监督职责",
-      "name": "住房公积金管理中心监督职责",
-      "type": "clause",
-      "properties": {
-        "supervision_targets": ["单位按时缴存", "受委托银行履约", "单位变更和注销登记"]
-      },
-      "source_block_ids": ["kb_006"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_违规提取综合治理",
-      "name": "违规提取住房公积金集中治理工作",
-      "type": "procedure",
-      "properties": {
-        "involved_authorities": ["公安", "通信", "城管", "网信"],
-        "scope": ["清理违规信息", "关停违规网站和电话", "查处中介机构", "移交伪造证明材料线索"]
-      },
-      "source_block_ids": ["kb_016"],
-      "quality": {"confidence": 0.85, "warnings": []}
-    },
-    {
-      "id": "ent_公积金风险内控",
-      "name": "住房公积金管理中心内部风险管理",
-      "type": "procedure",
-      "properties": {
-        "three_defense_lines": ["前台受理审核", "后台重点复核", "内审部门稽核"],
-        "control_measures": ["合理设置岗位", "明确岗位职责", "定期轮岗", "廉政风险防控"]
-      },
-      "source_block_ids": ["kb_013"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_公积金提取不得情形",
-      "name": "不得提取住房公积金的情形",
-      "type": "condition",
-      "properties": {
-        "prohibited_scenarios": [
-          "账户被依法查封、冻结",
-          "购买商业用房或商住两用房",
-          "行为时间超过规定期限",
-          "室内装修",
-          "以赠与、继承等方式取得住房"
-        ]
-      },
-      "source_block_ids": ["kb_051", "kb_052", "kb_181", "kb_201"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_提取方式",
-      "name": "住房公积金提取方式",
-      "type": "procedure",
-      "properties": {
-        "transfer_method": "转账方式",
-        "loan_priority": "负有贷款责任的职工，公积金优先偿还贷款本息",
-        "annual_limit": "一年只能提取一次（销户提取除外）"
-      },
-      "source_block_ids": ["kb_056", "kb_057", "kb_188", "kb_189", "kb_190", "kb_204"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_提取监督",
-      "name": "住房公积金提取监督",
-      "type": "clause",
-      "properties": {
-        "fake_documents_penalty": "责令全额追回，取消提取和贷款资格，通报所在单位",
-        "severe_cases": "移交司法部门处理"
-      },
-      "source_block_ids": ["kb_060", "kb_061", "kb_062", "kb_193", "kb_194", "kb_195", "kb_206", "kb_207"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_天水公积金归集业务操作规程新版",
-      "name": "天水市住房公积金管理中心归集业务操作规程（试行）",
-      "type": "policy",
-      "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、GB/T 51271-2017、《天水市住房公积金管理中心归集管理办法》"
+        "description": "住房公积金个人住房贷款与商业银行个人住房贷款的组合贷款"
       },
       "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_115"]}
+        {
+          "target": "ent_公积金贷款",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_032"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_115", "kb_116", "kb_117", "kb_118", "kb_119", "kb_120", "kb_121", "kb_122", "kb_123", "kb_124", "kb_125", "kb_126", "kb_127", "kb_128", "kb_129", "kb_130", "kb_131", "kb_132", "kb_133", "kb_134", "kb_135", "kb_136", "kb_137", "kb_138", "kb_139", "kb_140", "kb_141", "kb_142", "kb_143", "kb_144", "kb_145"],
-      "quality": {"confidence": 0.95, "warnings": []}
+      "source_block_ids": [
+        "kb_032",
+        "kb_033",
+        "kb_034",
+        "kb_035",
+        "kb_036",
+        "kb_037",
+        "kb_038",
+        "kb_039"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
     },
     {
-      "id": "ent_天水公积金提取业务操作规程新版",
-      "name": "天水市住房公积金管理中心提取业务操作规程（试行）",
-      "type": "policy",
+      "id": "ent_经济适用住房",
+      "name": "经济适用住房",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_缴存基数",
+      "name": "缴存基数",
+      "type": "condition",
       "properties": {
-        "issuing_authority": "天水市住房公积金管理中心",
-        "legal_basis": "《住房公积金管理条例》、GB/T51353-2019、《天水市住房公积金提取管理办法》"
+        "description": "职工住房公积金缴存基数为职工本人上一年度月平均工资"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_253",
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_缴存明细",
+      "name": "缴存明细",
+      "type": "material",
+      "properties": {
+        "description": "近6个月公积金缴存明细"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_246"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_缴存比例",
+      "name": "缴存比例",
+      "type": "condition",
+      "properties": {
+        "description": "单位和职工缴存比例最低5%,最高12%"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_017",
+        "kb_253",
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_缴存证明",
+      "name": "缴存证明",
+      "type": "material",
+      "properties": {
+        "description": "异地贷款职工住房公积金缴存及使用证明"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_246",
+        "kb_247",
+        "kb_251"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_网上服务大厅",
+      "name": "网上服务大厅",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_029"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_行政处分",
+      "name": "行政处分",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_020"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_补缴断缴",
+      "name": "补缴断缴",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_251"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_解除劳动关系",
+      "name": "解除劳动关系",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_027"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_证明有效期",
+      "name": "证明有效期",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_251"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_财务报告",
+      "name": "财务报告",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_019"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_财政部",
+      "name": "财政部",
+      "type": "department",
+      "properties": {
+        "description": "国务院财政部门"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_001",
+        "kb_011"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_财政部门",
+      "name": "财政部门",
+      "type": "department",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_019"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_账户封存",
+      "name": "账户封存",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_027"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购买二手房提取",
+      "name": "购买二手房提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购买保障房提取",
+      "name": "购买保障房提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购买商品房提取",
+      "name": "购买商品房提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购买国债",
+      "name": "购买国债",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_018"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购买拆迁安置房提取",
+      "name": "购买拆迁安置房提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_256"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购买自住住房",
+      "name": "购买自住住房",
+      "type": "clause",
+      "properties": {
+        "description": "购买、建造、翻建、大修自住住房可提取住房公积金"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_023",
+        "kb_024"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购房合同",
+      "name": "购房合同",
+      "type": "material",
+      "properties": {
+        "description": "购房合同原件及复印件"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_246"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_购房证明",
+      "name": "购房证明",
+      "type": "material",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_247"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款偿还",
+      "name": "贷款偿还",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_250"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款利率",
+      "name": "贷款利率",
+      "type": "condition",
+      "properties": {
+        "description": "公积金贷款利率按照国家公布的同期利率执行"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_249"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款受理",
+      "name": "贷款受理",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_248"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款对象",
+      "name": "贷款对象",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_243"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款期限",
+      "name": "贷款期限",
+      "type": "condition",
+      "properties": {
+        "description": "公积金贷款最长期限由市公积金管委会确定"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_249"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款申请",
+      "name": "贷款申请",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_248"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_贷款额度",
+      "name": "贷款额度",
+      "type": "condition",
+      "properties": {
+        "description": "公积金贷款最高额度由市公积金管委会确定"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_249"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_资料审核",
+      "name": "资料审核",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_030"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_起诉收回",
+      "name": "起诉收回",
+      "type": "procedure",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_250"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_身份证明",
+      "name": "身份证明",
+      "type": "material",
+      "properties": {
+        "description": "居民身份证原件及复印件"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_246",
+        "kb_247"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_转账提取",
+      "name": "转账提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_029"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_违约还款",
+      "name": "违约还款",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_250"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_违规套取",
+      "name": "违规套取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_031"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_连续缴存6个月",
+      "name": "连续缴存6个月",
+      "type": "clause",
+      "properties": {
+        "description": "申请公积金贷款需连续足额缴存住房公积金6个月(含)以上"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_245"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_销户提取",
+      "name": "销户提取",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_长三角",
+      "name": "长三角",
+      "type": "condition",
+      "properties": {
+        "description": "人员跨地区流动频繁的城市群,率先建立信息协查机制"
+      },
+      "relations": [],
+      "source_block_ids": [
+        "kb_008"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_集中管理账户",
+      "name": "集中管理账户",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_255"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_非天水缴存职工",
+      "name": "非天水缴存职工",
+      "type": "clause",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_243"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_首付款证明",
+      "name": "首付款证明",
+      "type": "condition",
+      "properties": {},
+      "relations": [],
+      "source_block_ids": [
+        "kb_246"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_麦积大厅",
+      "name": "麦积大厅",
+      "type": "department",
+      "properties": {
+        "description": "天水市住房公积金麦积服务大厅,预约电话:0938-8871350"
       },
       "relations": [
-        {"target": "ent_住房公积金管理条例", "predicate": "references", "evidence_block_ids": ["kb_178"]}
+        {
+          "target": "ent_天水市住房公积金管理中心",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_014"
+          ]
+        }
       ],
-      "source_block_ids": ["kb_178", "kb_179", "kb_180", "kb_181", "kb_182", "kb_183", "kb_184", "kb_185", "kb_186", "kb_187", "kb_188", "kb_189", "kb_190", "kb_191", "kb_192", "kb_193", "kb_194", "kb_195", "kb_196"],
-      "quality": {"confidence": 0.95, "warnings": []}
-    },
-    {
-      "id": "ent_公积金利息",
-      "name": "住房公积金利息",
-      "type": "clause",
-      "properties": {
-        "interest_start_date": "自存入职工住房公积金账户之日起",
-        "rate_basis": "国家规定的利率",
-        "tax_treatment": "免交所得税"
-      },
-      "source_block_ids": ["kb_091", "kb_092"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_农业转移人员违约处理",
-      "name": "农业转移人员公积金贷款违约处理",
-      "type": "clause",
-      "properties": {
-        "default_action": "中心有权解除借款合同并提前收回贷款本息",
-        "credit_penalty": "记入人民银行征信系统并记入黑名单",
-        "false_material_penalty": "取消5年内住房公积金提取及贷款资格"
-      },
-      "source_block_ids": ["kb_095", "kb_096", "kb_097"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_组合贷款资料共享",
-      "name": "组合贷款资料共享",
-      "type": "procedure",
-      "properties": {
-        "provision": "公积金贷款已具备的资料商贷银行可共享查看，借款人不再重复提供"
-      },
-      "source_block_ids": ["kb_073", "kb_074", "kb_075"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_组合贷款抵押登记",
-      "name": "组合贷款抵押登记",
-      "type": "procedure",
-      "source_block_ids": ["kb_074", "kb_075"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_组合贷款贷后管理",
-      "name": "组合贷款贷后管理",
-      "type": "procedure",
-      "source_block_ids": ["kb_077", "kb_078", "kb_079", "kb_080"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_办理时限",
-      "name": "住房公积金业务办理时限",
-      "type": "procedure",
-      "properties": {
-        "extraction_same_day": "申请资料完整无误当日办结",
-        "extraction_3_days": "需进一步核实3个工作日内告知结果",
-        "extraction_reconsideration": "5个工作日内答复",
-        "loan_approval": "15个工作日内作出准予或不准予决定",
-        "mortgage_loan_release": "抵押登记完成后3个工作日内发放贷款"
-      },
-      "source_block_ids": ["kb_023", "kb_059", "kb_082", "kb_144"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_查询渠道",
-      "name": "住房公积金查询渠道",
-      "type": "procedure",
-      "source_block_ids": ["kb_046", "kb_047", "kb_140", "kb_141", "kb_142"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_单位缴存义务",
-      "name": "单位住房公积金缴存义务",
-      "type": "clause",
-      "source_block_ids": ["kb_006"],
-      "quality": {"confidence": 0.85, "warnings": []}
-    },
-    {
-      "id": "ent_错账调整",
-      "name": "住房公积金错账调整",
-      "type": "procedure",
-      "source_block_ids": ["kb_039"],
-      "quality": {"confidence": 0.85, "warnings": []}
-    },
-    {
-      "id": "ent_司法冻结扣划",
-      "name": "住房公积金司法冻结和扣划",
-      "type": "procedure",
-      "properties": {
-        "required_documents_for_court": ["协助执行扣划通知书", "法院执行裁定书", "执行公务证件"],
-        "legal_basis": "《住房公积金管理条例》第二十四条"
-      },
-      "source_block_ids": ["kb_046", "kb_047", "kb_055"],
-      "quality": {"confidence": 0.9, "warnings": []}
-    },
-    {
-      "id": "ent_出具缴存证明",
-      "name": "住房公积金缴存证明开具",
-      "type": "procedure",
-      "source_block_ids": ["kb_047"],
-      "quality": {"confidence": 0.85, "warnings": []}
-    },
-    {
-      "id": "ent_宣传引导",
-      "name": "住房公积金政策宣传引导",
-      "type": "procedure",
-      "source_block_ids": ["kb_017"],
-      "quality": {"confidence": 0.8, "warnings": []}
+      "source_block_ids": [
+        "kb_014"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "warnings": []
+      }
     }
-  ],
-  "metadata": {
-    "total_blocks_processed": 210,
-    "total_entities": 70,
-    "processing_date": "2026-06-11",
-    "domain": "住房公积金（天水市）",
-    "entity_type_counts": {
-      "policy": 17,
-      "clause": 12,
-      "department": 6,
-      "condition": 4,
-      "material": 3,
-      "procedure": 28
-    }
-  }
+  ]
 }
