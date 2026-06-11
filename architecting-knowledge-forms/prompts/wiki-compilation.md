@@ -37,6 +37,14 @@ Format: Markdown with YAML frontmatter containing `entity_id`, `title`, `related
 
 Follow the output schema at [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml).
 
+## Context Budget
+
+If the orchestrator includes a note `[N additional blocks omitted due to context limit]` in {relevant_blocks}:
+- Use the inlined blocks as primary sources
+- Add `quality.warnings: ["partial_compilation: N blocks omitted"]` to the output
+- Prioritize completeness of `standards` and `conditions` sections over `faq`
+- The omitted blocks remain at `pipeline-output/blocks/` for future full recompilation
+
 ## Compilation Rules
 1. **Curate, don't concatenate.** Synthesize narrative from blocks — don't paste raw block content.
 2. **Preserve source traces.** Every section carries `source_block_ids` — never lose the link back.

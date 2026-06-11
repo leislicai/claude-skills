@@ -91,6 +91,7 @@ Ask the user:
 1. **What domain?** (e.g. 公积金, 医保, 法务, or "通用")
 2. **What subset?** Default: all four forms. User can limit: "stop after graph" or "just blocks + QA".
 3. **Where are the source documents?** A directory path or list of files.
+4. **Where to write pipeline output?** Default: `./pipeline-output` in the current working directory. User can specify any path.
 
 Then resolve the domain config:
 
@@ -102,24 +103,40 @@ Then resolve the domain config:
 5. Offer to save a new domain config for unrecognized domains
 ```
 
-Create the output directory:
+Create the output directory at the user-specified path:
 
 ```bash
-mkdir -p pipeline-output/blocks pipeline-output/wiki
+mkdir -p {output_dir}/blocks {output_dir}/wiki
 ```
 
-### Step 1: Stage 1 — Block Extraction
+All subsequent pipeline references to `pipeline-output/` should use `{output_dir}/` instead.
+
+### Step 1: Stage 1 — Block Extraction (per document, parallel, isolated)
+
+Parallel agents writing to a shared directory causes ID collisions. Each agent writes to a temp subdirectory; the orchestrator normalizes after all complete.
 
 ```
-1. READ prompts/block-extraction.md
-2. READ the matched domain config .yaml
-3. In the prompt template, replace:
-   - {input_dir} → the user's source document path
-   - {domain_config} → the full domain config YAML (inlined)
-4. DISPATCH 1 sub-agent with the resolved prompt
+1. LIST source files in the user's document directory
+2. READ prompts/block-extraction.md
+3. READ the matched domain config .yaml
+4. For EACH source document:
+   a. Assign a short doc_id (sanitized filename, e.g. "公积金管理条例")
+   b. In the prompt template, replace:
+      - {document_path} → the path to this single document
+      - {output_dir} → {user_output_dir}/blocks/temp/{doc_id}/
+      - {domain_config} → the full domain config YAML (inlined)
+   c. DISPATCH 1 sub-agent for this document
+5. Dispatch up to 8 agents in parallel. Wait for all.
+6. After ALL agents complete:
+   a. Gather all .json files from {output_dir}/blocks/temp/*/
+   b. Renumber them as kb_001.json, kb_002.json, ... sequentially into {output_dir}/blocks/
+   c. Delete temp directories
+   d. Run Between-Stages validation
 ```
 
-The sub-agent writes `pipeline-output/blocks/*.json` following [schemas/blocks.schema.yaml](schemas/blocks.schema.yaml).
+Each sub-agent writes to its OWN temp directory — no collisions. The orchestrator owns the final numbering, guaranteeing unique sequential IDs.
+
+**Resumption check:** If `{output_dir}/blocks/` already contains .json files that pass Between-Stages validation, ask the user: "Existing blocks found. Re-extract all, or only re-extract changed documents?" For changed-documents-only, compare source file timestamps against block timestamps and only dispatch agents for new/modified files.
 
 ### Step 2: Stage 2 — Entity Extraction
 
@@ -135,21 +152,32 @@ The sub-agent writes `pipeline-output/blocks/*.json` following [schemas/blocks.s
 
 The sub-agent reads `pipeline-output/blocks/` (the orchestrator tells it the files are there, with the block count inlined in the prompt). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
 
-### Step 3: Stage 3 — Wiki Compilation
+### Step 3: Stage 3 — Wiki Compilation (prioritized, parallel)
+
+Large entity catalogs (50+ entities) are too expensive for full parallel compilation. Prioritize by importance:
 
 ```
 1. Wait for Stage 2 to complete
 2. READ pipeline-output/entities.json to extract the entity list
-3. READ prompts/wiki-compilation.md
-4. READ the domain config .yaml
-5. For each entity in entities.json:
+3. Rank entities by importance score:
+   score = number_of_source_block_ids + number_of_relations + (1.5 if type is 'policy' else 0)
+   Sort descending. Top entities are the most heavily referenced, most connected policies.
+4. Ask the user: "N entities found. Top M by importance are [list]. Compile all N, or only top M?"
+   Default: compile policy + clause types only (typically covers 80%+ of knowledge value).
+5. READ prompts/wiki-compilation.md
+6. READ the domain config .yaml
+7. For each selected entity:
    a. Filter pipeline-output/blocks/ for blocks whose entities[] contain this entity_id
+   a2. If total token count of filtered blocks exceeds 60,000:
+       - Prioritize blocks with highest quality.confidence
+       - Include blocks whose tags match wiki skeleton section keys first
+       - Summarize omitted blocks as: "[N additional blocks omitted due to context limit]"
    b. In the prompt template, replace:
       - {entity_id} → the entity's id
       - {entity_data} → the entity's entry from entities.json (inlined)
       - {relevant_blocks} → the filtered blocks' content + summary (inlined, not file paths)
       - {domain_config} → the full domain config YAML (inlined)
-   c. DISPATCH 1 sub-agent per entity (parallel dispatch is safe — each writes a different file)
+   c. DISPATCH 1 sub-agent per entity (parallel dispatch — each writes a different file)
 ```
 
 Each sub-agent writes `pipeline-output/wiki/{entity_id}.md` following [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml).
@@ -167,6 +195,19 @@ Each sub-agent writes `pipeline-output/wiki/{entity_id}.md` following [schemas/w
 
 The sub-agent reads `pipeline-output/wiki/` and `pipeline-output/entities.json`, outputs `pipeline-output/qa_pairs.json` following [schemas/qa.schema.yaml](schemas/qa.schema.yaml).
 
+### Between Stages: Validate Output
+
+After each stage completes, before dispatching the next stage:
+
+1. **Count.** If output file count is 0, stop and report: "Stage N produced no output. Check input data."
+2. **Sample.** Pick 3 output files at random. Check required fields are present and non-empty.
+3. **Stage-specific checks:**
+   - Stage 1: Verify entity IDs use descriptive names (reject hash-based UUIDs like `ent_ea6cc483bf7d` — stop and require re-extraction).
+   - Stage 3: Verify wiki frontmatter has all required fields (`entity_id`, `title`, `compilation.version`, `compilation.status`). Check filenames match frontmatter `entity_id`.
+4. **Confidence scan.** If >20% of outputs have `quality.confidence < 0.5`, pause and ask the user whether to continue or fix the low-confidence outputs first.
+5. **If checks pass** → dispatch next stage.
+6. **If checks fail** → stop. Report which stage, which file, which field, and the validation error. Do not dispatch downstream stages.
+
 ### Cascade Update (Incremental Re-run)
 
 When re-running after source documents change, the orchestrator must detect what changed and only re-derive affected artifacts:
@@ -177,6 +218,43 @@ When re-running after source documents change, the orchestrator must detect what
 4. For each QA pair, compare its `quality.wiki_version` against the current wiki `compilation.version` → regenerate only stale QAs
 
 **Important:** The orchestrator must inline the stale-detection instructions into each sub-agent's prompt. Sub-agents don't automatically know what's stale — the orchestrator tells them by only passing the changed data.
+
+## Error Handling
+
+| Scenario | Action |
+|----------|--------|
+| Stage produces 0 output files | Stop. Report: "Stage N produced no output. Check input data." |
+| Sub-agent returns empty or malformed output | Retry once with the same prompt. If retry fails, stop and report stage + error. |
+| Sub-agent times out or fails | If the stage supports per-entity dispatch (wiki), retry only the failed entity. Otherwise stop. |
+| Domain config YAML fails to parse | Fall back to generic.yaml. Warn user. |
+| quality.confidence < 0.5 on >20% of outputs | Pause pipeline. Show warning count. Ask user: continue, fix and retry, or stop. |
+| Pipeline interrupted mid-run | Check pipeline-output/ for existing files. Resume from the last complete stage whose output passes Between-Stages validation. |
+| No domain matches user's input | Fall back to generic.yaml. Offer to save session rules as a new domain config. |
+
+## Pipeline Resumption
+
+Every stage writes to a distinct location. A stage is "complete" if its output exists and passes Between-Stages validation. The pipeline can resume from any stage:
+
+```
+Before each stage, check:
+  if output exists AND passes validation:
+    skip → proceed to next stage
+  else:
+    run this stage (not from Stage 1 — just this stage)
+```
+
+Example: Stage 1 passes, Stage 2 fails. Fix the issue, re-run — the orchestrator skips Stage 1 (blocks exist + pass validation) and resumes at Stage 2.
+
+**Per-stage resumption logic:**
+
+| Stage | Output to check | Action if valid |
+|-------|----------------|-----------------|
+| 1 | `{output_dir}/blocks/*.json` exists, count > 0, passes Between-Stages | Skip block extraction |
+| 2 | `{output_dir}/entities.json` exists, passes Between-Stages | Skip entity extraction |
+| 3 | `{output_dir}/wiki/*.md` exists, count > 0, passes Between-Stages | Skip wiki compilation. For incremental, only compile stale entities. |
+| 4 | `{output_dir}/qa_pairs.json` exists, passes Between-Stages | Skip QA generation |
+
+**Resumption check is the FIRST thing the orchestrator does at each Step.** It must happen before reading prompt templates or domain configs.
 
 ## Domain Configuration
 

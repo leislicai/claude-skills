@@ -2,7 +2,7 @@
 # Sub-agent reads pipeline-output/blocks/*.json, outputs pipeline-output/entities.json
 
 type: object
-required: [entities, relations]
+required: [entities]
 properties:
   entities:
     type: array
@@ -21,6 +21,27 @@ properties:
         properties:
           type: object
           description: Key-value pairs extracted from blocks
+        relations:
+          type: array
+          description: Relations originating from this entity
+          items:
+            type: object
+            required: [target, predicate]
+            properties:
+              target:
+                type: string
+                description: Target entity id
+              predicate:
+                type: string
+                description: Must match one of the relation_predicates in domain config
+              evidence_block_ids:
+                type: array
+                items: {type: string}
+                description: Blocks that support this relation
+              quality:
+                type: object
+                properties:
+                  confidence: {type: number}
         source_block_ids:
           type: array
           items: {type: string}
@@ -30,23 +51,3 @@ properties:
           properties:
             confidence: {type: number}
             warnings: {type: array, items: {type: string}}
-
-  relations:
-    type: array
-    items:
-      type: object
-      required: [source, target, predicate]
-      properties:
-        source: {type: string, description: "entity id"}
-        target: {type: string, description: "entity id"}
-        predicate:
-          type: string
-          description: Must match one of the relation_predicates in domain config
-        evidence_block_ids:
-          type: array
-          items: {type: string}
-          description: Blocks that support this relation
-        quality:
-          type: object
-          properties:
-            confidence: {type: number}
