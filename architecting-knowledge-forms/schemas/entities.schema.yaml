@@ -1,0 +1,52 @@
+# Stage 2 output schema — Entities + Relations
+# Sub-agent reads pipeline-output/blocks/*.json, outputs pipeline-output/entities.json
+
+type: object
+required: [entities, relations]
+properties:
+  entities:
+    type: array
+    items:
+      type: object
+      required: [id, name, type]
+      properties:
+        id:
+          type: string
+          pattern: "^ent_[a-zA-Z0-9_]+$"
+        name:
+          type: string
+        type:
+          type: string
+          description: Must match one of the entity_types in domain config
+        properties:
+          type: object
+          description: Key-value pairs extracted from blocks
+        source_block_ids:
+          type: array
+          items: {type: string}
+          description: Trace back to knowledge blocks
+        quality:
+          type: object
+          properties:
+            confidence: {type: number}
+            warnings: {type: array, items: {type: string}}
+
+  relations:
+    type: array
+    items:
+      type: object
+      required: [source, target, predicate]
+      properties:
+        source: {type: string, description: "entity id"}
+        target: {type: string, description: "entity id"}
+        predicate:
+          type: string
+          description: Must match one of the relation_predicates in domain config
+        evidence_block_ids:
+          type: array
+          items: {type: string}
+          description: Blocks that support this relation
+        quality:
+          type: object
+          properties:
+            confidence: {type: number}

@@ -1,0 +1,36 @@
+# Stage 4 output schema — QA Pairs
+# Sub-agent reads pipeline-output/wiki/*.md + entities.json
+# Outputs pipeline-output/qa_pairs.json
+
+type: array
+items:
+  type: object
+  required: [id, question, answer, source_block_ids, entities]
+  properties:
+    id:
+      type: string
+      pattern: "^qa_[a-z0-9]+$"
+    question:
+      type: string
+      minLength: 1
+    answer:
+      type: string
+      minLength: 1
+    source_block_ids:
+      type: array
+      items: {type: string}
+      description: Trace back to original blocks
+    entities:
+      type: array
+      items: {type: string}
+      description: Entity ids involved in this QA
+    intents:
+      type: array
+      items: {type: string}
+      description: Intent labels (查询标准/查询条件/查询材料/查询流程/对比)
+    quality:
+      type: object
+      properties:
+        confidence: {type: number, minimum: 0, maximum: 1}
+        wiki_version: {type: integer}
+        warnings: {type: array, items: {type: string}}

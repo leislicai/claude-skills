@@ -1,8 +1,8 @@
 ---
 name: architecting-knowledge-forms
 description: Designing multi-form knowledge systems — blocks, graph, wiki, QA pairs
-version: 1.0.0
-tags: [knowledge-management, rag, architecture, data-modeling]
+version: 2.0.0
+tags: [knowledge-management, rag, architecture, data-modeling, pipeline]
 author: leislicai
 ---
 
@@ -10,12 +10,13 @@ author: leislicai
 
 ## Overview
 
-**Knowledge blocks are the single write target; graph, wiki, and QA pairs are derived from them — each with different update characteristics.** This prevents N independent stores + ETL sync, which causes inconsistency, granularity drift, and exponential maintenance.
+**Knowledge blocks are the single write target; graph, wiki, and QA pairs are derived from them — each with different update characteristics.** This skill provides both the architecture to design such systems and the execution pipeline to process documents through all four stages.
 
 ## When to Use
 
 **Apply when:**
 - Designing a knowledge system's data model
+- Processing documents through a multi-stage knowledge pipeline
 - Deciding how chunks / graph / wiki / QA relate
 - Evaluating separate stores vs unified architecture
 
@@ -51,23 +52,15 @@ Document → [Chunk] → Knowledge Blocks (single write target)
    + relations)    per entity)
 ```
 
-Each stage is a controlled pipeline step. Stage N+1 starts only after Stage N completes (for its affected blocks). Incremental: only re-derive views for changed blocks.
-
 ### The Rules
 
-1. **One write target.** Blocks are the only write target. Graph, Wiki, QA derived via controlled pipeline steps, not independent write paths. Views CAN use different engines (Neo4j for graph, files for wiki, Qdrant for QA vectors).
-
-2. **Entity granularity aligns.** Block entity tags, graph nodes, and wiki pages share one granularity. If graph has `SigningBonusPolicy` as a node, there is a wiki page for it and blocks tagged with it.
-
-3. **Wiki is compiled, not rendered.** Build step triggered by block updates — preserves curated structure (summaries, cross-references). Compile incrementally if near-real-time needed; never render dynamically from graph queries.
-
+1. **One write target.** Blocks are the only write target. Graph, Wiki, QA derived via controlled pipeline steps, not independent write paths.
+2. **Entity granularity aligns.** Block entity tags, graph nodes, and wiki pages share one granularity.
+3. **Wiki is compiled, not rendered.** Build step triggered by block updates — preserves curated structure. Compile incrementally; never render dynamically from graph queries.
 4. **QA pairs derive from Wiki.** Wiki provides curated context — higher precision, less noise. Without Wiki, derive from blocks with explicit quality trade-off.
-
-5. **Block quality gates derivation.** Content must be non-empty. Source trace must resolve to a real document location. Entities[] must be resolvable after graph extraction runs. A corrupt block poisons all downstream views — validate at write time.
+5. **Block quality gates derivation.** Content non-empty. Source trace valid. Entities[] resolvable. A corrupt block poisons all downstream views — validate at write time.
 
 ### Partial Forms
-
-The pattern works with any subset. Common subsets and their starting point:
 
 | Subset | Use Case | First Build |
 |--------|----------|-------------|
@@ -77,23 +70,72 @@ The pattern works with any subset. Common subsets and their starting point:
 | Blocks + QA | RAG Q&A | + Q generation |
 | All four | Full knowledge platform | Full pipeline |
 
-Constraint: **if you have >1 form, sync via derivation from blocks, never ETL between views.**
+Constraint: **if >1 form, sync via derivation from blocks, never ETL between views.**
 
-## Claude Behavior
+## Pipeline Execution
 
-When this skill is triggered, Claude should interactively guide the design:
+### Step 0: Gather Context
 
-1. **Assess query patterns.** Ask what the user needs: semantic search? relationship navigation? structured browsing? direct Q&A? The answers determine which forms to build.
-2. **Recommend a subset.** Map query patterns to the Partial Forms table. Recommend the minimal viable subset and a build order (e.g. "start with blocks only, add graph when you need relationship traversal").
-3. **Output a concrete YAML schema.** Follow [data-model.md](data-model.md). Every output MUST include:
-   - Named entities with real examples (not placeholders)
-   - Cross-reference fields on every form (`source_block_ids`, `entities[]`, `entity_id`)
-   - A pipeline diagram showing derivation order for the chosen subset
-4. **Surface anti-patterns early.** If the user proposes independent stores + ETL, graph as write-primary, or QA from raw documents — flag it using the Red Flags table and suggest the correct pattern before proceeding with implementation.
+Before dispatching any agent, ask the user:
 
-### Data Model
+1. **What domain?** Examples: 公积金, 医保, 法务, or "通用". Load the matching config from [domains/](domains/). If no config exists, fall back to generic heuristics and offer to save the session's rules as a new domain config.
+2. **What subset?** Default to all four forms. User can say "stop after graph" or "just blocks + QA".
+3. **Where are the source documents?** A directory path or list of files.
 
-See [data-model.md](data-model.md) for concrete schemas (YAML), cross-reference topology, and quality constraints.
+### Step 1: Dispatch Stage 1 — Block Extraction
+
+Launch a sub-agent with [prompts/block-extraction.md](prompts/block-extraction.md). Pass:
+- `input_dir`: source document directory
+- `domain_config_path`: path to the loaded domain config
+
+Output lands at `pipeline-output/blocks/*.json` following [schemas/blocks.schema.yaml](schemas/blocks.schema.yaml).
+
+### Step 2: Dispatch Stage 2 — Entity Extraction
+
+Once Stage 1 completes, launch a sub-agent with [prompts/entity-extraction.md](prompts/entity-extraction.md). The agent reads `pipeline-output/blocks/` and domain config, outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
+
+### Step 3: Dispatch Stage 3 — Wiki Compilation
+
+Once Stage 2 completes, launch **parallel** sub-agents — one per entity — with [prompts/wiki-compilation.md](prompts/wiki-compilation.md). Each agent reads `pipeline-output/blocks/` + `pipeline-output/entities.json`, outputs `pipeline-output/wiki/{entity_id}.md` following [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml).
+
+Parallel dispatch is safe here because wiki pages are independent (each agent reads the same blocks + entities, writes to a different file).
+
+### Step 4: Dispatch Stage 4 — QA Generation
+
+Once all wiki pages are compiled, launch a sub-agent with [prompts/qa-generation.md](prompts/qa-generation.md). The agent reads `pipeline-output/wiki/` + `pipeline-output/entities.json`, outputs `pipeline-output/qa_pairs.json` following [schemas/qa.schema.yaml](schemas/qa.schema.yaml).
+
+### Cascade Update
+
+When re-running on changed documents, only re-derive affected artifacts:
+
+```
+1 changed doc → N blocks changed → M entities affected → M wikis stale → ~5M QAs stale
+```
+
+Use `source_block_ids` as the reverse index. Compare timestamps: any artifact whose sources are newer than its own compilation timestamp is stale.
+
+### Intermediate Artifacts
+
+All data passes between agents via files, not through the orchestrator context:
+
+```
+pipeline-output/
+├── blocks/          # Stage 1 → read by Stage 2, 3, 4
+├── entities.json    # Stage 2 → read by Stage 3, 4
+├── wiki/            # Stage 3 → read by Stage 4
+└── qa_pairs.json    # Stage 4 → final output
+```
+
+This enables: inspecting intermediate results, hand-editing before the next stage, resuming from any stage after a failure, and parallel wiki compilation.
+
+## Domain Configuration
+
+See [domains/gov-services.yaml](domains/gov-services.yaml) for the gov-services domain template. Each domain config provides: chunking strategy, entity types, relation predicates, wiki skeleton, QA templates, and quality rules.
+
+## Data Model
+
+- [data-model.md](data-model.md) — Four-form schemas, cross-reference topology, cascade model
+- [schemas/](schemas/) — Per-stage output schemas (the contract each sub-agent must follow)
 
 ## Anti-Patterns
 
@@ -111,6 +153,6 @@ See [data-model.md](data-model.md) for concrete schemas (YAML), cross-reference 
 |----------------|---------|--------|
 | "Four databases synced via ETL" | Building N stores. | Surface Rule 1 (one write target). Ask to refactor before proceeding. |
 | "The graph IS the knowledge" | Graph is the *relationship index*. | Point to data-model.md: blocks are the write target, graph is a derived view. |
-| "QA from raw docs is simpler" | Simpler to generate, worse quality. | Suggest deriving from Wiki first. If no Wiki exists, accept the quality trade-off explicitly. |
+| "QA from raw docs is simpler" | Simpler to generate, worse quality. | Suggest deriving from Wiki first. If no Wiki exists, accept the trade-off explicitly. |
 | "Wiki auto-updates from graph" | Auto-update = no curation. | Explain compiled vs rendered. Offer incremental compilation as middle ground. |
 | "Views in different DBs = multi-store" | Different engines for READ are OK. | Confirm: is the write path still unified? If yes, different engines are fine. |

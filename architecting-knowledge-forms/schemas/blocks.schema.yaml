@@ -1,0 +1,48 @@
+# Stage 1 output schema — Knowledge Blocks
+# Sub-agent MUST produce this exact structure as pipeline-output/blocks/*.json
+
+type: array
+items:
+  type: object
+  required: [id, content, summary, entities, tags, source]
+  properties:
+    id:
+      type: string
+      pattern: "^kb_[a-z0-9]+$"
+      description: Unique block ID
+    content:
+      type: string
+      minLength: 1
+      description: Full original text of this block
+    summary:
+      type: string
+      minLength: 1
+      maxLength: 500
+      description: One-sentence summary
+    entities:
+      type: array
+      items:
+        type: string
+        pattern: "^ent_[a-zA-Z0-9_]+$"
+      description: Entity references → consumed by Stage 2
+    tags:
+      type: array
+      items:
+        type: string
+      description: Freeform tags for wiki section assignment
+    source:
+      type: object
+      required: [doc_id]
+      properties:
+        doc_id: {type: string}
+        paragraph: {type: integer}
+        line_range: {type: array, items: {type: integer}, minItems: 2, maxItems: 2}
+    embedding:
+      type: array
+      items: {type: number}
+      description: Vector embedding (optional, can be generated later)
+    quality:
+      type: object
+      properties:
+        confidence: {type: number, minimum: 0, maximum: 1}
+        warnings: {type: array, items: {type: string}}

@@ -1,0 +1,50 @@
+# Stage 3 output schema — Wiki Pages
+# Sub-agent reads pipeline-output/blocks/*.json + entities.json
+# Outputs pipeline-output/wiki/{entity_id}.md
+
+type: array
+items:
+  type: object
+  required: [entity_id, title, sections]
+  properties:
+    entity_id:
+      type: string
+      pattern: "^ent_[a-zA-Z0-9_]+$"
+      description: 1:1 with graph entity
+    title:
+      type: string
+    sections:
+      type: array
+      items:
+        type: object
+        required: [heading, content, source_block_ids]
+        properties:
+          heading:
+            type: string
+            description: Section heading from wiki_skeleton
+          key:
+            type: string
+            description: Section key from wiki_skeleton (overview/standards/conditions/...)
+          content:
+            type: string
+            minLength: 1
+            description: Compiled narrative
+          source_block_ids:
+            type: array
+            items: {type: string}
+            description: Blocks compiled into this section
+    related_entities:
+      type: array
+      items: {type: string}
+      description: Entity ids referenced in this page
+    compilation:
+      type: object
+      properties:
+        version: {type: integer}
+        compiled_at: {type: string, format: date-time}
+        status: {enum: [fresh, stale, compiling]}
+    quality:
+      type: object
+      properties:
+        confidence: {type: number}
+        warnings: {type: array, items: {type: string}}

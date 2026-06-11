@@ -87,3 +87,49 @@ qa_pair:
 ```
 
 Trace arrows (source_block_ids) point back to Block. Traversal arrows (relations) connect Entity to Entity directly. These are edges with different purposes.
+
+## Pipeline Output Directory
+
+All intermediate artifacts land in `pipeline-output/` as JSON files. Sub-agents read from and write to this directory:
+
+```
+pipeline-output/
+├── blocks/              # Stage 1 output
+│   ├── kb_001.json
+│   ├── kb_002.json
+│   └── ...
+├── entities.json        # Stage 2 output (single file)
+├── wiki/                # Stage 3 output
+│   ├── ent_SigningBonusPolicy.md
+│   └── ...
+└── qa_pairs.json        # Stage 4 output (single file)
+```
+
+Schemas for each file: see [schemas/](schemas/).
+
+## Cascade Update Model
+
+One document change triggers cascading updates across the pipeline:
+
+```
+1 document changed
+  → N blocks re-extracted (Stage 1)
+    → M entities updated (Stage 2)
+      → M wiki pages recompiled (Stage 3)
+        → ~5×M QA pairs regenerated (Stage 4)
+```
+
+**How to compute affected scope:** For each changed block, trace through `entities[]` to find affected entities. For each affected entity, find its wiki page. For each wiki page, find its QA pairs. The `source_block_ids` field on every artifact is the reverse index — it tells you what depends on what.
+
+**Incremental strategy:** After Stage N completes, compare timestamps. Any downstream artifact whose source blocks have newer timestamps than its own `compiled_at` (wiki) or `wiki_version` (QA) is stale and must be re-derived.
+
+## Domain Configuration
+
+Domain-specific rules live in [domains/](domains/). Each domain config provides:
+- Chunking strategy (structural, semantic, hybrid)
+- Entity type system and relation predicates
+- Wiki page skeleton
+- QA templates
+- Quality rules (format, semantic, domain-specific)
+
+When no domain config matches, fall back to generic heuristics: semantic chunking, open entity discovery, flat wiki structure with overview+references sections.
