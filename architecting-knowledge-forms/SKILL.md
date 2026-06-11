@@ -76,7 +76,7 @@ Constraint: **if >1 form, sync via derivation from blocks, never ETL between vie
 
 ### How Orchestration Works
 
-Sub-agents are independent Claude instances — they cannot read files from the orchestrator's filesystem. The orchestrator must **READ → SUBSTITUTE → DISPATCH**:
+Sub-agents run in isolated contexts — they cannot read files from the orchestrator's filesystem unless the platform explicitly supports it. To work across platforms safely, the orchestrator must **READ → SUBSTITUTE → DISPATCH**:
 
 1. **READ** the prompt template and any input data files
 2. **SUBSTITUTE** all `{variable}` placeholders with actual content (inlined, not referenced)
