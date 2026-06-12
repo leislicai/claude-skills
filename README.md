@@ -6,7 +6,9 @@ Personal Claude Code skills collection.
 
 | Skill | Version | Description |
 |-------|---------|-------------|
-| [`architecting-knowledge-forms`](architecting-knowledge-forms/SKILL.md) | v2.1.0 | Design + execute multi-form knowledge pipelines — domain configs, prompt templates, schema contracts, 4-stage sub-agent orchestration |
+| [`architecting-knowledge-forms`](architecting-knowledge-forms/SKILL.md) | v2.5.0 | Design + execute multi-form knowledge pipelines — domain configs, prompt templates, schema contracts, 4-stage sub-agent orchestration |
+
+**Language note:** This skill's entity-naming conventions and domain configs assume Chinese-language source documents. The orchestration pattern (temp isolation, resumption, Between-Stages validation, dynamic predicates) is language-agnostic and reusable.
 
 ## Pipeline
 
@@ -49,7 +51,7 @@ pipeline-output/
 
 ## Example
 
-See [architecting-knowledge-forms/examples/](architecting-knowledge-forms/examples/) for a worked example using mock gov-services data.
+See [architecting-knowledge-forms/examples/](architecting-knowledge-forms/examples/) for a worked example using real Tianshui housing fund policy documents.
 
 ## Install
 
