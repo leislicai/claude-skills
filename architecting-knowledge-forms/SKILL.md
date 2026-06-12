@@ -1,7 +1,7 @@
 ---
 name: architecting-knowledge-forms
 description: Designing and executing multi-form knowledge pipelines — blocks, graph, wiki, QA pairs. Domain configs, prompt templates, 4-stage sub-agent orchestration.
-version: 2.4.0
+version: 2.5.0
 tags: [knowledge-management, rag, architecture, data-modeling, pipeline]
 author: leislicai
 ---
@@ -14,7 +14,7 @@ author: leislicai
 
 ## Platform Adaptation
 
-This skill is platform-agnostic. All prompts, schemas, and domain configs work across any agent platform that supports sub-agent dispatch.
+This skill is **orchestration-agnostic** (the dispatch pipeline works on any platform that supports sub-agents). **Language:** the entity-naming conventions and domain configs in this repo assume Chinese-language source documents. The orchestration pattern itself can be reused for other languages — create a translated domain config and update the entity-ID rules in `prompts/block-extraction.md`.
 
 | Concept | Claude Code | Codex | Generic term used in this skill |
 |---------|------------|-------|--------------------------------|
@@ -118,7 +118,7 @@ The orchestrator and sub-agents have different scripting rules:
 
 Ask the user:
 
-1. **What domain?** (e.g. 公积金, 医保, 法务, or "通用")
+1. **What domain?** (e.g. "housing-fund", "medical-insurance", "legal", or "generic")
 2. **What subset?** Default: all four forms. User can limit: "stop after graph" or "just blocks + QA".
 3. **Where are the source documents?** A directory path or list of files.
 4. **Where to write pipeline output?** Default: `./pipeline-output` in the current working directory. User can specify any path.
@@ -180,11 +180,9 @@ Each sub-agent writes to its OWN temp directory — no collisions. The orchestra
 6. DISPATCH 1 sub-agent with the resolved prompt
 ```
 
-The sub-agent reads all blocks, normalizes entities (with old→new ID mapping), then extracts relations from entity co-occurrence patterns (≥3 shared blocks). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
+The sub-agent reads all blocks (the orchestrator inlines the block count in the prompt), normalizes entities with an old→new ID mapping, and extracts relations from entity co-occurrence patterns (≥3 shared blocks). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
 
 **Relation quality gate:** Stage 2 output MUST have ≥50% of entities with at least one relation. If not, the Between-Stages check flags it and the orchestrator asks whether to re-extract or proceed with sparse relations.
-
-The sub-agent reads `pipeline-output/blocks/` (the orchestrator tells it the files are there, with the block count inlined in the prompt). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
 
 ### Step 3: Stage 3 — Wiki Compilation (prioritized, parallel)
 
@@ -240,8 +238,9 @@ After each stage completes, before dispatching the next stage:
    - Stage 2: Verify ≥50% of entities have at least one relation. If <50%, flag as sparse graph — ask user whether to re-extract relations or proceed.
    - Stage 3: Verify wiki frontmatter has all required fields (`entity_id`, `title`, `compilation.version`, `compilation.status`). Check filenames match frontmatter `entity_id`.
 4. **Confidence scan.** If >20% of outputs have `quality.confidence < 0.5`, pause and ask the user whether to continue or fix the low-confidence outputs first.
-5. **If checks pass** → dispatch next stage.
-6. **If checks fail** → stop. Report which stage, which file, which field, and the validation error. Do not dispatch downstream stages.
+5. **Relation density check (Stage 2 only).** If avg relations per entity > 10, or total relations > 5× entity count, flag as "graph may be over-dense" and ask the user whether to raise the co-occurrence threshold (e.g. ≥5 instead of ≥3) and re-extract.
+6. **If checks pass** → dispatch next stage.
+7. **If checks fail** → stop. Report which stage, which file, which field, and the validation error. Do not dispatch downstream stages.
 
 ### Cascade Update (Incremental Re-run)
 
