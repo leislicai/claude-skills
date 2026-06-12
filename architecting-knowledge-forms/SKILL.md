@@ -1,7 +1,7 @@
 ---
 name: architecting-knowledge-forms
 description: Designing and executing multi-form knowledge pipelines — blocks, graph, wiki, QA pairs. Domain configs, prompt templates, 4-stage sub-agent orchestration.
-version: 2.1.0
+version: 2.4.0
 tags: [knowledge-management, rag, architecture, data-modeling, pipeline]
 author: leislicai
 ---
@@ -11,6 +11,25 @@ author: leislicai
 ## Overview
 
 **Knowledge blocks are the single write target; graph, wiki, and QA pairs are derived from them — each with different update characteristics.** This skill provides both the architecture to design such systems and the execution pipeline to process documents through all four stages.
+
+## Platform Adaptation
+
+This skill is platform-agnostic. All prompts, schemas, and domain configs work across any agent platform that supports sub-agent dispatch.
+
+| Concept | Claude Code | Codex | Generic term used in this skill |
+|---------|------------|-------|--------------------------------|
+| Load skill | `Skill` tool | `skill` tool | "load this skill" |
+| Dispatch sub-agent | `Agent` tool | `task` tool | "dispatch a sub-agent" |
+| Read/write files | `Read` / `Write` | `read` / `write` | "read/write the file" |
+
+**What's platform-agnostic (no changes needed):**
+- `prompts/*.md` — sub-agent instructions ("You are a ... agent")
+- `schemas/*.yaml` — output contracts
+- `domains/*.yaml` — domain configuration
+- Pipeline logic — READ→SUBSTITUTE→DISPATCH, Between-Stages validation, cascade updates, error handling, resumption
+
+**What needs platform-specific translation:**
+Only the `DISPATCH` step in each Stage — translate "dispatch a sub-agent" to your platform's sub-agent API. The rest of this skill reads identically across platforms.
 
 ## When to Use
 
@@ -80,7 +99,7 @@ Sub-agents run in isolated contexts — they cannot read files from the orchestr
 
 1. **READ** the prompt template and any input data files
 2. **SUBSTITUTE** all `{variable}` placeholders with actual content (inlined, not referenced)
-3. **DISPATCH** the fully-resolved prompt string to the sub-agent via the Agent tool
+3. **DISPATCH** the fully-resolved prompt string as a sub-agent task
 
 Never pass a file path to a sub-agent. Always inline the content.
 
