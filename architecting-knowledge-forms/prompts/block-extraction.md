@@ -21,6 +21,11 @@ Apply the chunking strategy:
 ## Output
 Write ONE JSON file PER CHUNK to `{output_dir}/` (your temp directory). If the document yields 10 chunks, write 10 files. Name them `kb_001.json`, `kb_002.json`, `kb_003.json`, ... — sequentially. Use the Write tool for EACH file individually. Do NOT stop after writing the first file.
 
+### Entity Naming Rules (READ THIS FIRST)
+- **Language:** ALL entity IDs MUST be in Chinese. `ent_缴存比例` ✅. `ent_deposit_base` ❌.
+- **Prefix:** Every entity starts with `ent_`. `ent_天水市住房公积金管理中心` ✅. `天水市住房公积金管理中心` ❌.
+- **Granularity:** Only cross-block concepts (appear in ≥2 blocks). Single-block details → `tags[]`, not `entities[]`.
+
 For each block:
 - `id`: Sequential unique ID (`kb_001`, `kb_002`, ...). Assign IDs starting from the highest existing ID in the output directory plus 1.
 - `content`: The full original text of this block.
