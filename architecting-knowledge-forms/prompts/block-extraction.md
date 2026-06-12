@@ -25,8 +25,7 @@ For each block:
 - `id`: Sequential unique ID (`kb_001`, `kb_002`, ...). Assign IDs starting from the highest existing ID in the output directory plus 1.
 - `content`: The full original text of this block.
 - `summary`: One Chinese sentence capturing the block's essential meaning.
-- `entities[]`: Array of STRINGS with `ent_` prefix. Use FULL Chinese names: `["ent_天水市住房公积金管理中心", "ent_缴存比例"]`. NEVER English abbreviations like `ent_tianshui_hf` or `ent_ts_gjjzx`. NEVER hash UUIDs. NEVER objects.
-- `tags[]`: Assign tags that match the wiki section keys: `condition`, `material`, `procedure`, `standards`.
+- `entities[]`: Only tag concepts that appear ACROSS MULTIPLE blocks — policies, departments, recurring clauses, key terms that other blocks reference. If a concept appears only in THIS block and nowhere else, it is a `tag`, not an entity. Bad entity: `ent_30年期限` (once). Good entity: `ent_缴存比例` (many blocks). Bad tag: `condition` on a block about loan rates. Good tag: `standards` on a block about contribution ratios.
 - `source`: Exact document filename, paragraph number, and line range.
 - `quality.confidence`: Your confidence in the block boundary (0–1).
 
@@ -37,6 +36,7 @@ Before writing EACH block, verify:
 - [ ] summary captures the essential meaning in Chinese
 - [ ] tags align with domain config section keys (condition/material/procedure/standards)
 - [ ] entities[] use FULL Chinese names (e.g. `ent_天水市住房公积金管理中心`, NOT `ent_tianshui_hf` or hashes)
+- [ ] entities[] are cross-block concepts, not single-block keywords. Never create an entity for something that only appears once.
 
 If any check fails, fix the block before writing. If unfixable, set `quality.warnings` and reduce confidence.
 
@@ -45,5 +45,5 @@ If any check fails, fix the block before writing. If unfixable, set `quality.war
 - Write EVERY chunk as a SEPARATE file — N chunks = N files. Never stop at 1.
 - Use the Write tool for each block individually
 - Do NOT write Python scripts or batch processors
-- Every entity ID = FULL Chinese name with `ent_` prefix. NO English abbreviations.
+- Every entity = cross-block concept (appears in ≥2 blocks). Single-block details → use `tags`, not `entities`.
 - Execute immediately. Do NOT ask for confirmation. Do NOT ask about parameters. All parameters are provided in this prompt.
