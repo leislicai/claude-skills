@@ -32,6 +32,7 @@ Use the old→new mapping to translate block-level entity IDs to canonical IDs. 
    - `requires`: procedure → material, or condition → clause. Something depends on something else.
 3. **Record evidence.** For every relation, list `evidence_block_ids` — the blocks where both entities appear together.
 4. **Prioritize.** Extract AT LEAST one relation for every entity that co-occurs with another entity ≥3 times. The minimum bar: 50% of entities should have at least one relation.
+5. **Discover new predicates.** If a co-occurring pair clearly has a relationship that doesn't fit the 5 existing predicates, still assign the closest matching predicate BUT add `quality.warnings: ["new_predicate_suggested:建议的谓词名"]`. The orchestrator will collect these and offer to add them to the domain config.
 
 ## Output
 Write `pipeline-output/entities.json`:
