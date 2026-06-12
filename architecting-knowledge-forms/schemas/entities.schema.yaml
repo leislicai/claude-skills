@@ -12,7 +12,7 @@ properties:
       properties:
         id:
           type: string
-          pattern: "^ent_[a-zA-Z0-9_]+$"
+          pattern: "^ent_[a-zA-Z0-9_一-鿿]+$"
         name:
           type: string
         type:
