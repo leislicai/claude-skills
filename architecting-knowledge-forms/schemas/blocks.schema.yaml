@@ -23,7 +23,7 @@ items:
       type: array
       items:
         type: string
-        pattern: "^ent_[a-zA-Z0-9_]+$"
+        pattern: "^ent_[a-zA-Z0-9_一-鿿]+$"
       description: Entity references → consumed by Stage 2
     tags:
       type: array
