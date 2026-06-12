@@ -236,7 +236,7 @@ After each stage completes, before dispatching the next stage:
 1. **Count.** If output file count is 0, stop and report: "Stage N produced no output. Check input data."
 2. **Sample.** Pick 3 output files at random. Check required fields are present and non-empty.
 3. **Stage-specific checks:**
-   - Stage 1: Verify entity IDs use descriptive names (reject hash-based UUIDs like `ent_ea6cc483bf7d` — stop and require re-extraction).
+   - Stage 1: Verify entity IDs use Chinese descriptive names. Reject hash-based UUIDs (`ent_ea6cc483bf7d`) AND English abbreviations (`ent_deposit_base`, `ent_tianshui_hf`). If >20% of blocks have non-Chinese entity IDs, stop and require re-extraction.
    - Stage 2: Verify ≥50% of entities have at least one relation. If <50%, flag as sparse graph — ask user whether to re-extract relations or proceed.
    - Stage 3: Verify wiki frontmatter has all required fields (`entity_id`, `title`, `compilation.version`, `compilation.status`). Check filenames match frontmatter `entity_id`.
 4. **Confidence scan.** If >20% of outputs have `quality.confidence < 0.5`, pause and ask the user whether to continue or fix the low-confidence outputs first.
@@ -294,6 +294,8 @@ Example: Stage 1 passes, Stage 2 fails. Fix the issue, re-run — the orchestrat
 ## Domain Configuration
 
 See [domains/gov-services.yaml](domains/gov-services.yaml) for the gov-services domain template. Each domain config provides: chunking strategy, entity types, relation predicates, wiki skeleton, QA templates, and quality rules.
+
+**Dynamic predicates:** The 5 predicates are domain-config-defined, not hardcoded. Different domains may need different predicate sets. Stage 2 will flag relations that don't fit existing predicates as `new_predicate_suggested` in quality warnings. After each run, the orchestrator collects these and offers to add them to the domain config — making the system self-improving across domains.
 
 ## Data Model
 
