@@ -103,6 +103,17 @@ Sub-agents run in isolated contexts — they cannot read files from the orchestr
 
 Never pass a file path to a sub-agent. Always inline the content.
 
+### Scripting Policy
+
+The orchestrator and sub-agents have different scripting rules:
+
+| Role | Scripts allowed? | Reason | Examples |
+|------|-----------------|--------|---------|
+| **Orchestrator** | ✅ For mechanical tasks | Deterministic, reversible, doesn't affect content quality | File renaming, counting, sorting, field validation, normalization |
+| **Sub-agent** | ❌ For content work | Quality self-checks must be per-block. Scripts batch-process and skip verification. | Block extraction, entity extraction, wiki compilation, QA generation |
+
+**Why:** An orchestrator renaming 259 files with a Python one-liner is reliable. A sub-agent extracting 200 blocks with a Python script skips the per-block quality self-check — the skill's primary quality gate. The `"Do NOT write Python scripts"` rule in prompt templates targets content extraction, not mechanical file operations.
+
 ### Step 0: Gather Context
 
 Ask the user:
