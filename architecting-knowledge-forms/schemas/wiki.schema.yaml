@@ -9,7 +9,7 @@ items:
   properties:
     entity_id:
       type: string
-      pattern: "^ent_[a-zA-Z0-9_]+$"
+      pattern: "^ent_[a-zA-Z0-9_一-鿿]+$"
       description: 1:1 with graph entity
     title:
       type: string
