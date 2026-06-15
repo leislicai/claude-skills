@@ -102,7 +102,14 @@ pipeline-output/
 ├── wiki/                # Stage 3 output
 │   ├── ent_SigningBonusPolicy.md
 │   └── ...
-└── qa_pairs.json        # Stage 4 output (single file)
+├── qa_pairs.json        # Stage 4 output (single file)
+├── quality-reports/     # 质量报告（每阶段每次生成一份）
+│   ├── stage1-0-20260615120000.json
+│   ├── stage2-1-20260615120100.json
+│   └── ...
+└── human-review/        # 3 次重试仍不通过的输出，供人工审阅
+    ├── entities.json    # 有问题的实体列表
+    └── ...
 ```
 
 Schemas for each file: see [schemas/](schemas/).
@@ -133,3 +140,35 @@ Domain-specific rules live in [domains/](domains/). Each domain config provides:
 - Quality rules (format, semantic, domain-specific)
 
 When no domain config matches, fall back to generic heuristics: semantic chunking, open entity discovery, flat wiki structure with overview+references sections.
+
+## Version Compatibility
+
+This skill follows semantic versioning. Breaking changes increment the major version.
+
+### Schema upgrade policy
+
+When a schema changes:
+
+| Change type | Old pipeline-output | Action |
+|-------------|-------------------|--------|
+| New optional field added | ✅ Compatible | No action needed |
+| New required field added | ⚠️ Partial | Old output needs re-extraction for that stage |
+| Field renamed or removed | ❌ Incompatible | Full re-run from Stage 1 required |
+| Enum value added | ✅ Compatible | No action needed |
+| Enum value removed | ❌ Incompatible | Re-run affected stage |
+
+### Current version: 2.6.0
+
+| Component | Version | Notes |
+|-----------|---------|-------|
+| SKILL.md | 2.6.0 | Quality feedback loop introduced in 2.6 |
+| blocks.schema.yaml | 2.x | |
+| entities.schema.yaml | 2.x | |
+| wiki.schema.yaml | 2.x | |
+| qa.schema.yaml | 2.x | |
+| quality-report.schema.yaml | 1.0 | Introduced in 2.6 |
+
+### Migration notes
+
+- **2.5 → 2.6：** Quality inspection system added. Old pipeline-output without `quality-reports/` and `human-review/` directories is compatible — these are created on next run. No re-extraction needed.
+- **2.x → 2.6：** Entity ID naming rules now enforced in quality checks. Old pipeline-output with non-Chinese entity IDs will be flagged on re-run. Consider re-extracting entities if quality report shows naming violations.

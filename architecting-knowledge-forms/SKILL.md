@@ -1,12 +1,14 @@
 ---
 name: architecting-knowledge-forms
-description: Designing and executing multi-form knowledge pipelines — blocks, graph, wiki, QA pairs. Domain configs, prompt templates, 4-stage sub-agent orchestration.
-version: 2.5.0
+description: Designing and executing multi-form knowledge pipelines — blocks, graph, wiki, QA pairs. Domain configs, prompt templates, 4-stage sub-agent orchestration. 设计和执行多形态知识管线：知识块、图谱、Wiki、QA 对。含领域配置、prompt 模板、四阶段子 Agent 编排。
+version: 2.6.0
 tags: [knowledge-management, rag, architecture, data-modeling, pipeline]
 author: leislicai
 ---
 
 # Architecting Knowledge Forms — 知识形态架构
+
+> 首次使用？请先阅读 [GETTING_STARTED.md](GETTING_STARTED.md) 快速上手指引。
 
 ## 概述
 
@@ -344,7 +346,7 @@ retry_count 从 0 开始
 
 ```
 在每个阶段前检查：
-  如果输出存在 且 通过验证：
+  如果输出存在 且 质量报告 status=passed：
     跳过 → 进入下一阶段
   否则：
     运行本阶段（不是从头重跑——只跑本阶段）

@@ -1,67 +1,75 @@
-# Stage 3: Wiki Compilation
+# Stage 3: Wiki 编译
 
-## Role
-You are a wiki compilation agent. Compile a curated wiki page for a single entity.
+## 角色
+你是一个 Wiki 编译 Agent。为单个实体编译一份策划型 Wiki 页面。
 
-## Target Entity
-**Entity ID:** `{entity_id}`
-**Entity data:** (inlined from entities.json)
+## 目标实体
+**实体 ID：** `{entity_id}`
+**实体数据：**（从 entities.json 内联）
 ```
 {entity_data}
 ```
 
-## Input Data
-Knowledge blocks that reference this entity:
+## 输入数据
+引用该实体的知识块：
 ```
 {relevant_blocks}
 ```
 
-## Domain Rules
-(Inlined from domain config by the orchestrator)
+## 领域规则
+（由编排器从领域配置内联）
 ```
 {domain_config}
 ```
 
-Build the wiki page using `wiki_skeleton.sections`. For each section in the skeleton, use the `source` field to determine where content comes from:
+使用 `wiki_skeleton.sections` 构建 Wiki 页面。对骨架中的每个 section，按 `source` 字段确定内容来源：
 
-- **overview** (source=summary): Aggregate `summary` fields from relevant blocks. Write a concise narrative.
-- **standards** (source=properties): Render entity properties as structured data.
-- **conditions / materials / procedure** (source=blocks_tagged_with): Filter relevant blocks by `tag` matching the section key. Group by scenario or entity.
-- **faq** (source=derived_from_qa): Leave a placeholder — Stage 4 populates this.
-- **references** (source=relations): List related entities and their predicates.
+- **overview**（source=summary）：从相关 blocks 的 `summary` 字段聚合。撰写简明叙述。
+- **standards**（source=properties）：将 entity properties 渲染为结构化数据。
+- **conditions / materials / procedure**（source=blocks_tagged_with）：按 `tag` 匹配 section key 筛选相关 blocks。按场景或实体分组。
+- **faq**（source=derived_from_qa）：留占位——Stage 4 填充此项。
+- **references**（source=relations）：列出相关实体及其谓词。
 
-## Output
-Write a single file: `pipeline-output/wiki/{entity_id}.md`.
+## 输出
+写单个文件：`pipeline-output/wiki/{entity_id}.md`。
 
-Format: Markdown with YAML frontmatter containing `entity_id`, `title`, `related_entities`, `compilation.version`, `compilation.compiled_at`. Body uses the skeleton section names as Markdown headings with compiled content underneath.
+格式：Markdown 带 YAML frontmatter，包含 `entity_id`、`title`、`related_entities`、`compilation.version`、`compilation.compiled_at`。正文使用骨架的 section 名称作为 Markdown 标题，下方为编译内容。
 
-Follow the output schema at [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml).
+遵循 [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml) 的输出 schema。
 
-## Context Budget
+## 上下文预算
 
-If the orchestrator includes a note `[N additional blocks omitted due to context limit]` in {relevant_blocks}:
-- Use the inlined blocks as primary sources
-- Add `quality.warnings: ["partial_compilation: N blocks omitted"]` to the output
-- Prioritize completeness of `standards` and `conditions` sections over `faq`
-- The omitted blocks remain at `pipeline-output/blocks/` for future full recompilation
+如果编排器在 {relevant_blocks} 中包含了注释 `[因上下文限制，省略 N 个附加 block]`：
+- 以被内联的 blocks 为主要来源
+- 在输出中添加 `quality.warnings: ["partial_compilation: 省略 N 个 block"]`
+- 优先保障 `standards` 和 `conditions` section 的完整性，`faq` 次之
+- 被省略的 blocks 仍保留在 `pipeline-output/blocks/` 中以供未来完整重编译
 
-## Compilation Rules
-1. **Curate, don't concatenate.** Synthesize narrative from blocks — don't paste raw block content.
-2. **Preserve source traces.** Every section carries `source_block_ids` — never lose the link back.
-3. **Version tracking.** Set `compilation.version` (increment from previous if recompiling). Set `compilation.status` to `fresh`.
-4. **Skip if fresh.** If the entity's source blocks haven't changed since the last `compilation.compiled_at`, write a file with `compilation.status: fresh` (unchanged) and the previous content. This enables incremental updates.
+## 编译规则
+1. **策划而非拼接。** 从 blocks 中综合出叙述——不要粘贴原始 block 内容。
+2. **保留源追溯。** 每个 section 携带 `source_block_ids`——绝不丢失追溯链。
+3. **版本追踪。** 设置 `compilation.version`（重编译时自增前值）。设置 `compilation.status` 为 `fresh`。
+4. **无变更跳过。** 如果该实体的源 blocks 自上次 `compilation.compiled_at` 以来无变化，写入 `compilation.status: unchanged` 和先前内容。这支持增量更新。
 
-## Quality Self-Check
-- [ ] Every section has at least one `source_block_id`
-- [ ] Content is synthesized (not raw block concatenation)
-- [ ] Entity id matches `{entity_id}`
-- [ ] `related_entities` are valid entity ids
-- [ ] No empty sections (omit or note "暂无相关信息")
+## 质量自查
+写入前验证：
+- [ ] 每个 section 至少有一个 `source_block_id`
+- [ ] 内容是综合撰写的（不是原始 block 拼接）
+- [ ] entity_id 匹配 `{entity_id}`
+- [ ] `related_entities` 中的 ID 均为有效实体 ID
+- [ ] 无空 section（省略或标注"暂无相关信息"）
 
-If any check fails, fix before writing.
+有检查不通过，先修复再写入。
 
 ## Quality Feedback
 
 当该阶段被重试时，编排器将在本节注入前次输出的质量检查结果。请仔细阅读反馈内容并针对性修复。
 
 如果本节为空，则说明这是首次执行，无需处理反馈。
+
+**处理反馈时请逐一对照修复指令：**
+- 反馈指出缺失某个 section → 从源 blocks 中定位该 section 的内容并补充
+- 反馈指出某个断言缺少 source_block_id → 回溯 blocks 找到对应引用并添加
+- 反馈指出 section 之间矛盾 → 对比源 blocks，以 confidence 更高者为准，标注差异
+- 反馈指出信息退化 → 检查是否在综合过程中丢失了关键数据，从源 blocks 补充
+- 不要改动反馈未涉及的 section
