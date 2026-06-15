@@ -28,20 +28,26 @@ properties:
     type: string
     format: date-time
   summary:
+    description: "该阶段输出统计概览"
     type: object
     required: [total_count, passed_count, failed_count, avg_confidence]
     properties:
       total_count:
         type: integer
+        description: "该阶段输出总数"
       passed_count:
         type: integer
+        description: "通过检查项数"
       failed_count:
         type: integer
+        description: "未通过检查项数"
       avg_confidence:
         type: number
         minimum: 0
         maximum: 1
+        description: "平均置信度"
   checks:
+    description: "逐项检查结果"
     type: array
     items:
       type: object
@@ -53,48 +59,66 @@ properties:
       properties:
         check_name:
           type: string
+          description: "对应质量检查标准中的检查项名称"
         layer:
           type: string
           enum: ["relation", "semantic"]
+          description: "检查层面：关系层或语义层"
         severity:
           type: string
           enum: ["error", "warning", "info"]
+          description: "严重级别：error 阻塞管线，warning 建议改进，info 仅供参考"
         passed:
           type: boolean
+          description: "是否通过检查"
         details:
           type: string
+          description: "检查结论描述"
         affected_items:
           type: array
           items:
             type: string
+          description: "受影响的文件/实体/QA 列表"
         threshold:
           type: object
+          description: "阈值信息（仅数值类检查项使用）"
           properties:
             actual:
               type: number
+              description: "实际值"
             expected:
               type: number
+              description: "期望阈值"
   feedback:
+    description: "仅在 need_retry 时存在：可注入子 Agent 的结构化修复指令"
     type: object
     required: [instruction_blocks]
     properties:
       instruction_blocks:
+        description: "修复指令列表，每条对应一个检查项"
         type: array
         items:
           type: object
+          required: [severity, instruction]
           properties:
             severity:
               type: string
               enum: ["error", "warning"]
+              description: "修复优先级"
             check:
               type: string
+              description: "对应的 check_name"
             affected:
               type: array
               items:
                 type: string
+              description: "受影响的项列表（文件/实体 ID 等）"
             instruction:
               type: string
+              description: "可执行的具体修复指令"
   output_path:
     type: string
+    description: "被检查的阶段输出文件路径"
   human_review_path:
     type: string
+    description: "仅在 human_review_required 时存在：需人工审阅的输出隔离路径"
