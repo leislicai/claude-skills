@@ -162,7 +162,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
    a. 收集 {output_dir}/blocks/temp/*/ 下所有 .json 文件
    b. 重新编号为 kb_001.json、kb_002.json……顺序写入 {output_dir}/blocks/
    c. 删除临时目录
-   d. 运行质量检查
+   d. 运行机械预检：`python3 scripts/mechanical-check.py 1 {output_dir}`
 ```
 
 每个子 Agent 写入**自己的**临时目录——不会发生冲突。编排器拥有最终的编号权，保证全局唯一的顺序 ID。
@@ -230,35 +230,48 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 
 ### 阶段间质量检查与反馈回环
 
-本管线采用"检查→反馈→重做→再检"的闭环质量机制。每阶段输出后，编排器执行以下流程：
+> **硬约束：质量检查不可跳过。** 每个 Stage 完成后必须依次执行机械预检和语义评估，质量报告 status=passed 是进入下一阶段的唯一通行条件。缺少质量报告 = 编排器执行违规。
 
-#### 第 1 步：机械预检（编排器直接执行）
+每阶段输出后，编排器执行以下流程：
 
-编排器用脚本/命令行对输出执行机械性质检：
+#### 第 1 步：机械预检（必须先执行）
 
-1. **计数。** 输出文件数是否为 0？是则停止并报错。
-2. **实体 ID 命名合规（仅 Stage 2）。** 扫描所有 entity ID，`ent_` 后首个词是否为中文？若 >20% 不合规，标记并重做。
-3. **孤立实体率（仅 Stage 2）。** 无关系的实体占比 >15%？标记并重做。
-4. **关系多样性（仅 Stage 2）。** 某类谓词占比 >60%（如 references）？标记并重做。
-5. **关系密度（仅 Stage 2）。** 平均关系数 >10 或总数 > 实体数 ×5？标记并询问是否提高共现阈值。
-6. **置信度扫描。** 若 >20% 输出 confidence < 0.5，标记低质。
-7. **骨架完整性预检（仅 Stage 3）。** Wiki 文件数是否为 0？
+编排器运行可执行脚本，不允许手动替代：
 
-预检生成部分填写的质量报告（机械检查项目有结论，语义检查项目待填充）。
+```bash
+python3 scripts/mechanical-check.py <stage> {output_dir}
+```
 
-#### 第 2 步：语义质量检查（派发子 Agent）
+该脚本自动执行：
+- 计数验证、置信度扫描（全部 Stage）
+- Stage 1: 实体格式一致性、实体命名合规
+- Stage 2: 孤立实体率、关系多样性、关系密度、命名合规
+- Stage 3: 骨架完整性、Frontmatter 字段检查
+- Stage 4: 追源率
 
-若机械预检无致命问题，编排器派发 1 个子 Agent 运行 `prompts/quality-checks.md`，对该阶段输出进行语义层面评估。
+脚本输出 JSON 质量报告到 `{output_dir}/quality-reports/`，退出码 0=通过、1=需重做。
 
-子 Agent 读取阶段输出 + 领域配置，按质量检查标准逐项评估，输出完整质量报告到 `{output_dir}/quality-reports/{stage}-{retry_count}-{timestamp}.json`。
+**编排器读取脚本输出的报告后：**
+- 报告含 error → 进入反馈回环（第 3 步）
+- 报告无 error → 进入语义检查（第 2 步）
+
+#### 第 2 步：语义质量检查（必须派发）
+
+**此步不可跳过。** 即使机械预检全部通过，仍需派发子 Agent 进行语义评估。
+
+编排器读取 `prompts/quality-checks.md`，将 `{domain_config}` 内联，派发子 Agent。子 Agent 读取阶段输出，按质量检查标准逐项评估，输出完整质量报告（含语义检查结论）。
+
+合并机械预检报告 + 语义检查结论 → 最终质量报告。
 
 #### 第 3 步：判断与路由
 
-编排器读取质量报告：
+编排器读取最终质量报告的 `status` 字段：
 
-- **`status: "passed"`** → 进入下一阶段
-- **`status: "need_retry"`** → 进入反馈回环
-- **`status: "human_review_required"`** → 写入隔离目录，继续下游
+- **`"passed"`** → 进入下一阶段
+- **`"need_retry"`** → 进入反馈回环
+- **`"human_review_required"`** → 写入 `{output_dir}/human-review/`，继续下游
+
+**门控规则：** `{output_dir}/quality-reports/` 中不存在对应阶段且 status=passed 的报告时，编排器不得进入下一阶段。
 
 #### 反馈回环
 
@@ -274,7 +287,7 @@ retry_count 从 0 开始
     从质量报告提取 feedback.instruction_blocks
     追加为子 Agent prompt 的 "## Quality Feedback" 章节
     用该 prompt 重新派发同一阶段
-    重做完成后 → 再次进行质量检查
+    重做完成后 → 再次进行质量检查（从第 1 步重新开始）
 ```
 
 **反馈注入示例：**
