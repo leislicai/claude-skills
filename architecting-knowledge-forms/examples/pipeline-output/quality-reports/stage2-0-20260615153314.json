@@ -1,0 +1,82 @@
+{
+  "report_id": "stage2-0-20260615153314",
+  "stage": 2,
+  "status": "need_retry",
+  "retry_count": 0,
+  "timestamp": "2026-06-15T15:33:14.910006",
+  "summary": {
+    "total_count": 6,
+    "passed_count": 5,
+    "failed_count": 1,
+    "avg_confidence": 0.938
+  },
+  "checks": [
+    {
+      "check_name": "计数",
+      "layer": "mechanical",
+      "severity": "error",
+      "passed": true,
+      "details": "产出 13 个实体"
+    },
+    {
+      "check_name": "孤立实体率",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "0/13 (0.0%), 阈值 15%",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 15.0
+      },
+      "affected_items": []
+    },
+    {
+      "check_name": "关系多样性",
+      "layer": "mechanical",
+      "severity": "error",
+      "passed": false,
+      "details": "谓词分布: {'references': 14, 'requires': 18, 'part_of': 6}. 超标: references=36.8% (上限30%)",
+      "threshold": {
+        "actual": 47.36842105263158,
+        "expected": 60.0
+      }
+    },
+    {
+      "check_name": "关系密度",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 2.9 条/实体, 总计 38 条"
+    },
+    {
+      "check_name": "实体命名合规",
+      "layer": "semantic",
+      "severity": "info",
+      "passed": true,
+      "details": "全部合规",
+      "affected_items": []
+    },
+    {
+      "check_name": "置信度扫描",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 0.938, 低于0.5: 0/13 (0.0%)",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 20.0
+      }
+    }
+  ],
+  "feedback": {
+    "instruction_blocks": [
+      {
+        "severity": "error",
+        "check": "关系多样性",
+        "affected": [],
+        "instruction": "谓词分布: {'references': 14, 'requires': 18, 'part_of': 6}. 超标: references=36.8% (上限30%)"
+      }
+    ]
+  },
+  "output_path": "/Users/cairuilin/Desktop/res3"
+}

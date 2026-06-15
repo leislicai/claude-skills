@@ -1,0 +1,44 @@
+{
+  "report_id": "stage4-0-20260615153651",
+  "stage": 4,
+  "status": "passed",
+  "retry_count": 0,
+  "timestamp": "2026-06-15T15:36:51.118642",
+  "summary": {
+    "total_count": 3,
+    "passed_count": 3,
+    "failed_count": 0,
+    "avg_confidence": 0.851
+  },
+  "checks": [
+    {
+      "check_name": "计数",
+      "layer": "mechanical",
+      "severity": "error",
+      "passed": true,
+      "details": "产出 95 个 QA 对"
+    },
+    {
+      "check_name": "置信度扫描",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 0.851, 低于0.5: 0/95 (0.0%)",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 20.0
+      }
+    },
+    {
+      "check_name": "追源率",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "95/95 (100.0%) QA 有 source_block_ids"
+    }
+  ],
+  "feedback": {
+    "instruction_blocks": []
+  },
+  "output_path": "."
+}

@@ -1,0 +1,57 @@
+{
+  "report_id": "stage1-0-20260615152756",
+  "stage": 1,
+  "status": "passed",
+  "retry_count": 0,
+  "timestamp": "2026-06-15T15:27:56.556549",
+  "summary": {
+    "total_count": 4,
+    "passed_count": 4,
+    "failed_count": 0,
+    "avg_confidence": 0.95
+  },
+  "checks": [
+    {
+      "check_name": "计数",
+      "layer": "mechanical",
+      "severity": "error",
+      "passed": true,
+      "details": "产出 29 个 block",
+      "affected_items": []
+    },
+    {
+      "check_name": "置信度扫描",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 0.950, 低于0.5: 0/29 (0.0%)",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 20.0
+      }
+    },
+    {
+      "check_name": "实体格式一致性",
+      "layer": "mechanical",
+      "severity": "warning",
+      "passed": true,
+      "details": "string 格式 113, object 格式 0"
+    },
+    {
+      "check_name": "实体命名合规",
+      "layer": "semantic",
+      "severity": "warning",
+      "passed": true,
+      "details": "违规率 0.0% (非中文 0, 时间前缀 0)",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 20.0
+      },
+      "affected_items": []
+    }
+  ],
+  "feedback": {
+    "instruction_blocks": []
+  },
+  "output_path": "."
+}
