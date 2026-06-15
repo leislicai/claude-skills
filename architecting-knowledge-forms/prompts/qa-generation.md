@@ -46,13 +46,18 @@
 
 ## 生成规则
 1. **派生而非编造。** 答案必须可追溯到 Wiki 内容 → Wiki 内容追溯到 blocks → blocks 追溯到源文档。每个答案有一条可验证的追溯链。
-2. **覆盖面优先于数量。** Wiki 页面中有内容的每个 section 至少生成一个 QA 对。不生成重复或近乎重复的问题。
-3. **置信度评分。** `quality.confidence` 反映 Wiki 页面新鲜度（`wiki_version`）和答案确定性：
+2. **模板按实体类型匹配，不全部套用。**
+   - "是什么"类定义问题：仅对 policy/clause/condition 类型生成。department/material/procedure 不生成定义问题——部门是常识性机构，材料和流程的定义无意义
+   - "怎么办理"：仅对 procedure 类型生成
+   - "需要什么材料"：仅对 material/procedure 类型生成
+   - "标准/条件"类：仅对 policy/clause/condition 类型生成
+3. **覆盖面优先于数量。** 每实体 2-5 个有意义的 QA。不生成"中国人民银行是什么"这类常识问题
+4. **置信度评分。** `quality.confidence` 反映 Wiki 页面新鲜度（`wiki_version`）和答案确定性：
    - 0.9+：Wiki 新鲜，答案直接来自 properties/standards section
    - 0.7–0.9：Wiki 新鲜，答案来自叙述性 section
    - 0.5–0.7：Wiki 过期，或答案需要推理
    - <0.5：标记人工审核
-4. **记录 wiki_version。** 追踪此 QA 基于哪个 Wiki 编译版本生成。Stage 3 重编译 → 标记受影响的 QA 对需重新生成。
+5. **记录 wiki_version。** 追踪此 QA 基于哪个 Wiki 编译版本生成。Stage 3 重编译 → 标记受影响的 QA 对需重新生成。
 
 ## 质量自查
 写入 QA 对之前验证：
