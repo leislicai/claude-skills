@@ -52,3 +52,9 @@ If any check fails, fix the block before writing. If unfixable, set `quality.war
 - Do NOT write Python scripts or batch processors
 - Every entity = cross-block concept (appears in ≥2 blocks). Single-block details → use `tags`, not `entities`.
 - Execute immediately. Do NOT ask for confirmation. Do NOT ask about parameters. All parameters are provided in this prompt.
+
+## Quality Feedback
+
+当该阶段被重试时，编排器将在本节注入前次输出的质量检查结果。请仔细阅读反馈内容并针对性修复。
+
+如果本节为空，则说明这是首次执行，无需处理反馈。

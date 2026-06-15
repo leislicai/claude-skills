@@ -52,3 +52,9 @@ Before writing QA pairs, verify:
 - [ ] No exact duplicate questions
 
 If any check fails, fix or drop the QA pair before writing.
+
+## Quality Feedback
+
+当该阶段被重试时，编排器将在本节注入前次输出的质量检查结果。请仔细阅读反馈内容并针对性修复。
+
+如果本节为空，则说明这是首次执行，无需处理反馈。

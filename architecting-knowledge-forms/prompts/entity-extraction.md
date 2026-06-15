@@ -65,3 +65,15 @@ Write `pipeline-output/entities.json`:
 **Conflict detection:** If two blocks assign contradictory properties to the same entity, flag with `quality.warnings: ["Conflict:xxx"]`.
 
 If any check fails, fix before writing.
+
+## Quality Feedback
+
+当该阶段被重试时，编排器将在本节注入前次输出的质量检查结果。请仔细阅读反馈内容并针对性修复。
+
+如果本节为空，则说明这是首次执行，无需处理反馈。
+
+**处理反馈时请遵循以下原则：**
+1. 保持原始输入不变（blocks 不重新提取）
+2. 仅根据反馈指令修改输出
+3. 如果反馈指令要求合并实体，确保所有引用该实体的关系也同步更新
+4. 如果有矛盾指令（如同一条目同时要求合并和降级），优先处理 error 级别，再处理 warning 级别

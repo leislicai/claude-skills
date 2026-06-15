@@ -59,3 +59,9 @@ If the orchestrator includes a note `[N additional blocks omitted due to context
 - [ ] No empty sections (omit or note "暂无相关信息")
 
 If any check fails, fix before writing.
+
+## Quality Feedback
+
+当该阶段被重试时，编排器将在本节注入前次输出的质量检查结果。请仔细阅读反馈内容并针对性修复。
+
+如果本节为空，则说明这是首次执行，无需处理反馈。
