@@ -223,6 +223,23 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
       - {relevant_blocks} → 筛选后的 blocks 内容 + 汇总说明（内联，非文件路径）
       - {domain_config} → 完整领域配置 YAML（内联）
    c. DISPATCH 每个实体 1 个子 Agent（并行派发——各自写入不同文件）
+8. 所有 Agent 完成后，逐实体验证再计为完成：
+   a. 对每个 `{output_dir}/wiki/{entity_id}.md`，验证其 YAML frontmatter 可解析且含必填字段（entity_id/title/version/status/compiled_at）
+   b. 验证通过 → 保留
+   c. 验证失败 → 该实体的 .md 标记为失败，不删除
+   d. 如果有实体失败 → 进入部分重试
+   e. 全部通过 → 运行机械预检
+```
+
+#### 部分重试（仅重试失败的实体）
+
+```
+如果某实体的 Wiki 页面验证失败：
+  1. 保留失败的 .md 文件路径
+  2. 将 frontmatter 错误详情注入 Quality Feedback
+  3. 仅对该实体重新派发 Agent
+  4. 重新验证 → 通过则保留 → 运行机械预检
+  5. 重试最多 3 次，仍失败则标记 human-review/ 并继续下游
 ```
 
 每个子 Agent 写入 `{output_dir}/wiki/{entity_id}.md`，遵循 [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml)。
@@ -243,6 +260,15 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 ### 阶段间质量检查与反馈回环
 
 > **硬约束：质量检查不可跳过。** 每个 Stage 完成后必须依次执行机械预检和语义评估，质量报告 status=passed 是进入下一阶段的唯一通行条件。缺少质量报告 = 编排器执行违规。
+
+**各阶段兜底机制速查：**
+
+| 阶段 | 并行粒度 | 失败范围 | 兜底策略 |
+|------|---------|---------|---------|
+| Stage 1 | 按文档 | 某文档的 JSON 损坏 | 只重试该文档，最多 3 次；仍失败则跳过并记录 human-review/ |
+| Stage 2 | 单 Agent | 整体输出有问题 | 追加 Quality Feedback 重跑，最多 3 次 |
+| Stage 3 | 按实体 | 某实体的 Wiki 验证失败 | 只重试该实体，最多 3 次；仍失败则标记 human-review/ 继续下游 |
+| Stage 4 | 单 Agent | 整体输出有问题 | 追加 Quality Feedback 重跑，最多 3 次 |
 
 每阶段输出后，编排器执行以下流程：
 
@@ -362,7 +388,8 @@ retry_count 从 0 开始
 | 阶段产生 0 个输出文件 | 停止。报告："阶段 N 未产生任何输出。请检查输入数据。" |
 | Stage 1 某文档产出坏 JSON | 部分重试：仅对该文档追加 Quality Feedback 重派 Agent，最多 3 次。仍失败则跳过该文档，记录到 human-review/ |
 | 子 Agent 返回空或格式异常的输出 | 用相同 prompt 重试一次。重试仍失败则停止并报告阶段 + 错误详情。 |
-| 子 Agent 超时或失败 | 如果该阶段支持按实体派发（如 Wiki），只重试失败的实体。否则停止。 |
+| Stage 3 某实体 Wiki 验证失败 | 部分重试：仅对该实体追加 Quality Feedback 重派 Agent，最多 3 次。仍失败则标记 human-review/，继续下游 |
+| 子 Agent 超时或失败 | Stage 3 按实体重试失败的实体；Stage 1 按文档重试失败的文档；其他阶段整体重试。最多 3 次。 |
 | 领域配置 YAML 解析失败 | 回退到 generic.yaml。警告用户。 |
 | >20% 的输出 quality.confidence < 0.5 | 暂停管线。显示警告计数。询问用户：继续、修复后重试、或停止。 |
 | 管线中途中断 | 检查 {output_dir}/ 中已有文件。从最后一个完整的、输出通过质量检查的阶段恢复。 |
