@@ -1,9 +1,9 @@
 {
-  "report_id": "stage3-0-20260615153651",
+  "report_id": "stage3-0-20260615161702",
   "stage": 3,
   "status": "passed",
   "retry_count": 0,
-  "timestamp": "2026-06-15T15:36:51.097401",
+  "timestamp": "2026-06-15T16:17:02.679134",
   "summary": {
     "total_count": 2,
     "passed_count": 2,
@@ -16,7 +16,7 @@
       "layer": "mechanical",
       "severity": "error",
       "passed": true,
-      "details": "产出 13 个 Wiki 页面"
+      "details": "产出 14 个 Wiki 页面"
     },
     {
       "check_name": "Frontmatter 完整性",
