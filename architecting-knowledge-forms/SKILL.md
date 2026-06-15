@@ -26,7 +26,7 @@ author: leislicai
 - `prompts/*.md` — 子 Agent 指令（"你是一个……Agent"）
 - `schemas/*.yaml` — 输出契约
 - `domains/*.yaml` — 领域配置
-- 管线逻辑 — READ→SUBSTITUTE→DISPATCH、阶段间验证、级联更新、错误处理、断点恢复
+- 管线逻辑 — READ→SUBSTITUTE→DISPATCH、质量检查、级联更新、错误处理、断点恢复
 
 **需要平台特定适配的部分：**
 只有每个阶段的 `DISPATCH` 步骤——将"派发子 Agent"翻译为你平台的子 Agent API。技能其余部分在所有平台上读取方式相同。
@@ -160,12 +160,12 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
    a. 收集 {output_dir}/blocks/temp/*/ 下所有 .json 文件
    b. 重新编号为 kb_001.json、kb_002.json……顺序写入 {output_dir}/blocks/
    c. 删除临时目录
-   d. 运行阶段间验证
+   d. 运行质量检查
 ```
 
 每个子 Agent 写入**自己的**临时目录——不会发生冲突。编排器拥有最终的编号权，保证全局唯一的顺序 ID。
 
-**断点恢复检查：** 如果 `{output_dir}/blocks/` 中已存在通过阶段间验证的 .json 文件，询问用户："已发现已有 block。全部重新提取，还是只重新提取变更的文档？"如选择仅变更文档，对比源文件时间戳和 block 时间戳，只对新增/修改的文件派发 Agent。
+**断点恢复检查：** 如果 `{output_dir}/blocks/` 中已存在通过质量检查的 .json 文件，询问用户："已发现已有 block。全部重新提取，还是只重新提取变更的文档？"如选择仅变更文档，对比源文件时间戳和 block 时间戳，只对新增/修改的文件派发 Agent。
 
 ### 第 2 步：Stage 2 — 实体提取
 
@@ -181,7 +181,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 
 子 Agent 读取所有 blocks（编排器在 prompt 中内联 block 数量），使用旧→新 ID 映射规范化实体，并从实体共现模式（≥3 个共享 block）中提取关系。输出 `pipeline-output/entities.json`，遵循 [schemas/entities.schema.yaml](schemas/entities.schema.yaml)。
 
-**关系质量门控：** Stage 2 输出 MUST 有 ≥50% 的实体拥有至少一条关系。否则阶段间验证会标记该问题，编排器询问是重新提取还是接受稀疏关系继续。
+**关系质量门控：** Stage 2 输出 MUST 有 ≥50% 的实体拥有至少一条关系。否则质量检查会标记该问题，编排器询问是重新提取还是接受稀疏关系继续。
 
 ### 第 3 步：Stage 3 — Wiki 编译（按优先级、并行）
 
@@ -335,12 +335,12 @@ retry_count 从 0 开始
 | 子 Agent 超时或失败 | 如果该阶段支持按实体派发（如 Wiki），只重试失败的实体。否则停止。 |
 | 领域配置 YAML 解析失败 | 回退到 generic.yaml。警告用户。 |
 | >20% 的输出 quality.confidence < 0.5 | 暂停管线。显示警告计数。询问用户：继续、修复后重试、或停止。 |
-| 管线中途中断 | 检查 pipeline-output/ 中已有文件。从最后一个完整的、输出通过阶段间验证的阶段恢复。 |
+| 管线中途中断 | 检查 pipeline-output/ 中已有文件。从最后一个完整的、输出通过质量检查的阶段恢复。 |
 | 无领域配置匹配用户输入 | 回退到 generic.yaml。询问是否将本次对话规则保存为新领域配置。 |
 
 ## 管线断点恢复
 
-每个阶段写入不同的位置。一个阶段如果在"完成"后其输出存在且通过阶段间验证，则可跳过。管线可以从任意阶段恢复：
+每个阶段写入不同的位置。一个阶段如果在"完成"后其输出存在且通过质量检查，则可跳过。管线可以从任意阶段恢复：
 
 ```
 在每个阶段前检查：
