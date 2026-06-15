@@ -311,7 +311,9 @@ retry_count 从 0 开始
 
 #### 关于 human_review_required
 
-经过 3 次重试仍不通过的输出，不会阻塞管线。管线将该输出写入 `{output_dir}/human-review/` 目录并继续下游执行。标记的输出供人工后续集中审阅。此举确保不因某实体的质量问题阻塞整个知识库的生产。
+两种触发路径：1) 质量检查 Agent 判定问题需要人类判断才能解决（判断标准见 `prompts/quality-checks.md`）；2) 同一阶段连续 3 次 need_retry 后仍未通过。
+
+不论哪种路径，标记为 human_review_required 的输出不阻塞管线。管线将该输出写入 `{output_dir}/human-review/` 目录并继续下游执行。标记的输出供人工后续集中审阅。
 
 #### 与断点恢复的关系
 
