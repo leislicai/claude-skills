@@ -1,0 +1,100 @@
+# 质量报告 — 输出契约
+# 由质量检查器生成，用于向编排器报告阶段输出质量
+
+type: object
+required:
+  - report_id
+  - stage
+  - status
+  - retry_count
+  - timestamp
+  - summary
+  - checks
+properties:
+  report_id:
+    type: string
+    description: "格式：{stage}-{retry_count}-{YYYYMMDDHHmmss}"
+  stage:
+    type: integer
+    enum: [1, 2, 3, 4]
+  status:
+    type: string
+    enum: ["passed", "need_retry", "human_review_required"]
+  retry_count:
+    type: integer
+    minimum: 0
+    maximum: 3
+  timestamp:
+    type: string
+    format: date-time
+  summary:
+    type: object
+    required: [total_count, passed_count, failed_count, avg_confidence]
+    properties:
+      total_count:
+        type: integer
+      passed_count:
+        type: integer
+      failed_count:
+        type: integer
+      avg_confidence:
+        type: number
+        minimum: 0
+        maximum: 1
+  checks:
+    type: array
+    items:
+      type: object
+      required:
+        - check_name
+        - layer
+        - severity
+        - passed
+      properties:
+        check_name:
+          type: string
+        layer:
+          type: string
+          enum: ["relation", "semantic"]
+        severity:
+          type: string
+          enum: ["error", "warning", "info"]
+        passed:
+          type: boolean
+        details:
+          type: string
+        affected_items:
+          type: array
+          items:
+            type: string
+        threshold:
+          type: object
+          properties:
+            actual:
+              type: number
+            expected:
+              type: number
+  feedback:
+    type: object
+    required: [instruction_blocks]
+    properties:
+      instruction_blocks:
+        type: array
+        items:
+          type: object
+          properties:
+            severity:
+              type: string
+              enum: ["error", "warning"]
+            check:
+              type: string
+            affected:
+              type: array
+              items:
+                type: string
+            instruction:
+              type: string
+  output_path:
+    type: string
+  human_review_path:
+    type: string
