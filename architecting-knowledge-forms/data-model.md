@@ -157,7 +157,7 @@ When a schema changes:
 | Enum value added | ✅ Compatible | No action needed |
 | Enum value removed | ❌ Incompatible | Re-run affected stage |
 
-### Current version: 2.6.0
+### Current version: 2.7.0
 
 | Component | Version | Notes |
 |-----------|---------|-------|

@@ -37,6 +37,9 @@ properties:
           items:
             type: string
           description: 意图标签（查询标准/查询条件/查询材料/查询流程/对比/定义）
+        scenario:
+          type: string
+          description: 所属业务场景名称（如"购房提取公积金"）
         quality:
           type: object
           required: [confidence, wiki_version]
