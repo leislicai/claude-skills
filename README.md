@@ -36,14 +36,14 @@ pipeline-output/
 
 ## Example Run / 运行示例
 
-天水市住房公积金 23 份政策文档，最近一次管线产出 / Latest run on 23 Tianshui housing fund policy docs：
+天水市住房公积金 3 份核心政策文档，v2.7 管线产出 / 3 core Tianshui housing fund docs, v2.7 pipeline：
 
 | Stage | Output / 产出 | Quality / 质量 |
 |-------|------|------|
-| 1 — 块提取 | 250 blocks | avg confidence 0.949 |
-| 2 — 实体提取 | 65 entities + 97 relations | 87.7% related, 0 naming violations |
-| 3 — Wiki 编译 | 24 wiki pages | 含 source_block_ids 追溯 |
-| 4 — QA 生成 | 114 QA pairs | 91 ≥ 0.9 confidence |
+| 1 — 块提取 | 29 blocks | 全机械检查 passed |
+| 2 — 实体提取 | 13 entities + 38 relations | 100% related, 0 英文违规 |
+| 3 — Wiki 编译 | 13 wiki pages | 全机械检查 passed |
+| 4 — QA 生成 | 95 QA pairs | 全机械检查 passed |
 
 See [architecting-knowledge-forms/examples/pipeline-output/](architecting-knowledge-forms/examples/pipeline-output/) for full output.
 
