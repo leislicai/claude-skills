@@ -23,14 +23,26 @@
 4. 将答案锚定到该 section 的 `source_block_ids`。
 
 ## 输出
-写入 `pipeline-output/qa_pairs.json`，遵循 [schemas/qa.schema.yaml](../schemas/qa.schema.yaml)。
+写入 `pipeline-output/qa_pairs.json`。
 
-每个 QA 对必须包含：
-- 一个具体的、可回答的问题（不是开放式的）
-- 从 Wiki 页面提取的答案，不是编造的
-- `source_block_ids` 追溯到支撑该答案的精确 blocks
-- `entities[]` 列出涉及的所有实体
-- `intents[]` 使用模板的 intent 标签
+**QA 对精确格式（`{qa_pairs: [...]}` 包装，字段不增不减）：**
+```json
+{
+  "qa_pairs": [
+    {
+      "id": "qa_001",
+      "question": "具体的、可回答的问题",
+      "answer": "从 Wiki 提取的答案，非编造",
+      "source_block_ids": ["kb_001"],
+      "entities": ["ent_实体1"],
+      "intents": ["查询标准"],
+      "quality": {"confidence": 0.92, "wiki_version": 1}
+    }
+  ]
+}
+```
+
+遵循 [schemas/qa.schema.yaml](../schemas/qa.schema.yaml)。
 
 ## 生成规则
 1. **派生而非编造。** 答案必须可追溯到 Wiki 内容 → Wiki 内容追溯到 blocks → blocks 追溯到源文档。每个答案有一条可验证的追溯链。

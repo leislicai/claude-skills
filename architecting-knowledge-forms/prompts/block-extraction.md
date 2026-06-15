@@ -19,20 +19,43 @@
 3. **Token 限制** — 每个 block 必须 ≥ 80 tokens 且 ≤ 2000 tokens。
 
 ## 输出
-每块写一个 JSON 文件到 `{output_dir}/`（你的临时目录）。如果文档产出了 10 个块，就写 10 个文件。命名为 `kb_001.json`、`kb_002.json`、`kb_003.json`……顺序编号。对每个文件使用 Write 工具单独写入。不要写完第一个就停。
+每块写一个 JSON 文件到 `{output_dir}/`。命名为 `kb_001.json`、`kb_002.json`……顺序编号。对每个文件使用 Write 工具单独写入。
+
+**每个 block 必须精确使用以下 JSON 格式（字段不增不减）：**
+```json
+{
+  "id": "kb_001",
+  "content": "该块的完整原始文本，不截断",
+  "summary": "一句中文概括核心含义",
+  "entities": ["ent_规范中文名称1", "ent_规范中文名称2"],
+  "tags": ["condition"],
+  "source": {
+    "file": "源文档文件名",
+    "title": "文档标题",
+    "section": "所在章节或条款",
+    "line_range": "起始行-结束行"
+  },
+  "quality": {"confidence": 0.95}
+}
+```
 
 ### 实体命名规则（先读这里）
-- **语言：** 所有实体 ID 必须用中文。`ent_缴存比例` ✅。`ent_deposit_base` ❌。
-- **前缀：** 每个实体以 `ent_` 开头。`ent_天水市住房公积金管理中心` ✅。`天水市住房公积金管理中心` ❌。
-- **粒度：** 只有跨块概念（出现在 ≥2 个 block 中）才能成为实体。仅在单块出现的细节 → 用 `tags[]`，不进 `entities[]`。
+- **entities 必须是字符串数组**（`["ent_xxx"]`），不是对象数组
+- **语言：** 所有实体 ID 必须用中文。`ent_缴存比例` ✅。`ent_deposit_base` ❌
+- **前缀：** 每个实体以 `ent_` 开头。`ent_天水市住房公积金管理中心` ✅
+- **粒度：** 只有跨块概念（出现≥2个block）才能成为实体。单块细节用 `tags[]`，不进 `entities[]`
 
-每个 block 包含：
-- `id`：顺序唯一 ID（`kb_001`、`kb_002`……）。从输出目录中已有最高 ID + 1 开始编号。
-- `content`：该块的完整原始文本。
-- `summary`：一句中文概括该块的核心含义。
-- `entities[]`：只标注跨多个 block 出现的概念——政策、部门、重复出现的条款、其他 block 引用的关键术语。只在当前 block 出现的概念属于 `tag`，不算 entity。坏 entity：`ent_30年期限`（只出现一次）。好 entity：`ent_缴存比例`（出现在多个 block）。坏 tag：在贷款额度 block 上打 `condition` tag。好 tag：在缴存比例 block 上打 `standards` tag。
-- `source`：确切的源文件名、段落号和行范围。
-- `quality.confidence`：你对块边界正确性的置信度（0–1）。
+### 字段说明
+- `id`：顺序编号（如 `kb_001`），从输出目录中已有最高 ID + 1 开始
+- `content`：完整原始文本，无截断
+- `summary`：一句中文概括核心含义
+- `entities`：字符串数组，仅含跨块概念（出现≥2个block）
+- `tags`：字符串数组，从 condition/material/procedure/standards 中选择
+- `source.file`：源文档文件名
+- `source.title`：文档标题
+- `source.section`：所在章节/条款/段落名
+- `source.line_range`：字符串格式的行范围（如 `"18-19"`）
+- `quality.confidence`：块边界正确性的置信度（0-1）
 
 ## 逐块质量自查
 写入每个 block 前验证：

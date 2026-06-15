@@ -1,5 +1,5 @@
-# Stage 2 output schema — Entities + Relations
-# Sub-agent reads pipeline-output/blocks/*.json, outputs pipeline-output/entities.json
+# Stage 2 输出 schema — 实体目录 + 关系
+# 子 Agent 产出 entities.json 的精确格式
 
 type: object
 required: [entities]
@@ -8,46 +8,53 @@ properties:
     type: array
     items:
       type: object
-      required: [id, name, type]
+      required: [id, name, type, source_block_ids, quality]
       properties:
         id:
           type: string
-          pattern: "^ent_[a-zA-Z0-9_一-鿿]+$"
+          pattern: "^ent_[一-鿿][一-鿿a-zA-Z0-9_]*$"
+          description: 规范实体 ID（中文描述性名称）
         name:
           type: string
+          description: 实体中文名称
         type:
           type: string
-          description: Must match one of the entity_types in domain config
+          description: 实体类型（领域配置 entity_types 中定义的值）
         properties:
           type: object
-          description: Key-value pairs extracted from blocks
+          description: 从 blocks 中提取的键值属性
         relations:
           type: array
-          description: Relations originating from this entity
+          description: 从该实体出发的关系
           items:
             type: object
-            required: [target, predicate]
+            required: [target, predicate, evidence_block_ids]
             properties:
               target:
                 type: string
-                description: Target entity id
+                description: 目标实体 ID
               predicate:
                 type: string
-                description: Must match one of the relation_predicates in domain config
+                description: 关系谓词（领域配置 relation_predicates 中定义的值）
               evidence_block_ids:
                 type: array
-                items: {type: string}
-                description: Blocks that support this relation
-              quality:
-                type: object
-                properties:
-                  confidence: {type: number}
+                items:
+                  type: string
+                description: 两个实体共同出现的 block ID 列表（≥3 个）
         source_block_ids:
           type: array
-          items: {type: string}
-          description: Trace back to knowledge blocks
+          items:
+            type: string
+          description: 引用该实体的 block ID 列表
         quality:
           type: object
+          required: [confidence]
           properties:
-            confidence: {type: number}
-            warnings: {type: array, items: {type: string}}
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+            warnings:
+              type: array
+              items:
+                type: string

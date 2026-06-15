@@ -1,61 +1,62 @@
 # 通用领域 — 回退配置
 # 当用户领域没有专属配置时使用此文件
 
-domain:
-  id: generic
-  name: 通用
-  description: 无专属配置时的回退策略
+领域:
+  编号: generic
+  名称: 通用
+  描述: 无专属配置时的回退策略
 
-chunking:
-  mode: semantic
-  semantic_rules:
-    completeness_threshold: 0.8
-    max_tokens: 2000
-    min_tokens: 80
+分块策略:
+  模式: 语义
+  语义规则:
+    完整性阈值: 0.8
+    最大token: 2000
+    最小token: 80
 
-entity_types:
-  - id: concept
-    name: 概念
-    description: 文档中出现的核心概念
-  - id: entity
-    name: 实体
-    description: 文档提到的人、机构、事物
+实体类型:
+  - 编号: concept
+    名称: 概念
+    描述: 文档中出现的核心概念
+  - 编号: entity
+    名称: 实体
+    描述: 文档提到的人、机构、事物
 
-relation_predicates:
-  - id: related_to
-    name: 相关
-    description: 两个实体之间存在关联
+关系谓词:
+  - 编号: related_to
+    名称: 相关
+    描述: 两个实体之间存在关联
 
-wiki_skeleton:
-  sections:
-    - name: 概述
-      key: overview
-      source: summary
-    - name: 相关内容
-      key: references
-      source: relations
+Wiki骨架:
+  通用章节:
+    - 名称: 概述
+      键: overview
+      来源: summary
+    - 名称: 相关内容
+      键: references
+      来源: relations
 
-qa_templates:
-  - pattern: "什么是{{entity.name}}？"
-    source_section: overview
-    intents: ["定义"]
-  - pattern: "{{entity.name}}包含哪些内容？"
-    source_section: overview
-    intents: ["了解"]
+QA模板:
+  通用:
+    - 模式: "什么是{{实体名}}？"
+      来源章节: overview
+      意图: ["定义"]
+    - 模式: "{{实体名}}包含哪些内容？"
+      来源章节: overview
+      意图: ["了解"]
 
-quality:
-  format:
-    content_non_empty: true
-    source_trace_valid: true
-    entities_resolvable: true
-  semantic:
-    entity_conflict_detection: true
-    conflict_action: flag_for_human_review
-    human_review_required:
-      - when: confidence < 0.5
+质量规则:
+  格式:
+    内容非空: true
+    源追溯有效: true
+    实体可解析: true
+  语义:
+    实体冲突检测: true
+    冲突处理: 标记人工审核
+    需人工审核:
+      - 当: confidence < 0.5
 
-cascade:
-  block_changed:
-    - re_extract_entities: true
-    - re_compile_wikis: affected
-    - re_generate_qa: affected
+级联:
+  block变更:
+    - 重新提取实体: true
+    - 重新编译Wiki: 仅受影响
+    - 重新生成QA: 仅受影响

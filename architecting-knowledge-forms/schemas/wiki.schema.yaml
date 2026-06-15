@@ -1,50 +1,41 @@
-# Stage 3 output schema — Wiki Pages
-# Sub-agent reads pipeline-output/blocks/*.json + entities.json
-# Outputs pipeline-output/wiki/{entity_id}.md
+# Stage 3 输出 schema — Wiki 页面
+# 子 Agent 产出 wiki/{entity_id}.md 的精确格式
+# 文件为 Markdown + YAML frontmatter
 
-type: array
-items:
-  type: object
-  required: [entity_id, title, sections]
-  properties:
-    entity_id:
+type: object
+required: [entity_id, title, version, status, compiled_at]
+properties:
+  entity_id:
+    type: string
+    pattern: "^ent_[一-鿿][一-鿿a-zA-Z0-9_]*$"
+    description: 1:1 对应实体 ID
+  title:
+    type: string
+    description: 页面标题
+  entity_type:
+    type: string
+    description: 实体类型
+  version:
+    type: integer
+    description: 编译版本号，首次为 1，重编译时自增
+  status:
+    type: string
+    enum: [fresh, unchanged]
+    description: fresh=新编译, unchanged=源 blocks 无变化
+  compiled_at:
+    type: string
+    format: date
+    description: 编译日期（YYYY-MM-DD）
+  source_block_ids:
+    type: array
+    items:
       type: string
-      pattern: "^ent_[a-zA-Z0-9_一-鿿]+$"
-      description: 1:1 with graph entity
-    title:
+    description: 页面引用的所有 block ID
+  related_entities:
+    type: array
+    items:
       type: string
-    sections:
-      type: array
-      items:
-        type: object
-        required: [heading, content, source_block_ids]
-        properties:
-          heading:
-            type: string
-            description: Section heading from wiki_skeleton
-          key:
-            type: string
-            description: Section key from wiki_skeleton (overview/standards/conditions/...)
-          content:
-            type: string
-            minLength: 1
-            description: Compiled narrative
-          source_block_ids:
-            type: array
-            items: {type: string}
-            description: Blocks compiled into this section
-    related_entities:
-      type: array
-      items: {type: string}
-      description: Entity ids referenced in this page
-    compilation:
-      type: object
-      properties:
-        version: {type: integer}
-        compiled_at: {type: string, format: date-time}
-        status: {enum: [fresh, stale, compiling]}
-    quality:
-      type: object
-      properties:
-        confidence: {type: number}
-        warnings: {type: array, items: {type: string}}
+    description: 关联实体 ID 列表
+
+# 正文为 Markdown，按领域配置的 Wiki 骨架组织章节
+# 章节内通过 (kb_NNN) 标注引用来源

@@ -1,36 +1,53 @@
-# Stage 4 output schema — QA Pairs
-# Sub-agent reads pipeline-output/wiki/*.md + entities.json
-# Outputs pipeline-output/qa_pairs.json
+# Stage 4 输出 schema — QA 对
+# 子 Agent 产出 qa_pairs.json 的精确格式
 
-type: array
-items:
-  type: object
-  required: [id, question, answer, source_block_ids, entities]
-  properties:
-    id:
-      type: string
-      pattern: "^qa_[a-z0-9]+$"
-    question:
-      type: string
-      minLength: 1
-    answer:
-      type: string
-      minLength: 1
-    source_block_ids:
-      type: array
-      items: {type: string}
-      description: Trace back to original blocks
-    entities:
-      type: array
-      items: {type: string}
-      description: Entity ids involved in this QA
-    intents:
-      type: array
-      items: {type: string}
-      description: Intent labels (查询标准/查询条件/查询材料/查询流程/对比)
-    quality:
+type: object
+required: [qa_pairs]
+properties:
+  qa_pairs:
+    type: array
+    items:
       type: object
+      required: [id, question, answer, source_block_ids, entities]
       properties:
-        confidence: {type: number, minimum: 0, maximum: 1}
-        wiki_version: {type: integer}
-        warnings: {type: array, items: {type: string}}
+        id:
+          type: string
+          pattern: "^qa_\\d{3}$"
+          description: 唯一 QA ID
+        question:
+          type: string
+          minLength: 1
+          description: 具体的、可回答的问题
+        answer:
+          type: string
+          minLength: 1
+          description: 从 Wiki 提取的答案，非编造
+        source_block_ids:
+          type: array
+          items:
+            type: string
+          description: 追溯到源 blocks
+        entities:
+          type: array
+          items:
+            type: string
+          description: 涉及的所有实体 ID
+        intents:
+          type: array
+          items:
+            type: string
+          description: 意图标签（查询标准/查询条件/查询材料/查询流程/对比/定义）
+        quality:
+          type: object
+          required: [confidence, wiki_version]
+          properties:
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+            wiki_version:
+              type: integer
+            warnings:
+              type: array
+              items:
+                type: string

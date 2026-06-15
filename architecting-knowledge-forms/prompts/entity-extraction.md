@@ -36,7 +36,7 @@
 1. 收集所有 block 中 `entities[]` 的值。这些是初步 ID——有些可能是英文缩写（`ent_tianshui_hf`），有些可能是同一概念的不同表述。
 2. **应用 Step 0 过滤规则。** 将时间修饰语、纯数值、单次名词、举例场景从实体列表中移除或降级为属性。
 3. **构建旧→新映射。** 对过滤后保留的每个独立实体 ID，创建一个规范条目，使用描述性中文 `id` 和 `name`。保留映射：每个旧 ID → 规范 ID。
-4. 将每个规范实体归入领域配置的 6 个 `entity_types` 之一。
+4. 将每个规范实体归入领域配置中定义的实体类型之一（见 `{domain_config}` 中的 `entity_types` 列表）。
 5. 从该实体出现的 block 内容中提取键值型 `properties`。
 
 ### 实体 ID 命名审计
@@ -57,9 +57,7 @@
    - `amends`：policy → policy。新文件修改了旧文件（在 block 内容中查找"修订""调整""修改"）。
    - `repeals`：policy → policy。新文件替换旧文件（在 block 内容中查找"废止""取代"）。
    - `requires`：procedure → material，或 condition → clause。某物依赖另一物。如"提取手续 需要 身份证"。
-3. **关系多样性要求。** 每个谓词至少使用一次（在其适用场景存在的前提下）。如果所有关系都是 `references`，重新审视：是否可以用更具体的谓词？
-   - "缴存基数上限根据2020年度……确定" → 应用 `requires` 而非 `references`
-   - "根据《住房公积金管理条例》" → 应用 `part_of` 而非 `references`
+3. **关系多样性要求。** 领域配置中定义的每个谓词至少使用一次（在适用场景存在的前提下）。如果几乎所有关系都是同一谓词（如 references），重新审视是否可以用更具体的谓词。不要用 references 当兜底。
 4. **记录证据。** 每条关系列出 `evidence_block_ids`——两个实体共同出现的 block。
 5. **优先级。** 对每个与另一实体 ≥3 次共现的实体，至少提取一条关系。底线：50% 的实体至少有一条关系。
 6. **发现新谓词。** 如果一对共现实体明显有关系但不匹配现有 5 个谓词，仍分配最接近的谓词，但添加 `quality.warnings: ["new_predicate_suggested:建议的谓词名"]`。编排器会收集这些建议并询问是否加入领域配置。
@@ -92,9 +90,9 @@
 
 ## 质量自查
 - [ ] 所有 block 中的实体 ID 都能映射到规范条目
-- [ ] 实体类型均匹配领域配置的 6 种
+- [ ] 实体类型均匹配领域配置中定义的 entity_types
 - [ ] **≥50% 的实体至少有一条关系**（计数并确认）
-- [ ] 所有 5 个谓词类型（part_of、references、amends、repeals、requires）在适用场景下各至少使用一次
+- [ ] 领域配置中定义的所有谓词类型在适用场景下各至少使用一次（见 `{domain_config}` 中的 `relation_predicates`）
 - [ ] 每条关系有 ≥3 个 evidence_block_ids
 - [ ] 每个实体的 `source_block_ids` 追溯到有效的 block ID
 - [ ] 所有 entity ID 使用中文描述名（无 `ent_clause_`、`ent_policy_notice_`、`ent_2020`）

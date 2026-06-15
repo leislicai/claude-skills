@@ -1,48 +1,60 @@
-# Stage 1 output schema — Knowledge Blocks
-# Sub-agent MUST produce this exact structure as pipeline-output/blocks/*.json
+# Stage 1 输出 schema — 知识块
+# 子 Agent 产出 pipeline-output/blocks/kb_NNN.json 的精确格式
 
-type: array
-items:
-  type: object
-  required: [id, content, summary, entities, tags, source]
-  properties:
-    id:
+type: object
+required: [id, content, summary, entities, tags, source, quality]
+properties:
+  id:
+    type: string
+    pattern: "^kb_\\d{3}$"
+    description: 唯一块 ID
+  content:
+    type: string
+    minLength: 1
+    description: 该块的完整原始文本
+  summary:
+    type: string
+    minLength: 1
+    maxLength: 500
+    description: 一句中文概括核心含义
+  entities:
+    type: array
+    items:
       type: string
-      pattern: "^kb_[a-z0-9]+$"
-      description: Unique block ID
-    content:
+      pattern: "^ent_[一-鿿][一-鿿a-zA-Z0-9_]*$"
+    description: 跨块实体 ID 列表（字符串数组，≥2 个 block 中出现）
+  tags:
+    type: array
+    items:
       type: string
-      minLength: 1
-      description: Full original text of this block
-    summary:
-      type: string
-      minLength: 1
-      maxLength: 500
-      description: One-sentence summary
-    entities:
-      type: array
-      items:
+    description: 标签列表（condition/material/procedure/standards）
+  source:
+    type: object
+    required: [file, title, section, line_range]
+    properties:
+      file:
         type: string
-        pattern: "^ent_[a-zA-Z0-9_一-鿿]+$"
-      description: Entity references → consumed by Stage 2
-    tags:
-      type: array
-      items:
+        description: 源文档文件名
+      title:
         type: string
-      description: Freeform tags for wiki section assignment
-    source:
-      type: object
-      required: [doc_id]
-      properties:
-        doc_id: {type: string}
-        paragraph: {type: integer}
-        line_range: {type: array, items: {type: integer}, minItems: 2, maxItems: 2}
-    embedding:
-      type: array
-      items: {type: number}
-      description: Vector embedding (optional, can be generated later)
-    quality:
-      type: object
-      properties:
-        confidence: {type: number, minimum: 0, maximum: 1}
-        warnings: {type: array, items: {type: string}}
+        description: 文档标题
+      section:
+        type: string
+        description: 所在章节或条款
+      line_range:
+        type: string
+        description: 字符串格式的行范围（如 "18-19"）
+  quality:
+    type: object
+    required: [confidence]
+    properties:
+      confidence:
+        type: number
+        minimum: 0
+        maximum: 1
+        description: 块边界正确性的置信度
+      warnings:
+        type: array
+        items:
+          type: string
+        description: 质量问题标记（如有）

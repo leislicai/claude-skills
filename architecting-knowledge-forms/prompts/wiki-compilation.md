@@ -22,7 +22,7 @@
 {domain_config}
 ```
 
-使用 `wiki_skeleton.sections` 构建 Wiki 页面。对骨架中的每个 section，按 `source` 字段确定内容来源：
+使用领域配置中的 Wiki 骨架（见 `{domain_config}` 中的 `Wiki骨架` 或 `wiki_skeleton`）构建页面。按实体类型选择对应章节，按 `来源` 字段确定内容来源：
 
 - **overview**（source=summary）：从相关 blocks 的 `summary` 字段聚合。撰写简明叙述。
 - **standards**（source=properties）：将 entity properties 渲染为结构化数据。
@@ -31,11 +31,25 @@
 - **references**（source=relations）：列出相关实体及其谓词。
 
 ## 输出
-写单个文件：`pipeline-output/wiki/{entity_id}.md`。
+写入 `pipeline-output/wiki/{entity_id}.md`。Markdown + YAML frontmatter。
 
-格式：Markdown 带 YAML frontmatter，包含 `entity_id`、`title`、`related_entities`、`compilation.version`、`compilation.compiled_at`。正文使用骨架的 section 名称作为 Markdown 标题，下方为编译内容。
+**frontmatter 精确格式（字段不增不减）：**
+```yaml
+---
+entity_id: "ent_xxx"
+title: "页面标题"
+entity_type: "policy|clause|department|condition|material|procedure"
+version: 1
+status: "fresh"
+compiled_at: "2026-06-15"
+source_block_ids: ["kb_001", "kb_002"]
+related_entities: ["ent_关联实体"]
+---
+```
 
-遵循 [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml) 的输出 schema。
+正文使用骨架的 section 名称作为 Markdown 标题（如 `## 概述`），下方为综合撰写的编译内容。每个章节内通过 `(kb_NNN)` 标注引用来源。
+
+遵循 [schemas/wiki.schema.yaml](../schemas/wiki.schema.yaml)。
 
 ## 上下文预算
 

@@ -30,7 +30,7 @@ def check_stage_1(output_dir):
     # 计数
     checks.append({
         "check_name": "计数",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error",
         "passed": len(files) > 0,
         "details": f"产出 {len(files)} 个 block" if files else "零输出",
@@ -49,7 +49,7 @@ def check_stage_1(output_dir):
         except json.JSONDecodeError:
             checks.append({
                 "check_name": "JSON 格式",
-                "layer": "relation",
+                "layer": "mechanical",
                 "severity": "error",
                 "passed": False,
                 "details": f"文件 {os.path.basename(f)} JSON 解析失败",
@@ -72,7 +72,7 @@ def check_stage_1(output_dir):
 
     checks.append({
         "check_name": "置信度扫描",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error" if below_pct > 20 else "info",
         "passed": below_pct <= 20,
         "details": f"均值 {avg_conf:.3f}, 低于0.5: {below_05}/{len(confs)} ({below_pct:.1f}%)",
@@ -87,7 +87,7 @@ def check_stage_1(output_dir):
             elif isinstance(e, dict): obj_ents += 1
     checks.append({
         "check_name": "实体格式一致性",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "warning",
         "passed": True,
         "details": f"string 格式 {str_ents}, object 格式 {obj_ents}"
@@ -162,7 +162,7 @@ def check_stage_2(output_dir, domain_config=None):
     if not os.path.exists(entities_path):
         checks.append({
             "check_name": "文件存在",
-            "layer": "relation", "severity": "error", "passed": False,
+            "layer": "mechanical", "severity": "error", "passed": False,
             "details": "entities.json 不存在", "affected_items": [entities_path]
         })
         return checks, 0.0, 0.0
@@ -174,7 +174,7 @@ def check_stage_2(output_dir, domain_config=None):
 
     checks.append({
         "check_name": "计数",
-        "layer": "relation", "severity": "error",
+        "layer": "mechanical", "severity": "error",
         "passed": n > 0,
         "details": f"产出 {n} 个实体" if n else "零输出"
     })
@@ -187,7 +187,7 @@ def check_stage_2(output_dir, domain_config=None):
     orphan_pct = 100 * len(orphans) / n
     checks.append({
         "check_name": "孤立实体率",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error" if orphan_pct > 15 else "info",
         "passed": orphan_pct <= 15,
         "details": f"{len(orphans)}/{n} ({orphan_pct:.1f}%), 阈值 15%",
@@ -218,7 +218,7 @@ def check_stage_2(output_dir, domain_config=None):
 
     checks.append({
         "check_name": "关系多样性",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error" if not diversity_passed else "info",
         "passed": diversity_passed,
         "details": f"谓词分布: {dict(preds)}. " + ("全部在领域容忍范围内" if diversity_passed else f"超标: {', '.join(pred_violations)}"),
@@ -229,7 +229,7 @@ def check_stage_2(output_dir, domain_config=None):
     avg_rels = total_rels / n if n else 0
     checks.append({
         "check_name": "关系密度",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "warning" if (avg_rels > 10 or total_rels > n*5) else "info",
         "passed": avg_rels <= 10 and total_rels <= n*5,
         "details": f"均值 {avg_rels:.1f} 条/实体, 总计 {total_rels} 条"
@@ -246,14 +246,19 @@ def check_stage_2(output_dir, domain_config=None):
         "affected_items": non_chinese[:10]
     })
 
-    # 置信度
-    confs = [e["quality"]["confidence"] for e in entities]
+    # 置信度（防御性访问）
+    confs = []
+    for e in entities:
+        q = e.get("quality", {})
+        c = q.get("confidence") if isinstance(q, dict) else None
+        if c is not None:
+            confs.append(c)
     avg_c = sum(confs) / len(confs)
     below_05 = sum(1 for c in confs if c < 0.5)
     below_pct = 100 * below_05 / n
     checks.append({
         "check_name": "置信度扫描",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error" if below_pct > 20 else "info",
         "passed": below_pct <= 20,
         "details": f"均值 {avg_c:.3f}, 低于0.5: {below_05}/{n} ({below_pct:.1f}%)",
@@ -271,7 +276,7 @@ def check_stage_3(output_dir):
 
     checks.append({
         "check_name": "骨架完整性预检",
-        "layer": "relation", "severity": "error",
+        "layer": "mechanical", "severity": "error",
         "passed": len(files) > 0,
         "details": f"产出 {len(files)} 个 Wiki 页面" if files else "零输出"
     })
@@ -291,7 +296,7 @@ def check_stage_3(output_dir):
 
     checks.append({
         "check_name": "Frontmatter 完整性",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "warning" if fm_ok < len(sample) else "info",
         "passed": fm_ok == len(sample),
         "details": f"抽样 {len(sample)} 个, {fm_ok} 个包含必要 frontmatter 字段"
@@ -308,7 +313,7 @@ def check_stage_4(output_dir):
     if not os.path.exists(qa_path):
         checks.append({
             "check_name": "文件存在",
-            "layer": "relation", "severity": "error", "passed": False,
+            "layer": "mechanical", "severity": "error", "passed": False,
             "details": "qa_pairs.json 不存在"
         })
         return checks, 0.0, 0.0
@@ -320,7 +325,7 @@ def check_stage_4(output_dir):
 
     checks.append({
         "check_name": "计数",
-        "layer": "relation", "severity": "error",
+        "layer": "mechanical", "severity": "error",
         "passed": n > 0,
         "details": f"产出 {n} 个 QA 对" if n else "零输出"
     })
@@ -346,7 +351,7 @@ def check_stage_4(output_dir):
 
     checks.append({
         "check_name": "置信度扫描",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error" if below_pct > 20 else "info",
         "passed": below_pct <= 20,
         "details": f"均值 {avg_c:.3f}, 低于0.5: {below_05}/{len(confs)} ({below_pct:.1f}%)",
@@ -355,7 +360,7 @@ def check_stage_4(output_dir):
 
     checks.append({
         "check_name": "追源率",
-        "layer": "relation",
+        "layer": "mechanical",
         "severity": "error" if source_ok < n * 0.5 else "warning" if source_ok < n * 0.8 else "info",
         "passed": source_ok >= n * 0.8,
         "details": f"{source_ok}/{n} ({100*source_ok/n:.1f}%) QA 有 source_block_ids"

@@ -30,7 +30,7 @@
 | 实体定义模糊 | semantic | 审查低置信度（<0.5）的实体。其 context_snippet 是否真正定义了该实体？ |
 | 同义合并 | semantic | 有无两个实体实质上是同一概念的不同表述？ |
 | 跨界实体 | semantic | 有无实体的 type 与关系模式矛盾？（如 type=material 但所有关系都是 part_of policy） |
-| 命名合规 | relation | entities.json 中的实体 ID 是否全部遵循以中文开头？拒绝英文/数字前缀。 |
+| 命名合规 | mechanical | entities.json 中的实体 ID 是否全部遵循以中文开头？拒绝英文/数字前缀。 |
 | 时间/属性降级 | semantic | 有无时间修饰语、纯数值、单次出现名词被当作独立实体？ |
 | 粒度一致性 | semantic | 所有实体是否大致在同一抽象层级？检查条款内的举例场景是否被提取为独立实体。 |
 
@@ -40,7 +40,7 @@
 |-------|------|---------|
 | 骨架完整性 | semantic | 随机抽取 5 个 Wiki 页面，领域配置的 wiki_skeleton sections 是否均有实质内容？ |
 | 源可追溯 | semantic | 对每个抽样页面的 3 个随机论断，能否追溯到源 block？ |
-| 内部链接 | relation | 所有 `[[ent_xxx]]` 链接引用的实体是否在 entities.json 中存在？ |
+| 内部链接 | mechanical | 所有 `[[ent_xxx]]` 链接引用的实体是否在 entities.json 中存在？ |
 | 信息退化 | semantic | 对比 Wiki 内容与源 blocks——是否丢失了重要信息？ |
 | 不自相矛盾 | semantic | 同一 Wiki 页面的不同 section 之间是否存在相互矛盾的说法？ |
 
@@ -49,7 +49,7 @@
 | 检查项 | 层面 | 检查方式 |
 |-------|------|---------|
 | 追源验证 | semantic | 每个 QA 对的答案能否追溯到具体的源 blocks（通过 answer 的 source_block_ids 或 wiki section 引用）？ |
-| 模板覆盖率 | relation | 对照领域配置的 qa_templates——所有 pattern 是否都已覆盖？ |
+| 模板覆盖率 | mechanical | 对照领域配置的 qa_templates——所有 pattern 是否都已覆盖？ |
 | 问句多样性 | semantic | 对 ≥3 个 QA 的同一实体，问法是否各不相同？ |
 | 自洽性 | semantic | 同一实体的不同 QA 对之间答案是否一致？ |
 | 往返测试 | semantic | 抽取 5 个 QA 对：用答案反推"这个回答对应什么问题？"结果与原问题是否语义一致？ |

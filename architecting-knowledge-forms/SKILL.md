@@ -1,7 +1,7 @@
 ---
 name: architecting-knowledge-forms
 description: Designing and executing multi-form knowledge pipelines — blocks, graph, wiki, QA pairs. Domain configs, prompt templates, 4-stage sub-agent orchestration. 设计和执行多形态知识管线：知识块、图谱、Wiki、QA 对。含领域配置、prompt 模板、四阶段子 Agent 编排。
-version: 2.6.0
+version: 2.7.0
 tags: [knowledge-management, rag, architecture, data-modeling, pipeline]
 author: leislicai
 ---

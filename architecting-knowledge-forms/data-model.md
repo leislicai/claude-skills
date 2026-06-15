@@ -161,7 +161,7 @@ When a schema changes:
 
 | Component | Version | Notes |
 |-----------|---------|-------|
-| SKILL.md | 2.6.0 | Quality feedback loop introduced in 2.6 |
+| SKILL.md | 2.7.0 | Hard-gate quality checks + Chinese domain config + inline JSON formats |
 | blocks.schema.yaml | 2.x | |
 | entities.schema.yaml | 2.x | |
 | wiki.schema.yaml | 2.x | |

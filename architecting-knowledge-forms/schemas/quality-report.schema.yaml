@@ -62,7 +62,7 @@ properties:
           description: "对应质量检查标准中的检查项名称"
         layer:
           type: string
-          enum: ["relation", "semantic"]
+          enum: ["mechanical", "semantic"]
           description: "检查层面：关系层或语义层"
         severity:
           type: string
