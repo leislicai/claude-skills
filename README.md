@@ -1,59 +1,59 @@
-# Claude Skills
+# Claude Skills / Claude 技能集
 
-Personal Claude Code skills collection.
+Personal Claude Code skills collection. 个人 Claude Code 技能集合。
 
-## Skills
+## Skills / 技能
 
-| Skill | Version | Description |
+| Skill | Version | Description / 描述 |
 |-------|---------|-------------|
-| [`architecting-knowledge-forms`](architecting-knowledge-forms/SKILL.md) | v2.5.0 | Design + execute multi-form knowledge pipelines — domain configs, prompt templates, schema contracts, 4-stage sub-agent orchestration |
+| [`architecting-knowledge-forms`](architecting-knowledge-forms/SKILL.md) | v2.7.0 | 多形态知识管线编排——Block → Entity → Wiki → QA。含领域配置、prompt 模板、schema 契约、质量检查反馈回环。Design + execute multi-form knowledge pipelines with hard-gate quality inspection and feedback loops. |
 
-**Language note:** This skill's entity-naming conventions and domain configs assume Chinese-language source documents. The orchestration pattern (temp isolation, resumption, Between-Stages validation, dynamic predicates) is language-agnostic and reusable.
+**语言说明 / Language:** 实体命名和领域配置假定中文源文档。编排模式（临时目录隔离、断点恢复、质量检查、动态谓词）是语言无关的。Entity naming and domain configs assume Chinese-language source documents. The orchestration pattern is language-agnostic.
 
-## Pipeline
+## Pipeline / 管线
 
 ```
-Document → [Block Extraction] → [Entity Extraction] → [Wiki Compilation] → [QA Generation]
-              Stage 1               Stage 2               Stage 3              Stage 4
+Document → [Stage 1: 块提取] → [Stage 2: 实体提取] → [Stage 3: Wiki 编译] → [Stage 4: QA 生成]
+                Block                  Entity                  Wiki                   QA
+              Extraction             Extraction             Compilation            Generation
 ```
 
-All stages dispatch as sub-agents. Data passes between stages via JSON files. Stage 3 dispatches parallel agents — one per entity.
+每阶段完成后强制执行质量检查（机械预检 + 语义评估），不合格则进入反馈回环（最多 3 次重试）。
 
-## Partial Modes
+Each stage is followed by mandatory quality inspection (mechanical pre-check + semantic evaluation). Failed stages enter a feedback loop (max 3 retries).
 
-| Mode | Builds | Good for |
-|------|--------|----------|
-| Blocks only | Stage 1 | Semantic search |
-| Blocks + Graph | Stage 1-2 | Search + relationship navigation |
-| Blocks + Wiki | Stage 1-3 | Knowledge browsing |
-| Blocks + QA | Stage 1-2 + QA | RAG Q&A without wiki |
-| All four | Full pipeline | Complete knowledge platform |
-
-## Domain Configuration
-
-Domain configs live in `architecting-knowledge-forms/domains/`. To add a new domain:
-
-1. Copy `domains/generic.yaml` to `domains/your-domain.yaml`
-2. Set `domain.applies_to` to match your document type keywords
-3. Customize entity types, relation predicates, wiki skeleton, and QA templates
-
-The orchestrator auto-detects the domain by matching user input against `domain.applies_to`.
-
-## Output Structure
+## Output Structure / 产出结构
 
 ```
 pipeline-output/
-├── blocks/              # Stage 1 — one .json per knowledge block
-├── entities.json        # Stage 2 — entity catalog with relations
-├── wiki/                # Stage 3 — one .md per entity
-└── qa_pairs.json        # Stage 4 — Q+A pairs
+├── blocks/              # Stage 1 — kb_NNN.json
+├── entities.json        # Stage 2 — 实体目录 + 关系
+├── wiki/                # Stage 3 — ent_xxx.md
+├── qa_pairs.json        # Stage 4 — QA 对
+├── quality-reports/     # 质量报告（每阶段必生成）
+└── human-review/        # 3 次重试后仍不通过，人工审阅
 ```
 
-## Example
+## Example Run / 运行示例
 
-See [architecting-knowledge-forms/examples/](architecting-knowledge-forms/examples/) for a worked example using real Tianshui housing fund policy documents.
+天水市住房公积金 23 份政策文档，最近一次管线产出 / Latest run on 23 Tianshui housing fund policy docs：
 
-## Install
+| Stage | Output / 产出 | Quality / 质量 |
+|-------|------|------|
+| 1 — 块提取 | 250 blocks | avg confidence 0.949 |
+| 2 — 实体提取 | 65 entities + 97 relations | 87.7% related, 0 naming violations |
+| 3 — Wiki 编译 | 24 wiki pages | 含 source_block_ids 追溯 |
+| 4 — QA 生成 | 114 QA pairs | 91 ≥ 0.9 confidence |
+
+See [architecting-knowledge-forms/examples/pipeline-output/](architecting-knowledge-forms/examples/pipeline-output/) for full output.
+
+## Quick Start / 快速上手
+
+Read [GETTING_STARTED.md](architecting-knowledge-forms/GETTING_STARTED.md) for a 5-minute walkthrough with good/bad output examples.
+
+阅读 [GETTING_STARTED.md](architecting-knowledge-forms/GETTING_STARTED.md) 获取 5 分钟快速上手指引和好/坏输出对比示例。
+
+## Install / 安装
 
 ```bash
 cp -r architecting-knowledge-forms ~/.claude/skills/
