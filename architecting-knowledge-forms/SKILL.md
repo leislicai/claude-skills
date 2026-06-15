@@ -140,7 +140,7 @@ author: leislicai
 mkdir -p {output_dir}/blocks {output_dir}/wiki
 ```
 
-所有后续管线中对 `pipeline-output/` 的引用应改用 `{output_dir}/`。
+所有后续管线步骤中的路径均使用 `{output_dir}` 变量，编排器在执行时将其替换为用户指定的输出目录。下文为便于阅读，展示的是以默认目录为例的路径——实际执行时一律替换为 `{output_dir}`。
 
 ### 第 1 步：Stage 1 — 块提取（按文档、并行、隔离）
 
@@ -175,13 +175,13 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 1. 等待 Stage 1 完成
 2. READ prompts/entity-extraction.md
 3. READ 领域配置 .yaml
-4. LIST pipeline-output/blocks/ 确认 block 存在
+4. LIST {output_dir}/blocks/ 确认 block 存在
 5. 在 prompt 模板中替换：
    - {domain_config} → 完整领域配置 YAML（内联）
 6. DISPATCH 1 个子 Agent 处理解析后的 prompt
 ```
 
-子 Agent 读取所有 blocks（编排器在 prompt 中内联 block 数量），使用旧→新 ID 映射规范化实体，并从实体共现模式（≥3 个共享 block）中提取关系。输出 `pipeline-output/entities.json`，遵循 [schemas/entities.schema.yaml](schemas/entities.schema.yaml)。
+子 Agent 读取所有 blocks（编排器在 prompt 中内联 block 数量），使用旧→新 ID 映射规范化实体，并从实体共现模式（≥3 个共享 block）中提取关系。输出 `{output_dir}/entities.json`，遵循 [schemas/entities.schema.yaml](schemas/entities.schema.yaml)。
 
 **关系质量门控：** Stage 2 输出 MUST 有 ≥50% 的实体拥有至少一条关系。否则质量检查会标记该问题，编排器询问是重新提取还是接受稀疏关系继续。
 
@@ -191,7 +191,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 
 ```
 1. 等待 Stage 2 完成
-2. READ pipeline-output/entities.json 提取实体列表
+2. READ {output_dir}/entities.json 提取实体列表
 3. 按重要度评分排序：
    score = number_of_source_block_ids + number_of_relations + (1.5 if type is 'policy' else 0)
    降序排列。顶部实体是被引用最多、关联度最高的政策实体。
@@ -200,7 +200,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 5. READ prompts/wiki-compilation.md
 6. READ 领域配置 .yaml
 7. 对每个选中的实体：
-   a. 在 pipeline-output/blocks/ 中筛选 entities[] 包含该 entity_id 的 blocks
+   a. 在 {output_dir}/blocks/ 中筛选 entities[] 包含该 entity_id 的 blocks
    a2. 如筛选出的 blocks 的总 token 数超过 60,000：
        - 优先选择 quality.confidence 最高的 blocks
        - 优先包含 tags 匹配 Wiki 骨架章节键的 blocks
@@ -213,7 +213,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
    c. DISPATCH 每个实体 1 个子 Agent（并行派发——各自写入不同文件）
 ```
 
-每个子 Agent 写入 `pipeline-output/wiki/{entity_id}.md`，遵循 [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml)。
+每个子 Agent 写入 `{output_dir}/wiki/{entity_id}.md`，遵循 [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml)。
 
 ### 第 4 步：Stage 4 — QA 生成
 
@@ -226,7 +226,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 5. DISPATCH 1 个子 Agent 处理解析后的 prompt
 ```
 
-子 Agent 读取 `pipeline-output/wiki/` 和 `pipeline-output/entities.json`，输出 `pipeline-output/qa_pairs.json`，遵循 [schemas/qa.schema.yaml](schemas/qa.schema.yaml)。
+子 Agent 读取 `{output_dir}/wiki/` 和 `{output_dir}/entities.json`，输出 `{output_dir}/qa_pairs.json`，遵循 [schemas/qa.schema.yaml](schemas/qa.schema.yaml)。
 
 ### 阶段间质量检查与反馈回环
 
@@ -250,7 +250,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 
 若机械预检无致命问题，编排器派发 1 个子 Agent 运行 `prompts/quality-checks.md`，对该阶段输出进行语义层面评估。
 
-子 Agent 读取阶段输出 + 领域配置，按质量检查标准逐项评估，输出完整质量报告到 `pipeline-output/quality-reports/{stage}-{retry_count}-{timestamp}.json`。
+子 Agent 读取阶段输出 + 领域配置，按质量检查标准逐项评估，输出完整质量报告到 `{output_dir}/quality-reports/{stage}-{retry_count}-{timestamp}.json`。
 
 #### 第 3 步：判断与路由
 
@@ -268,7 +268,7 @@ retry_count 从 0 开始
   retry_count += 1
   if retry_count > 3:
     标记 human_review_required
-    输出写入 pipeline-output/human-review/
+    输出写入 {output_dir}/human-review/
     继续下一阶段
   else:
     从质量报告提取 feedback.instruction_blocks
@@ -307,11 +307,11 @@ retry_count 从 0 开始
 #### 第 4 步：质量报告留存
 
 每阶段每次执行（含重试）均生成一份完整质量报告，写入：
-`pipeline-output/quality-reports/{stage}-{retry_count}-{timestamp}.json`
+`{output_dir}/quality-reports/{stage}-{retry_count}-{timestamp}.json`
 
 #### 关于 human_review_required
 
-经过 3 次重试仍不通过的输出，不会阻塞管线。管线将该输出写入 `pipeline-output/human-review/` 目录并继续下游执行。标记的输出供人工后续集中审阅。此举确保不因某实体的质量问题阻塞整个知识库的生产。
+经过 3 次重试仍不通过的输出，不会阻塞管线。管线将该输出写入 `{output_dir}/human-review/` 目录并继续下游执行。标记的输出供人工后续集中审阅。此举确保不因某实体的质量问题阻塞整个知识库的生产。
 
 #### 与断点恢复的关系
 
@@ -321,8 +321,8 @@ retry_count 从 0 开始
 
 当源文档变更后重新运行管线时，编排器必须检测变更内容，只重新派生受影响的产物：
 
-1. 对比源文档时间戳与 `pipeline-output/blocks/*.json` 时间戳 → 只重新提取变更的文档
-2. 对比 `pipeline-output/blocks/` 时间戳与 `pipeline-output/entities.json` 时间戳 → 仅当 blocks 变更时才重新提取实体
+1. 对比源文档时间戳与 `{output_dir}/blocks/*.json` 时间戳 → 只重新提取变更的文档
+2. 对比 `{output_dir}/blocks/` 时间戳与 `{output_dir}/entities.json` 时间戳 → 仅当 blocks 变更时才重新提取实体
 3. 对每个 Wiki 页面，对比其 `compilation.compiled_at` 时间戳与引用其实体的 blocks 的时间戳 → 只重新编译过期 Wiki
 4. 对每个 QA 对，对比其 `quality.wiki_version` 与当前 Wiki 的 `compilation.version` → 只重新生成过期 QA
 
@@ -337,7 +337,7 @@ retry_count 从 0 开始
 | 子 Agent 超时或失败 | 如果该阶段支持按实体派发（如 Wiki），只重试失败的实体。否则停止。 |
 | 领域配置 YAML 解析失败 | 回退到 generic.yaml。警告用户。 |
 | >20% 的输出 quality.confidence < 0.5 | 暂停管线。显示警告计数。询问用户：继续、修复后重试、或停止。 |
-| 管线中途中断 | 检查 pipeline-output/ 中已有文件。从最后一个完整的、输出通过质量检查的阶段恢复。 |
+| 管线中途中断 | 检查 {output_dir}/ 中已有文件。从最后一个完整的、输出通过质量检查的阶段恢复。 |
 | 无领域配置匹配用户输入 | 回退到 generic.yaml。询问是否将本次对话规则保存为新领域配置。 |
 
 ## 管线断点恢复
@@ -352,7 +352,7 @@ retry_count 从 0 开始
     运行本阶段（不是从头重跑——只跑本阶段）
 ```
 
-示例：Stage 1 通过，Stage 2 失败。修复问题后重新运行——编排器跳过 Stage 1（blocks 存在 + 通过验证），从 Stage 2 恢复。
+示例：Stage 1 通过，Stage 2 失败。修复问题后重新运行——编排器跳过 Stage 1（blocks 存在 + 质量报告 status=passed），从 Stage 2 恢复。
 
 **各阶段恢复逻辑：**
 
