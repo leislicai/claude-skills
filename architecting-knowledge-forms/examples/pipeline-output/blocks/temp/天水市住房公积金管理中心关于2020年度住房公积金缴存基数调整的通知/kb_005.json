@@ -1,0 +1,21 @@
+{
+  "id": "kb_005",
+  "content": "四、住房公积金按月缴存，月缴存额计算实行单位与职工同比例制度（根据《住房公积金管理条例》《住房公积金归集业务标准》，缴存单位和职工个人缴存比例分别不低于5%，不高于12%）。",
+  "summary": "缴存比例：实行单位与职工同比例制度，缴存比例范围为5%至12%，依据《住房公积金管理条例》及归集业务标准确定。",
+  "entities": [
+    {"id": "ent_月缴存额", "type": "condition", "name": "月缴存额"},
+    {"id": "ent_缴存单位", "type": "department", "name": "缴存单位"},
+    {"id": "ent_职工", "type": "condition", "name": "职工"},
+    {"id": "ent_住房公积金管理条例", "type": "policy", "name": "住房公积金管理条例"}
+  ],
+  "tags": ["condition", "procedure", "standards"],
+  "source": {
+    "file": "天水市住房公积金管理中心关于2020年度住房公积金缴存基数调整的通知.html",
+    "pages": [2],
+    "paragraphs": "第10段",
+    "line_range": "行21-23"
+  },
+  "quality": {
+    "confidence": 0.95
+  }
+}

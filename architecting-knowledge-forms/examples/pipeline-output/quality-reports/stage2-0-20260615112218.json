@@ -1,0 +1,91 @@
+{
+  "report_id": "stage2-0-20260615112218",
+  "stage": 2,
+  "status": "need_retry",
+  "retry_count": 0,
+  "timestamp": "2026-06-15T11:22:18.869358",
+  "summary": {
+    "total_count": 6,
+    "passed_count": 5,
+    "failed_count": 1,
+    "avg_confidence": 0.898
+  },
+  "checks": [
+    {
+      "check_name": "计数",
+      "layer": "relation",
+      "severity": "error",
+      "passed": true,
+      "details": "产出 65 个实体"
+    },
+    {
+      "check_name": "孤立实体率",
+      "layer": "relation",
+      "severity": "info",
+      "passed": true,
+      "details": "8/65 (12.3%), 阈值 15%",
+      "threshold": {
+        "actual": 12.307692307692308,
+        "expected": 15.0
+      },
+      "affected_items": [
+        "ent_提取条件",
+        "ent_贷款政策",
+        "ent_提取政策",
+        "ent_自愿缴存人员",
+        "ent_租赁提取",
+        "ent_周六不打烊服务",
+        "ent_延时服务",
+        "ent_天公积金发2020年53号文件"
+      ]
+    },
+    {
+      "check_name": "关系多样性",
+      "layer": "relation",
+      "severity": "error",
+      "passed": false,
+      "details": "'requires' 占比 64.9% (阈值 60%). 谓词分布: {'references': 20, 'requires': 63, 'part_of': 8, 'amends': 5, 'repeals': 1}",
+      "threshold": {
+        "actual": 64.94845360824742,
+        "expected": 60.0
+      }
+    },
+    {
+      "check_name": "关系密度",
+      "layer": "relation",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 1.5 条/实体, 总计 97 条"
+    },
+    {
+      "check_name": "实体命名合规",
+      "layer": "semantic",
+      "severity": "info",
+      "passed": true,
+      "details": "全部合规",
+      "affected_items": []
+    },
+    {
+      "check_name": "置信度扫描",
+      "layer": "relation",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 0.898, 低于0.5: 0/65 (0.0%)",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 20.0
+      }
+    }
+  ],
+  "feedback": {
+    "instruction_blocks": [
+      {
+        "severity": "error",
+        "check": "关系多样性",
+        "affected": [],
+        "instruction": "'requires' 占比 64.9% (阈值 60%). 谓词分布: {'references': 20, 'requires': 63, 'part_of': 8, 'amends': 5, 'repeals': 1}"
+      }
+    ]
+  },
+  "output_path": "/Users/cairuilin/Desktop/res"
+}

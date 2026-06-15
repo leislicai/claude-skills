@@ -1,0 +1,28 @@
+{
+  "id": "kb_012",
+  "content": "第七章 附则\n\n第四十五条 住房公积金财务管理和会计核算的办法，由国务院财政部门商国务院建设行政主管部门制定。\n\n第四十六条 本条例施行前尚未办理住房公积金缴存登记和职工住房公积金账户设立手续的单位，应当自本条例施行之日起60日内到住房公积金管理中心办理缴存登记，并到受委托银行办理职工住房公积金账户设立手续。\n\n第四十七条 本条例自发布之日起施行。",
+  "summary": "第七章附则规定：公积金财务管理和会计核算办法由国务院财政部门会同建设行政主管部门制定。本条例施行前未办理缴存登记和账户设立的单位，应自施行之日起60日内到中心办理登记并到受委托银行开立账户。本条例自发布之日起施行。",
+  "entities": [
+    {"id": "ent_住房公积金管理条例", "name": "住房公积金管理条例", "type": "policy"},
+    {"id": "ent_住房公积金", "name": "住房公积金", "type": "policy"},
+    {"id": "ent_住房公积金管理中心", "name": "住房公积金管理中心", "type": "department"},
+    {"id": "ent_受委托银行", "name": "受委托银行", "type": "department"},
+    {"id": "ent_国务院建设行政主管部门", "name": "国务院建设行政主管部门", "type": "department"},
+    {"id": "ent_财政部门", "name": "财政部门", "type": "department"},
+    {"id": "ent_单位", "name": "单位", "type": "department"},
+    {"id": "ent_职工", "name": "职工", "type": "condition"},
+    {"id": "ent_条款", "name": "条款", "type": "clause"}
+  ],
+  "tags": ["附则", "财务管理", "会计核算", "过渡规定", "60日", "施行日期"],
+  "source": {
+    "file": "住房公积金管理条例.html",
+    "url": "天水市公积金中心",
+    "updated_at": "2024-05-17"
+  },
+  "quality": {
+    "confidence": 0.95,
+    "content_non_empty": true,
+    "source_trace_valid": true,
+    "entities_resolvable": true
+  }
+}
