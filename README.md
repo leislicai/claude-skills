@@ -40,10 +40,10 @@ pipeline-output/
 
 | Stage | Output / 产出 | Quality / 质量 |
 |-------|------|------|
-| 1 — 块提取 | 29 blocks | 全机械检查 passed |
-| 2 — 实体提取 | 13 entities + 38 relations | 100% related, 0 英文违规 |
-| 3 — Wiki 编译 | 13 wiki pages | 全机械检查 passed |
-| 4 — QA 生成 | 95 QA pairs | 全机械检查 passed |
+| 1 — 块提取 | 43 blocks | 全阶段机械检查 passed |
+| 2 — 实体提取 | 14 entities + 25 relations | 100% related, 0 英文违规 |
+| 3 — Wiki 编译 | 14 wiki pages | 全阶段机械检查 passed |
+| 4 — QA 生成 | 28 QA pairs（12 场景，0 常识问题） | 全阶段机械检查 passed |
 
 See [architecting-knowledge-forms/examples/pipeline-output/](architecting-knowledge-forms/examples/pipeline-output/) for full output.
 
