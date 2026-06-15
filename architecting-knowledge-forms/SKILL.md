@@ -226,20 +226,94 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 
 子 Agent 读取 `pipeline-output/wiki/` 和 `pipeline-output/entities.json`，输出 `pipeline-output/qa_pairs.json`，遵循 [schemas/qa.schema.yaml](schemas/qa.schema.yaml)。
 
-### 阶段间验证：检查输出
+### 阶段间质量检查与反馈回环
 
-每阶段完成后、派发下一阶段前执行：
+本管线采用"检查→反馈→重做→再检"的闭环质量机制。每阶段输出后，编排器执行以下流程：
 
-1. **计数。** 如果输出文件数为 0，停止并报告："阶段 N 未产生任何输出。请检查输入数据。"
-2. **抽样。** 随机抽取 3 个输出文件。检查必填字段是否存在且非空。
-3. **阶段特定检查：**
-   - Stage 1：验证实体 ID 使用中文描述性名称。拒绝哈希型 UUID（`ent_ea6cc483bf7d`）和英文缩写（`ent_deposit_base`、`ent_tianshui_hf`）。如果超过 20% 的 block 有非中文实体 ID，停止并要求重新提取。
-   - Stage 2：验证 ≥50% 的实体有至少一条关系。如果 <50%，标记为稀疏图——询问用户是重新提取关系还是继续。
-   - Stage 3：验证 Wiki frontmatter 包含所有必填字段（`entity_id`、`title`、`compilation.version`、`compilation.status`）。检查文件名是否匹配 frontmatter 的 `entity_id`。
-4. **置信度扫描。** 如果超过 20% 的输出的 `quality.confidence < 0.5`，暂停并询问用户是继续、先修复低置信度输出、还是停止。
-5. **关系密度检查（仅 Stage 2）。** 如果每个实体的平均关系数 > 10，或总关系数 > 实体数 × 5，标记为"图谱可能过密"，询问用户是否提高共现阈值（如 ≥5 而非 ≥3）并重新提取。
-6. **检查通过** → 派发下一阶段。
-7. **检查不通过** → 停止。报告是哪个阶段、哪个文件、哪个字段以及具体的验证错误。不要派发下游阶段。
+#### 第 1 步：机械预检（编排器直接执行）
+
+编排器用脚本/命令行对输出执行机械性质检：
+
+1. **计数。** 输出文件数是否为 0？是则停止并报错。
+2. **实体 ID 命名合规（仅 Stage 2）。** 扫描所有 entity ID，`ent_` 后首个词是否为中文？若 >20% 不合规，标记并重做。
+3. **孤立实体率（仅 Stage 2）。** 无关系的实体占比 >15%？标记并重做。
+4. **关系多样性（仅 Stage 2）。** 某类谓词占比 >60%（如 references）？标记并重做。
+5. **关系密度（仅 Stage 2）。** 平均关系数 >10 或总数 > 实体数 ×5？标记并询问是否提高共现阈值。
+6. **置信度扫描。** 若 >20% 输出 confidence < 0.5，标记低质。
+7. **骨架完整性预检（仅 Stage 3）。** Wiki 文件数是否为 0？
+
+预检生成部分填写的质量报告（机械检查项目有结论，语义检查项目待填充）。
+
+#### 第 2 步：语义质量检查（派发子 Agent）
+
+若机械预检无致命问题，编排器派发 1 个子 Agent 运行 `prompts/quality-checks.md`，对该阶段输出进行语义层面评估。
+
+子 Agent 读取阶段输出 + 领域配置，按质量检查标准逐项评估，输出完整质量报告到 `pipeline-output/quality-reports/{stage}-{retry_count}-{timestamp}.json`。
+
+#### 第 3 步：判断与路由
+
+编排器读取质量报告：
+
+- **`status: "passed"`** → 进入下一阶段
+- **`status: "need_retry"`** → 进入反馈回环
+- **`status: "human_review_required"`** → 写入隔离目录，继续下游
+
+#### 反馈回环
+
+```
+retry_count 从 0 开始
+检查不通过（need_retry）→
+  retry_count += 1
+  if retry_count > 3:
+    标记 human_review_required
+    输出写入 pipeline-output/human-review/
+    继续下一阶段
+  else:
+    从质量报告提取 feedback.instruction_blocks
+    追加为子 Agent prompt 的 "## Quality Feedback" 章节
+    用该 prompt 重新派发同一阶段
+    重做完成后 → 再次进行质量检查
+```
+
+**反馈注入示例：**
+
+在子 Agent 的 prompt 末尾追加：
+
+```markdown
+## Quality Feedback
+
+该阶段的前一次输出经质量检查发现以下问题，请修复：
+
+### error: 实体命名不合规
+
+- 影响项：ent_clause_article_1, ent_policy_notice_46
+- 修复指令：将上述实体 ID 从英文/数字前缀改为中文描述名。
+  ent_clause_article_1 → ent_规范改进提取政策
+  ent_policy_notice_46 → ent_123号通知（以实际名称为准）
+
+### error: 时间修饰语降级
+
+- 影响项：ent_2020年度, ent_2021年度
+- 修复指令：这两个实体是其他实体的时间属性，不应独立存在。
+  将其从实体列表移除，改为对应实体的 properties（如 effective_year）
+
+### warning: 孤立实体率 21.8%（阈值 15%）
+
+- 修复指令：审查无关系的 31 个实体，对低频且无关联的实体进行合并或过滤。
+```
+
+#### 第 4 步：质量报告留存
+
+每阶段每次执行（含重试）均生成一份完整质量报告，写入：
+`pipeline-output/quality-reports/{stage}-{retry_count}-{timestamp}.json`
+
+#### 关于 human_review_required
+
+经过 3 次重试仍不通过的输出，不会阻塞管线。管线将该输出写入 `pipeline-output/human-review/` 目录并继续下游执行。标记的输出供人工后续集中审阅。此举确保不因某实体的质量问题阻塞整个知识库的生产。
+
+#### 与断点恢复的关系
+
+质量检查 + 反馈回环不改变断点恢复逻辑。若某阶段输出存在且最后一份质量报告 status 为 "passed"，则视为有效，跳过该阶段。若输出存在但最后一份质量报告 status 为 "human_review_required"，则在恢复时需用户确认是否重新执行。
 
 ### 级联更新（增量重跑）
 
@@ -282,10 +356,10 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 
 | 阶段 | 检查的输出 | 有效时的行为 |
 |-------|----------------|-----------------|
-| 1 | `{output_dir}/blocks/*.json` 存在、计数 > 0、通过阶段间验证 | 跳过块提取 |
-| 2 | `{output_dir}/entities.json` 存在、通过阶段间验证 | 跳过实体提取 |
-| 3 | `{output_dir}/wiki/*.md` 存在、计数 > 0、通过阶段间验证 | 跳过 Wiki 编译。增量模式只编译过期实体。 |
-| 4 | `{output_dir}/qa_pairs.json` 存在、通过阶段间验证 | 跳过 QA 生成 |
+| 1 | `{output_dir}/blocks/*.json` 存在、计数 > 0、且质量报告 status=passed | 跳过块提取 |
+| 2 | `{output_dir}/entities.json` 存在、且质量报告 status=passed | 跳过实体提取 |
+| 3 | `{output_dir}/wiki/*.md` 存在、计数 > 0、且质量报告 status=passed | 跳过 Wiki 编译。增量模式只编译过期实体。 |
+| 4 | `{output_dir}/qa_pairs.json` 存在、且质量报告 status=passed | 跳过 QA 生成 |
 
 **恢复检查是编排器在每个步骤的第一件事。** 必须在读取 prompt 模板或领域配置之前进行。
 
