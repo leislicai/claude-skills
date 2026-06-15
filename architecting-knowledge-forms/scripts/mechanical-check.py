@@ -3,10 +3,11 @@
 管线机械预检脚本 — 编排器在每个 Stage 完成后执行。
 
 用法：
-  python3 scripts/mechanical-check.py <stage> <output_dir>
+  python3 scripts/mechanical-check.py <stage> <output_dir> [--domain <config_path>]
 
   stage: 1|2|3|4
   output_dir: pipeline 输出根目录（如 /Users/xxx/res）
+  --domain: 领域配置 .yaml 路径（可选，用于读取领域特定的阈值）
 
 输出：JSON 格式的部分质量报告（机械检查结论 + 待语义检查项列表）
 
@@ -116,10 +117,47 @@ def check_stage_1(output_dir):
     return checks, avg_conf, valid_blocks / max(all_blocks, 1)
 
 
-def check_stage_2(output_dir):
+def check_stage_2(output_dir, domain_config=None):
     """Stage 2: Entity 质量预检"""
     checks = []
     entities_path = os.path.join(output_dir, "entities.json")
+
+    # 读取领域特定的谓词容忍度
+    pred_tolerances = {}
+    if domain_config and os.path.exists(domain_config):
+        try:
+            # 简单 YAML 解析（避免引入 pyyaml 依赖）
+            with open(domain_config) as f:
+                yaml_text = f.read()
+            import re as _re
+            # 解析 谓词容忍度 段落（灵活缩进，处理注释）
+            in_tolerance = False
+            current_pred = None
+            for line in yaml_text.split('\n'):
+                # 去掉注释
+                if '#' in line:
+                    line = line.split('#')[0]
+                stripped = line.strip()
+                if '谓词容忍度' in stripped:
+                    in_tolerance = True
+                    continue
+                if in_tolerance:
+                    # 检查是否是同级或更高级的 key（离开容忍度段落）
+                    if line and not line[0].isspace() and '谓词容忍度' not in stripped:
+                        if stripped:  # 非空行说明是新的顶级 key
+                            break
+                    # 匹配谓词名（如 requires: 或 references:）
+                    if stripped and stripped.endswith(':') and '上限' not in stripped and '原因' not in stripped:
+                        current_pred = stripped.replace(':', '').strip()
+                    elif '上限' in stripped and current_pred:
+                        val = _re.search(r'([\d.]+)', stripped)
+                        if val:
+                            pred_tolerances[current_pred] = float(val.group(1))
+        except Exception:
+            pass  # 解析失败则用默认值
+
+    # 默认阈值
+    default_max_pct = 60.0
 
     if not os.path.exists(entities_path):
         checks.append({
@@ -167,13 +205,24 @@ def check_stage_2(output_dir):
     max_pct = 100 * max_pred / total_rels if total_rels else 0
     max_name = preds.most_common(1)[0][0] if preds else "N/A"
 
+    # 每个谓词使用自己的容忍上限（领域配置值为 0-1 比例，需转为百分比）
+    pred_violations = []
+    for pred_name, count in preds.items():
+        pct = 100 * count / total_rels
+        raw_limit = pred_tolerances.get(pred_name, default_max_pct / 100.0)
+        # 如果 limit < 1，说明是比例，转为百分比
+        limit = raw_limit * 100 if raw_limit < 1 else raw_limit
+        if pct > limit:
+            pred_violations.append(f"{pred_name}={pct:.1f}% (上限{limit:.0f}%)")
+    diversity_passed = len(pred_violations) == 0
+
     checks.append({
         "check_name": "关系多样性",
         "layer": "relation",
-        "severity": "error" if max_pct > 60 else "info",
-        "passed": max_pct <= 60,
-        "details": f"'{max_name}' 占比 {max_pct:.1f}% (阈值 60%). 谓词分布: {dict(preds)}",
-        "threshold": {"actual": max_pct, "expected": 60.0}
+        "severity": "error" if not diversity_passed else "info",
+        "passed": diversity_passed,
+        "details": f"谓词分布: {dict(preds)}. " + ("全部在领域容忍范围内" if diversity_passed else f"超标: {', '.join(pred_violations)}"),
+        "threshold": {"actual": max_pct, "expected": default_max_pct}
     })
 
     # 关系密度
@@ -317,18 +366,28 @@ def check_stage_4(output_dir):
 
 def main():
     if len(sys.argv) < 3:
-        print("用法: python3 scripts/mechanical-check.py <stage> <output_dir>", file=sys.stderr)
+        print("用法: python3 scripts/mechanical-check.py <stage> <output_dir> [--domain <config_path>]", file=sys.stderr)
         sys.exit(2)
 
     stage = int(sys.argv[1])
     output_dir = sys.argv[2]
+
+    # 解析 --domain 参数
+    domain_config = None
+    if '--domain' in sys.argv:
+        idx = sys.argv.index('--domain')
+        if idx + 1 < len(sys.argv):
+            domain_config = sys.argv[idx + 1]
 
     check_fns = {1: check_stage_1, 2: check_stage_2, 3: check_stage_3, 4: check_stage_4}
     if stage not in check_fns:
         print(f"无效 stage: {stage}", file=sys.stderr)
         sys.exit(2)
 
-    checks, avg_confidence, health_score = check_fns[stage](output_dir)
+    if stage == 2:
+        checks, avg_confidence, health_score = check_stage_2(output_dir, domain_config)
+    else:
+        checks, avg_confidence, health_score = check_fns[stage](output_dir)
 
     errors = [c for c in checks if c["severity"] == "error" and not c["passed"]]
     warnings = [c for c in checks if c["severity"] == "warning" and not c["passed"]]

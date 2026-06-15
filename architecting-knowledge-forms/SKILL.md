@@ -239,7 +239,7 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
 编排器运行可执行脚本，不允许手动替代：
 
 ```bash
-python3 scripts/mechanical-check.py <stage> {output_dir}
+python3 scripts/mechanical-check.py <stage> {output_dir} --domain domains/gov-services.yaml
 ```
 
 该脚本自动执行：

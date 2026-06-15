@@ -1,11 +1,12 @@
 # 政务服务政策文件 — 领域配置
 # 公积金、医保、社保、税务等政务服务类政策文档通用
+# 本配置面向中文政策文档，字段名使用中文
 
-domain:
-  id: gov-services
-  name: 政务服务政策文件
-  description: 公积金、医保、社保、税务等政务部门的规范性文件
-  applies_to:
+领域:
+  编号: gov-services
+  名称: 政务服务政策文件
+  描述: 公积金、医保、社保、税务等政务部门的规范性文件
+  适用范围:
     - 住房公积金
     - 社会保险
     - 医疗保险
@@ -15,187 +16,272 @@ domain:
 # ============================================================
 # Stage 1: 知识块切分策略
 # ============================================================
-chunking:
-  mode: hybrid
-  structural_rules:
-    - pattern: "^第\\s*[一二三四五六七八九十百千0-9]+\\s*条"
-      boundary: after
-      label: article
-    - pattern: "^第\\s*[一二三四五六七八九十百千0-9]+\\s*章"
-      boundary: before
-      label: chapter
-    - pattern: "^[一二三四五六七八九十]、"
-      boundary: before
-      label: section
-  semantic_rules:
-    completeness_threshold: 0.8 # LLM 自包含判断阈值（0-1）
-    max_tokens: 2000
-    min_tokens: 80
-  hybrid:
-    structural_first: true
-    semantic_refine: true # 结构化切完用语义检查是否需要合并/再拆
+分块策略:
+  模式: 混合
+  结构化规则:
+    - 匹配: "^第\\s*[一二三四五六七八九十百千0-9]+\\s*条"
+      边界: 之后
+      标签: 条款
+    - 匹配: "^第\\s*[一二三四五六七八九十百千0-9]+\\s*章"
+      边界: 之前
+      标签: 章节
+    - 匹配: "^[一二三四五六七八九十]、"
+      边界: 之前
+      标签: 段落
+  语义规则:
+    完整性阈值: 0.8
+    最大token: 2000
+    最小token: 80
+  混合:
+    结构化优先: true
+    语义优化: true
 
 # ============================================================
 # Stage 2: 实体类型体系 + 关系谓词
 # ============================================================
-entity_types:
-  - id: policy
-    name: 政策法规
-    description: 政策文件本身或其上位法
-    examples: ["住房公积金管理条例", "关于调整缴存比例的通知"]
+实体类型:
+  - 编号: policy
+    名称: 政策法规
+    描述: 政策文件本身或其上位法
+    示例: ["住房公积金管理条例", "关于调整缴存比例的通知"]
 
-  - id: clause
-    name: 政策条款
-    description: 文件中的具体规定条目
-    examples: ["缴存比例", "提取条件", "贷款额度计算"]
+  - 编号: clause
+    名称: 政策条款
+    描述: 文件中的具体规定条目
+    示例: ["缴存比例", "提取条件", "贷款额度计算"]
 
-  - id: department
-    name: 责任部门
-    description: 执行或解释该条款的政府机构
-    examples: ["住房公积金管理中心", "人力资源和社会保障局"]
+  - 编号: department
+    名称: 责任部门
+    描述: 执行或解释该条款的政府机构
+    示例: ["住房公积金管理中心", "人力资源和社会保障局"]
+    对应模板: ["负责什么业务", "在哪里办理", "联系方式是什么"]
 
-  - id: condition
-    name: 适用条件
-    description: 条款生效的前提条件
-    examples: ["连续缴存满6个月", "首套自住住房"]
+  - 编号: condition
+    名称: 适用条件
+    描述: 条款生效的前提条件
+    示例: ["连续缴存满6个月", "首套自住住房"]
 
-  - id: material
-    name: 办理材料
-    description: 办理业务需要提交的证明文件
-    examples: ["身份证", "购房合同", "贷款申请表"]
+  - 编号: material
+    名称: 办理材料
+    描述: 办理业务需要提交的证明文件
+    示例: ["身份证", "购房合同", "贷款申请表"]
 
-  - id: procedure
-    name: 办理流程
-    description: 业务办理的步骤
-    examples: ["线上申请", "窗口受理", "审核审批"]
+  - 编号: procedure
+    名称: 办理流程
+    描述: 业务办理的步骤
+    示例: ["线上申请", "窗口受理", "审核审批"]
+    对应模板: ["需要什么材料", "需要多久", "怎么办理"]
 
-relation_predicates:
-  - id: part_of
-    name: 属于
-    inverse: contains
-    description: 条款属于某项政策，材料属于某个办理事项
+关系谓词:
+  - 编号: part_of
+    名称: 属于
+    逆向: contains
+    描述: 条款属于某项政策，材料属于某个办理事项
 
-  - id: references
-    name: 引用
-    inverse: referenced_by
-    description: 此条款引用了上位法或其他条款
+  - 编号: references
+    名称: 引用
+    逆向: referenced_by
+    描述: 此条款引用了上位法或其他条款。仅在其他谓词均不适用时使用。
 
-  - id: amends
-    name: 修订
-    inverse: amended_by
-    description: 新政策修订了旧政策的条款
+  - 编号: amends
+    名称: 修订
+    逆向: amended_by
+    描述: 新政策修订了旧政策的条款
 
-  - id: repeals
-    name: 废止
-    inverse: repealed_by
-    description: 新政策废止了旧政策或其中条款
+  - 编号: repeals
+    名称: 废止
+    逆向: repealed_by
+    描述: 新政策废止了旧政策或其中条款
 
-  - id: requires
-    name: 需要
-    inverse: required_by
-    description: 某项流程需要某种材料，某个条件触发某个条款
-
-# ============================================================
-# Stage 3: Wiki 页面骨架
-# ============================================================
-wiki_skeleton:
-  sections:
-    - name: 政策概述
-      key: overview
-      source: summary
-      description: 从 block.summary 聚合该实体的概要说明
-
-    - name: 核心标准
-      key: standards
-      source: properties
-      description: 从 entity.properties 取关键数值（比例、额度、年限）
-
-    - name: 适用条件
-      key: conditions
-      source: blocks_tagged_with
-      tag: condition
-      description: 找出所有 tag="条件" 的 block，列出适用/不适用场景
-
-    - name: 办理材料
-      key: materials
-      source: blocks_tagged_with
-      tag: material
-      description: 找出所有 tag="材料" 的 block，按 entity 分列
-
-    - name: 办理流程
-      key: procedure
-      source: blocks_tagged_with
-      tag: procedure
-      description: 找出所有 tag="流程" 的 block，按时序排列
-
-    - name: 常见问题
-      key: faq
-      source: derived_from_qa
-      description: 从关联 QA 对反向填充，选取 confidence ≥ 0.7 的
-
-    - name: 相关依据
-      key: references
-      source: relations
-      description: 从图谱 relations 列出引用/修订/废止/属于该实体的其他实体
+  - 编号: requires
+    名称: 需要
+    逆向: required_by
+    描述: 某项流程需要某种材料，某个条件触发某个条款
 
 # ============================================================
-# Stage 4: QA 生成模板
+# Stage 3: Wiki 页面骨架（按实体类型区分）
 # ============================================================
-qa_templates:
-  - pattern: "{{entity.name}}的标准是什么？"
-    source_section: standards
-    intents: ["查询标准"]
+Wiki骨架:
+  通用章节:  # 所有类型都包含
+    - 名称: 概述
+      键: overview
+      来源: summary
+    - 名称: 相关依据
+      键: references
+      来源: relations
 
-  - pattern: "{{entity.name}}适用于什么情况？"
-    source_section: conditions
-    intents: ["查询条件"]
+  按类型章节:
+    policy:  # 政策法规
+      - 名称: 核心规定
+        键: core_rules
+        来源: properties
+      - 名称: 适用范围
+        键: scope
+        来源: blocks_tagged_with
+        标签: condition
 
-  - pattern: "办理{{entity.name}}需要什么材料？"
-    source_section: materials
-    intents: ["查询材料"]
+    clause:  # 政策条款
+      - 名称: 核心标准
+        键: standards
+        来源: properties
+      - 名称: 适用条件
+        键: conditions
+        来源: blocks_tagged_with
+        标签: condition
 
-  - pattern: "{{entity.name}}怎么办理？"
-    source_section: procedure
-    intents: ["查询流程"]
+    department:  # 责任部门
+      - 名称: 职责范围
+        键: responsibilities
+        来源: properties
+      - 名称: 服务网点
+        键: locations
+        来源: blocks_tagged_with
+        标签: procedure
+      - 名称: 联系方式
+        键: contact
+        来源: properties
 
-  - pattern: "{{entity.name}}和{{related_entity.name}}有什么区别？"
-    source_section: overview
-    intents: ["对比"]
-    requires: related_entity
+    condition:  # 适用条件
+      - 名称: 条件详情
+        键: details
+        来源: properties
+      - 名称: 满足条件的后续步骤
+        键: next_steps
+        来源: relations
+
+    material:  # 办理材料
+      - 名称: 材料清单
+        键: checklist
+        来源: properties
+      - 名称: 材料要求
+        键: requirements
+        来源: blocks_tagged_with
+        标签: standards
+      - 名称: 关联业务
+        键: related_procedures
+        来源: relations
+
+    procedure:  # 办理流程
+      - 名称: 办理步骤
+        键: steps
+        来源: properties
+      - 名称: 所需材料
+        键: materials
+        来源: blocks_tagged_with
+        标签: material
+      - 名称: 办理时限
+        键: timeline
+        来源: properties
+
+# ============================================================
+# Stage 4: QA 生成模板（按实体类型区分）
+# ============================================================
+QA模板:
+  通用:  # 所有类型都适用
+    - 模式: "{{实体名}}是什么？"
+      来源章节: overview
+      意图: ["定义"]
+
+  policy:
+    - 模式: "{{实体名}}的核心规定是什么？"
+      来源章节: core_rules
+      意图: ["查询标准"]
+    - 模式: "{{实体名}}适用于什么范围？"
+      来源章节: scope
+      意图: ["查询范围"]
+
+  clause:
+    - 模式: "{{实体名}}的标准是什么？"
+      来源章节: standards
+      意图: ["查询标准"]
+    - 模式: "{{实体名}}适用于什么情况？"
+      来源章节: conditions
+      意图: ["查询条件"]
+    - 模式: "{{实体名}}和{{关联实体名}}有什么区别？"
+      来源章节: overview
+      意图: ["对比"]
+      需要: 关联实体
+
+  department:
+    - 模式: "{{实体名}}负责什么？"
+      来源章节: responsibilities
+      意图: ["查询职责"]
+    - 模式: "{{实体名}}在哪里？"
+      来源章节: locations
+      意图: ["查询地点"]
+    - 模式: "怎么联系{{实体名}}？"
+      来源章节: contact
+      意图: ["查询联系方式"]
+
+  condition:
+    - 模式: "{{实体名}}需要满足什么条件？"
+      来源章节: details
+      意图: ["查询条件"]
+    - 模式: "满足{{实体名}}后下一步做什么？"
+      来源章节: next_steps
+      意图: ["查询后续"]
+
+  material:
+    - 模式: "办理{{实体名}}需要什么材料？"
+      来源章节: checklist
+      意图: ["查询材料"]
+    - 模式: "{{实体名}}有什么要求？"
+      来源章节: requirements
+      意图: ["查询标准"]
+
+  procedure:
+    - 模式: "{{实体名}}怎么办理？"
+      来源章节: steps
+      意图: ["查询流程"]
+    - 模式: "{{实体名}}需要什么材料？"
+      来源章节: materials
+      意图: ["查询材料"]
+    - 模式: "{{实体名}}需要多久？"
+      来源章节: timeline
+      意图: ["查询时限"]
 
 # ============================================================
 # 质量规则
 # ============================================================
-quality:
-  format:
-    content_non_empty: true
-    source_trace_valid: true
-    entities_resolvable: true
+质量规则:
+  格式:
+    内容非空: true
+    源追溯有效: true
+    实体可解析: true
 
-  semantic:
-    entity_conflict_detection: true
-    conflict_action: flag_for_human_review
+  语义:
+    实体冲突检测: true
+    冲突处理: 标记人工审核
 
-    stale_detection:
-      enabled: true
-      trigger_keywords: ["废止", "修订", "取代", "不再适用", "自.*起废止"]
-      action: mark_stale
+    过期检测:
+      启用: true
+      触发关键词: ["废止", "修订", "取代", "不再适用", "自.*起废止"]
+      处理: 标记过期
 
-    human_review_required:
-      - when: confidence < 0.7
-      - when: entity_conflict_detected
-      - when: new_entity_type_discovered # 发现实体类型体系中没有的新类型
+    需人工审核:
+      - 当: confidence < 0.7
+      - 当: 检测到实体冲突
+      - 当: 发现实体类型体系中没有的新类型
 
-  domain_specific:
-    required_entity_types: ["policy", "clause"]
-    prohibited_patterns: ["已废止", "已失效", "试行中"]
-    prohibited_action: warn_and_flag
+  领域专属:
+    必须覆盖的实体类型: ["policy", "clause"]
+    禁止匹配: ["已废止", "已失效", "试行中"]
+    禁止处理: 警告并标记
+
+  # 谓词容忍度：政策文档中 requires 偏高是正常的（材料→流程、条件→条款的依赖链）
+  谓词容忍度:
+    requires:  # 政策文档中 requires 天然偏高
+      上限: 0.70  # 允许最高 70%（高于通用阈值 60%）
+      原因: "政策文档中材料需要流程、条件触发条款、流程依赖材料的链式关系是领域特性"
+    references:
+      上限: 0.30  # 严格限制——不应超过 30%
+      原因: "references 是兜底谓词，高占比说明关系语义不精确"
 
 # ============================================================
 # 级联更新触发规则
 # ============================================================
-cascade:
-  block_changed:
-    - re_extract_entities: true # 变更 block 的 entities[] 重新抽取
-    - re_compile_wikis: affected # 受影响 entity 的 Wiki 标记 stale
-    - re_generate_qa: affected # 受影响 Wiki 的 QA 标记 stale
+级联:
+  block变更:
+    - 重新提取实体: true
+    - 重新编译Wiki: 仅受影响
+    - 重新生成QA: 仅受影响
