@@ -6,317 +6,316 @@ tags: [knowledge-management, rag, architecture, data-modeling, pipeline]
 author: leislicai
 ---
 
-# Architecting Knowledge Forms
+# Architecting Knowledge Forms — 知识形态架构
 
-## Overview
+## 概述
 
-**Knowledge blocks are the single write target; graph, wiki, and QA pairs are derived from them — each with different update characteristics.** This skill provides both the architecture to design such systems and the execution pipeline to process documents through all four stages.
+**知识块（Knowledge Block）是唯一写入目标；图（Graph）、Wiki、QA 对都是从它派生出来的——各自有不同的更新特性。** 本 Skill 既提供了设计此类系统的架构原则，也提供了将文档依次处理完四个阶段的执行管线。
 
-## Platform Adaptation
+## 平台适配
 
-This skill is **orchestration-agnostic** (the dispatch pipeline works on any platform that supports sub-agents). **Language:** the entity-naming conventions and domain configs in this repo assume Chinese-language source documents. The orchestration pattern itself can be reused for other languages — create a translated domain config and update the entity-ID rules in `prompts/block-extraction.md`.
+本 Skill 是**编排器无关的**（派发管线可在任何支持子 Agent 的平台上运行）。**语言说明：** 实体命名约定和领域配置假定源文档为中文。编排模式本身可复用到其他语言——创建一个翻译后的领域配置并更新 `prompts/block-extraction.md` 中的实体 ID 规则即可。
 
-| Concept | Claude Code | Codex | Generic term used in this skill |
+| 概念 | Claude Code | Codex | 本 Skill 通用术语 |
 |---------|------------|-------|--------------------------------|
-| Load skill | `Skill` tool | `skill` tool | "load this skill" |
-| Dispatch sub-agent | `Agent` tool | `task` tool | "dispatch a sub-agent" |
-| Read/write files | `Read` / `Write` | `read` / `write` | "read/write the file" |
+| 加载 skill | `Skill` 工具 | `skill` 工具 | "加载该 skill" |
+| 派发子 Agent | `Agent` 工具 | `task` 工具 | "派发子 Agent" |
+| 读写文件 | `Read` / `Write` | `read` / `write` | "读取/写入文件" |
 
-**What's platform-agnostic (no changes needed):**
-- `prompts/*.md` — sub-agent instructions ("You are a ... agent")
-- `schemas/*.yaml` — output contracts
-- `domains/*.yaml` — domain configuration
-- Pipeline logic — READ→SUBSTITUTE→DISPATCH, Between-Stages validation, cascade updates, error handling, resumption
+**平台无关部分（无需修改）：**
+- `prompts/*.md` — 子 Agent 指令（"你是一个……Agent"）
+- `schemas/*.yaml` — 输出契约
+- `domains/*.yaml` — 领域配置
+- 管线逻辑 — READ→SUBSTITUTE→DISPATCH、阶段间验证、级联更新、错误处理、断点恢复
 
-**What needs platform-specific translation:**
-Only the `DISPATCH` step in each Stage — translate "dispatch a sub-agent" to your platform's sub-agent API. The rest of this skill reads identically across platforms.
+**需要平台特定适配的部分：**
+只有每个阶段的 `DISPATCH` 步骤——将"派发子 Agent"翻译为你平台的子 Agent API。技能其余部分在所有平台上读取方式相同。
 
-## When to Use
+## 何时使用
 
-**Apply when:**
-- Designing a knowledge system's data model
-- Processing documents through a multi-stage knowledge pipeline
-- Deciding how chunks / graph / wiki / QA relate
-- Evaluating separate stores vs unified architecture
+**适用场景：**
+- 设计知识系统的数据模型
+- 将文档通过多阶段知识管线加工处理
+- 决定分块（chunk）/ 图（graph）/ Wiki / QA 之间的关系
+- 评估独立存储 vs 统一架构的取舍
 
-**Do NOT use when:**
-- Building a simple FAQ bot (just blocks + QA, skip graph and wiki)
-- Pure document search (blocks + vector index, nothing else)
-- Already have a working single-store architecture (don't over-design)
+**不适用场景：**
+- 构建简单的 FAQ 机器人（只需 blocks + QA，跳过 graph 和 wiki）
+- 纯文档搜索（blocks + 向量索引，不需要其他形态）
+- 已有可用的单存储架构（不要过度设计）
 
-## Core Pattern
+## 核心模式
 
-### The Four Forms
+### 四种知识形态
 
-| Form | Role | Update |
+| 形态 | 角色 | 更新方式 |
 |------|------|--------|
-| **Knowledge Block** | Atomic, source-traced knowledge unit | **Write target** (immutable) |
-| **Knowledge Graph** | Entity-relation index | Near-real-time (from blocks.entities[]) |
-| **Wiki** | Curated entity pages, compiled | On block update (deferred build step) |
-| **QA Pairs** | Q+A anchored to source | After Wiki (two-hop derivation) |
+| **知识块（Knowledge Block）** | 原子级、带源追溯的知识单元 | **写入目标**（不可变） |
+| **知识图谱（Knowledge Graph）** | 实体-关系索引 | 从 blocks.entities[] 近实时派生 |
+| **Wiki** | 策划型实体页面，编译产出 | 在 block 更新时触发（延迟构建步骤） |
+| **QA 对** | 锚定源文档的问答对 | Wiki 完成后（两步派生） |
 
-### Compilation Pipeline
+### 编译管线
 
 ```
-Document → [Chunk] → Knowledge Blocks (single write target)
+文档 → [分块] → 知识块（唯一写入目标）
                          │
           ┌──────────────┼──────────────┐
           ▼              ▼              ▼
    Stage 2:        Stage 3:       Stage 4:
-   Entity          Wiki           QA
-   Extraction      Compilation    Generation
-   (blocks.        (blocks GROUP  (from Wiki
-   entities[]      BY entity →    pages →
-   → entities      sections       Q+A pairs)
+   实体提取         Wiki 编译      QA 生成
+   (blocks.        (blocks GROUP  (从 Wiki
+   entities[]      BY entity →    页面 →
+   → entities      sections       问答对)
    + relations)    per entity)
 ```
 
-### The Rules
+### 核心规则
 
-1. **One write target.** Blocks are the only write target. Graph, Wiki, QA derived via controlled pipeline steps, not independent write paths.
-2. **Entity granularity aligns.** Block entity tags, graph nodes, and wiki pages share one granularity.
-3. **Wiki is compiled, not rendered.** Build step triggered by block updates — preserves curated structure. Compile incrementally; never render dynamically from graph queries.
-4. **QA pairs derive from Wiki.** Wiki provides curated context — higher precision, less noise. Without Wiki, derive from blocks with explicit quality trade-off.
-5. **Block quality gates derivation.** Content non-empty. Source trace valid. Entities[] resolvable. A corrupt block poisons all downstream views — validate at write time.
+1. **一个写入目标。** Block 是唯一的写入目标。图、Wiki、QA 通过受控的管线步骤派生，不是独立的写路径。
+2. **实体粒度一致。** Block 的实体标签、图节点、Wiki 页面共享一套实体粒度。
+3. **Wiki 是编译的，不是渲染的。** 构建步骤由 block 更新触发——保留策划结构。增量编译；永远不要从图查询动态渲染。
+4. **QA 对从 Wiki 派生。** Wiki 提供策划上下文——精度更高、噪声更少。没有 Wiki 时，从 blocks 派生并明确接受质量折衷。
+5. **Block 质量门控下游视图。** 内容非空。源追溯有效。Entities[] 可解析。一个损坏的 block 会污染所有下游视图——在写入时验证。
 
-### Partial Forms
+### 部分形态组合
 
-| Subset | Use Case | First Build |
+| 子集 | 用途 | 首次构建 |
 |--------|----------|-------------|
-| Blocks only | Semantic search | Block extraction |
-| Blocks + Graph | Search + relationship nav | + entity extraction |
-| Blocks + Wiki | Knowledge browsing | + compilation |
-| Blocks + QA | RAG Q&A | + Q generation |
-| All four | Full knowledge platform | Full pipeline |
+| 仅 Blocks | 语义搜索 | 块提取 |
+| Blocks + Graph | 搜索 + 关系导航 | + 实体提取 |
+| Blocks + Wiki | 知识浏览 | + 编译 |
+| Blocks + QA | RAG 问答 | + QA 生成 |
+| 全部四种 | 完整知识平台 | 完整管线 |
 
-Constraint: **if >1 form, sync via derivation from blocks, never ETL between views.**
+约束：**如果有 >1 种形态，通过从 blocks 派生来同步，绝不要在各视图之间做 ETL。**
 
-## Pipeline Execution
+## 管线执行
 
-### How Orchestration Works
+### 编排工作原理
 
-Sub-agents run in isolated contexts — they cannot read files from the orchestrator's filesystem unless the platform explicitly supports it. To work across platforms safely, the orchestrator must **READ → SUBSTITUTE → DISPATCH**:
+子 Agent 在隔离上下文中运行——除非平台明确支持，否则它们无法读取编排器文件系统中的文件。为了跨平台安全工作，编排器必须遵循 **READ → SUBSTITUTE → DISPATCH**：
 
-1. **READ** the prompt template and any input data files
-2. **SUBSTITUTE** all `{variable}` placeholders with actual content (inlined, not referenced)
-3. **DISPATCH** the fully-resolved prompt string as a sub-agent task
+1. **READ** — 读取 prompt 模板和任何输入数据文件
+2. **SUBSTITUTE** — 将所有 `{variable}` 占位符替换为实际内容（内联，非引用）
+3. **DISPATCH** — 将完全解析后的 prompt 字符串作为子 Agent 任务派发
 
-Never pass a file path to a sub-agent. Always inline the content.
+绝不向子 Agent 传递文件路径。始终内联内容。
 
-### Scripting Policy
+### 脚本使用策略
 
-The orchestrator and sub-agents have different scripting rules:
+编排器和子 Agent 有不同的脚本使用规则：
 
-| Role | Scripts allowed? | Reason | Examples |
+| 角色 | 是否允许脚本？ | 原因 | 示例 |
 |------|-----------------|--------|---------|
-| **Orchestrator** | ✅ For mechanical tasks | Deterministic, reversible, doesn't affect content quality | File renaming, counting, sorting, field validation, normalization |
-| **Sub-agent** | ❌ For content work | Quality self-checks must be per-block. Scripts batch-process and skip verification. | Block extraction, entity extraction, wiki compilation, QA generation |
+| **编排器** | ✅ 用于机械任务 | 确定性、可逆、不影响内容质量 | 文件重命名、计数、排序、字段校验、规范化 |
+| **子 Agent** | ❌ 不可用于内容工作 | 质量自查必须逐 block 进行。脚本批量处理会跳过验证。 | 块提取、实体提取、Wiki 编译、QA 生成 |
 
-**Why:** An orchestrator renaming 259 files with a Python one-liner is reliable. A sub-agent extracting 200 blocks with a Python script skips the per-block quality self-check — the skill's primary quality gate. The `"Do NOT write Python scripts"` rule in prompt templates targets content extraction, not mechanical file operations.
+**原因：** 编排器用一行 Python 重命名 259 个文件是可靠的。子 Agent 用一个 Python 脚本提取 200 个 block 会跳过逐 block 的质量自查——这是本 Skill 的主要质量门控。prompt 模板中的 "Do NOT write Python scripts" 规则针对的是内容提取，不是机械性的文件操作。
 
-### Step 0: Gather Context
+### 第 0 步：收集上下文
 
-Ask the user:
+依次询问用户：
 
-1. **What domain?** (e.g. "housing-fund", "medical-insurance", "legal", or "generic")
-2. **What subset?** Default: all four forms. User can limit: "stop after graph" or "just blocks + QA".
-3. **Where are the source documents?** A directory path or list of files.
-4. **Where to write pipeline output?** Default: `./pipeline-output` in the current working directory. User can specify any path.
+1. **领域是什么？**（例如"公积金"、"医保"、"法律"或"通用"）
+2. **需要哪些形态？** 默认：全部四种。用户可限制范围："处理到 graph 就停"或"只要 blocks + QA"。
+3. **源文档在哪里？** 一个目录路径或文件列表。
+4. **管线输出写到哪里？** 默认：当前工作目录下的 `./pipeline-output`。用户可指定任意路径。
 
-Then resolve the domain config:
+然后解析领域配置：
 
 ```
-1. ls domains/ to list available configs
-2. For each .yaml file, read it and check domain.applies_to for a match
-3. If match found → use that config
-4. If no match → use domains/generic.yaml
-5. Offer to save a new domain config for unrecognized domains
+1. ls domains/ 列出可用配置
+2. 逐一读取 .yaml 文件，检查 domain.applies_to 是否匹配
+3. 匹配到 → 使用该配置
+4. 未匹配到 → 使用 domains/generic.yaml
+5. 对未识别的领域，询问是否保存为新领域配置
 ```
 
-Create the output directory at the user-specified path:
+在用户指定的路径创建输出目录：
 
 ```bash
 mkdir -p {output_dir}/blocks {output_dir}/wiki
 ```
 
-All subsequent pipeline references to `pipeline-output/` should use `{output_dir}/` instead.
+所有后续管线中对 `pipeline-output/` 的引用应改用 `{output_dir}/`。
 
-### Step 1: Stage 1 — Block Extraction (per document, parallel, isolated)
+### 第 1 步：Stage 1 — 块提取（按文档、并行、隔离）
 
-Parallel agents writing to a shared directory causes ID collisions. Each agent writes to a temp subdirectory; the orchestrator normalizes after all complete.
+多个并行 Agent 写入同一共享目录会导致 ID 冲突。每个 Agent 写入一个临时子目录；所有 Agent 完成后由编排器统一规范化。
 
 ```
-1. LIST source files in the user's document directory
+1. LIST 用户文档目录中的源文件
 2. READ prompts/block-extraction.md
-3. READ the matched domain config .yaml
-4. For EACH source document:
-   a. Assign a short doc_id (sanitized filename, e.g. "公积金管理条例")
-   b. In the prompt template, replace:
-      - {document_path} → the path to this single document
+3. READ 匹配的领域配置 .yaml
+4. 对每份源文档：
+   a. 分配简短 doc_id（文件名净化后，如"公积金管理条例"）
+   b. 在 prompt 模板中替换：
+      - {document_path} → 该文档的路径
       - {output_dir} → {user_output_dir}/blocks/temp/{doc_id}/
-      - {domain_config} → the full domain config YAML (inlined)
-   c. DISPATCH 1 sub-agent for this document
-5. Dispatch up to 8 agents in parallel. Wait for all.
-6. After ALL agents complete:
-   a. Gather all .json files from {output_dir}/blocks/temp/*/
-   b. Renumber them as kb_001.json, kb_002.json, ... sequentially into {output_dir}/blocks/
-   c. Delete temp directories
-   d. Run Between-Stages validation
+      - {domain_config} → 完整领域配置 YAML（内联）
+   c. DISPATCH 1 个子 Agent 处理该文档
+5. 同时派发最多 8 个 Agent。等待全部完成。
+6. 所有 Agent 完成后：
+   a. 收集 {output_dir}/blocks/temp/*/ 下所有 .json 文件
+   b. 重新编号为 kb_001.json、kb_002.json……顺序写入 {output_dir}/blocks/
+   c. 删除临时目录
+   d. 运行阶段间验证
 ```
 
-Each sub-agent writes to its OWN temp directory — no collisions. The orchestrator owns the final numbering, guaranteeing unique sequential IDs.
+每个子 Agent 写入**自己的**临时目录——不会发生冲突。编排器拥有最终的编号权，保证全局唯一的顺序 ID。
 
-**Resumption check:** If `{output_dir}/blocks/` already contains .json files that pass Between-Stages validation, ask the user: "Existing blocks found. Re-extract all, or only re-extract changed documents?" For changed-documents-only, compare source file timestamps against block timestamps and only dispatch agents for new/modified files.
+**断点恢复检查：** 如果 `{output_dir}/blocks/` 中已存在通过阶段间验证的 .json 文件，询问用户："已发现已有 block。全部重新提取，还是只重新提取变更的文档？"如选择仅变更文档，对比源文件时间戳和 block 时间戳，只对新增/修改的文件派发 Agent。
 
-### Step 2: Stage 2 — Entity Extraction
+### 第 2 步：Stage 2 — 实体提取
 
 ```
-1. Wait for Stage 1 to complete
+1. 等待 Stage 1 完成
 2. READ prompts/entity-extraction.md
-3. READ the domain config .yaml
-4. LIST pipeline-output/blocks/ to confirm blocks exist
-5. In the prompt template, replace:
-   - {domain_config} → the full domain config YAML (inlined)
-6. DISPATCH 1 sub-agent with the resolved prompt
+3. READ 领域配置 .yaml
+4. LIST pipeline-output/blocks/ 确认 block 存在
+5. 在 prompt 模板中替换：
+   - {domain_config} → 完整领域配置 YAML（内联）
+6. DISPATCH 1 个子 Agent 处理解析后的 prompt
 ```
 
-The sub-agent reads all blocks (the orchestrator inlines the block count in the prompt), normalizes entities with an old→new ID mapping, and extracts relations from entity co-occurrence patterns (≥3 shared blocks). Outputs `pipeline-output/entities.json` following [schemas/entities.schema.yaml](schemas/entities.schema.yaml).
+子 Agent 读取所有 blocks（编排器在 prompt 中内联 block 数量），使用旧→新 ID 映射规范化实体，并从实体共现模式（≥3 个共享 block）中提取关系。输出 `pipeline-output/entities.json`，遵循 [schemas/entities.schema.yaml](schemas/entities.schema.yaml)。
 
-**Relation quality gate:** Stage 2 output MUST have ≥50% of entities with at least one relation. If not, the Between-Stages check flags it and the orchestrator asks whether to re-extract or proceed with sparse relations.
+**关系质量门控：** Stage 2 输出 MUST 有 ≥50% 的实体拥有至少一条关系。否则阶段间验证会标记该问题，编排器询问是重新提取还是接受稀疏关系继续。
 
-### Step 3: Stage 3 — Wiki Compilation (prioritized, parallel)
+### 第 3 步：Stage 3 — Wiki 编译（按优先级、并行）
 
-Large entity catalogs (50+ entities) are too expensive for full parallel compilation. Prioritize by importance:
+大型实体目录（50+ 实体）全量并行编译成本过高。按重要度排序：
 
 ```
-1. Wait for Stage 2 to complete
-2. READ pipeline-output/entities.json to extract the entity list
-3. Rank entities by importance score:
+1. 等待 Stage 2 完成
+2. READ pipeline-output/entities.json 提取实体列表
+3. 按重要度评分排序：
    score = number_of_source_block_ids + number_of_relations + (1.5 if type is 'policy' else 0)
-   Sort descending. Top entities are the most heavily referenced, most connected policies.
-4. Ask the user: "N entities found. Top M by importance are [list]. Compile all N, or only top M?"
-   Default: compile policy + clause types only (typically covers 80%+ of knowledge value).
+   降序排列。顶部实体是被引用最多、关联度最高的政策实体。
+4. 询问用户："共 N 个实体。按重要度排名前 M 的是 [列表]。编译全部 N 个，还是仅前 M 个？"
+   默认值：仅编译 policy + clause 类实体（通常覆盖 80%+ 的知识价值）。
 5. READ prompts/wiki-compilation.md
-6. READ the domain config .yaml
-7. For each selected entity:
-   a. Filter pipeline-output/blocks/ for blocks whose entities[] contain this entity_id
-   a2. If total token count of filtered blocks exceeds 60,000:
-       - Prioritize blocks with highest quality.confidence
-       - Include blocks whose tags match wiki skeleton section keys first
-       - Summarize omitted blocks as: "[N additional blocks omitted due to context limit]"
-   b. In the prompt template, replace:
-      - {entity_id} → the entity's id
-      - {entity_data} → the entity's entry from entities.json (inlined)
-      - {relevant_blocks} → the filtered blocks' content + summary (inlined, not file paths)
-      - {domain_config} → the full domain config YAML (inlined)
-   c. DISPATCH 1 sub-agent per entity (parallel dispatch — each writes a different file)
+6. READ 领域配置 .yaml
+7. 对每个选中的实体：
+   a. 在 pipeline-output/blocks/ 中筛选 entities[] 包含该 entity_id 的 blocks
+   a2. 如筛选出的 blocks 的总 token 数超过 60,000：
+       - 优先选择 quality.confidence 最高的 blocks
+       - 优先包含 tags 匹配 Wiki 骨架章节键的 blocks
+       - 对被省略的 block 汇总为："[因上下文限制，省略 N 个附加 block]"
+   b. 在 prompt 模板中替换：
+      - {entity_id} → 实体的 id
+      - {entity_data} → 该实体在 entities.json 中的条目（内联）
+      - {relevant_blocks} → 筛选后的 blocks 内容 + 汇总说明（内联，非文件路径）
+      - {domain_config} → 完整领域配置 YAML（内联）
+   c. DISPATCH 每个实体 1 个子 Agent（并行派发——各自写入不同文件）
 ```
 
-Each sub-agent writes `pipeline-output/wiki/{entity_id}.md` following [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml).
+每个子 Agent 写入 `pipeline-output/wiki/{entity_id}.md`，遵循 [schemas/wiki.schema.yaml](schemas/wiki.schema.yaml)。
 
-### Step 4: Stage 4 — QA Generation
+### 第 4 步：Stage 4 — QA 生成
 
 ```
-1. Wait for all Stage 3 agents to complete
+1. 等待所有 Stage 3 的 Agent 完成
 2. READ prompts/qa-generation.md
-3. READ the domain config .yaml
-4. In the prompt template, replace:
-   - {domain_config} → the full domain config YAML (inlined, especially qa_templates)
-5. DISPATCH 1 sub-agent with the resolved prompt
+3. READ 领域配置 .yaml
+4. 在 prompt 模板中替换：
+   - {domain_config} → 完整领域配置 YAML（内联，尤其是 qa_templates）
+5. DISPATCH 1 个子 Agent 处理解析后的 prompt
 ```
 
-The sub-agent reads `pipeline-output/wiki/` and `pipeline-output/entities.json`, outputs `pipeline-output/qa_pairs.json` following [schemas/qa.schema.yaml](schemas/qa.schema.yaml).
+子 Agent 读取 `pipeline-output/wiki/` 和 `pipeline-output/entities.json`，输出 `pipeline-output/qa_pairs.json`，遵循 [schemas/qa.schema.yaml](schemas/qa.schema.yaml)。
 
-### Between Stages: Validate Output
+### 阶段间验证：检查输出
 
-After each stage completes, before dispatching the next stage:
+每阶段完成后、派发下一阶段前执行：
 
-1. **Count.** If output file count is 0, stop and report: "Stage N produced no output. Check input data."
-2. **Sample.** Pick 3 output files at random. Check required fields are present and non-empty.
-3. **Stage-specific checks:**
-   - Stage 1: Verify entity IDs use Chinese descriptive names. Reject hash-based UUIDs (`ent_ea6cc483bf7d`) AND English abbreviations (`ent_deposit_base`, `ent_tianshui_hf`). If >20% of blocks have non-Chinese entity IDs, stop and require re-extraction.
-   - Stage 2: Verify ≥50% of entities have at least one relation. If <50%, flag as sparse graph — ask user whether to re-extract relations or proceed.
-   - Stage 3: Verify wiki frontmatter has all required fields (`entity_id`, `title`, `compilation.version`, `compilation.status`). Check filenames match frontmatter `entity_id`.
-4. **Confidence scan.** If >20% of outputs have `quality.confidence < 0.5`, pause and ask the user whether to continue or fix the low-confidence outputs first.
-5. **Relation density check (Stage 2 only).** If avg relations per entity > 10, or total relations > 5× entity count, flag as "graph may be over-dense" and ask the user whether to raise the co-occurrence threshold (e.g. ≥5 instead of ≥3) and re-extract.
-6. **If checks pass** → dispatch next stage.
-7. **If checks fail** → stop. Report which stage, which file, which field, and the validation error. Do not dispatch downstream stages.
+1. **计数。** 如果输出文件数为 0，停止并报告："阶段 N 未产生任何输出。请检查输入数据。"
+2. **抽样。** 随机抽取 3 个输出文件。检查必填字段是否存在且非空。
+3. **阶段特定检查：**
+   - Stage 1：验证实体 ID 使用中文描述性名称。拒绝哈希型 UUID（`ent_ea6cc483bf7d`）和英文缩写（`ent_deposit_base`、`ent_tianshui_hf`）。如果超过 20% 的 block 有非中文实体 ID，停止并要求重新提取。
+   - Stage 2：验证 ≥50% 的实体有至少一条关系。如果 <50%，标记为稀疏图——询问用户是重新提取关系还是继续。
+   - Stage 3：验证 Wiki frontmatter 包含所有必填字段（`entity_id`、`title`、`compilation.version`、`compilation.status`）。检查文件名是否匹配 frontmatter 的 `entity_id`。
+4. **置信度扫描。** 如果超过 20% 的输出的 `quality.confidence < 0.5`，暂停并询问用户是继续、先修复低置信度输出、还是停止。
+5. **关系密度检查（仅 Stage 2）。** 如果每个实体的平均关系数 > 10，或总关系数 > 实体数 × 5，标记为"图谱可能过密"，询问用户是否提高共现阈值（如 ≥5 而非 ≥3）并重新提取。
+6. **检查通过** → 派发下一阶段。
+7. **检查不通过** → 停止。报告是哪个阶段、哪个文件、哪个字段以及具体的验证错误。不要派发下游阶段。
 
-### Cascade Update (Incremental Re-run)
+### 级联更新（增量重跑）
 
-When re-running after source documents change, the orchestrator must detect what changed and only re-derive affected artifacts:
+当源文档变更后重新运行管线时，编排器必须检测变更内容，只重新派生受影响的产物：
 
-1. Compare source document timestamps against `pipeline-output/blocks/*.json` timestamps → re-extract only changed documents
-2. Compare `pipeline-output/blocks/` timestamps against `pipeline-output/entities.json` timestamp → re-extract entities only if blocks changed
-3. For each wiki page, compare its `compilation.compiled_at` against the timestamps of blocks referencing its entity → recompile only stale wikis
-4. For each QA pair, compare its `quality.wiki_version` against the current wiki `compilation.version` → regenerate only stale QAs
+1. 对比源文档时间戳与 `pipeline-output/blocks/*.json` 时间戳 → 只重新提取变更的文档
+2. 对比 `pipeline-output/blocks/` 时间戳与 `pipeline-output/entities.json` 时间戳 → 仅当 blocks 变更时才重新提取实体
+3. 对每个 Wiki 页面，对比其 `compilation.compiled_at` 时间戳与引用其实体的 blocks 的时间戳 → 只重新编译过期 Wiki
+4. 对每个 QA 对，对比其 `quality.wiki_version` 与当前 Wiki 的 `compilation.version` → 只重新生成过期 QA
 
-**Important:** The orchestrator must inline the stale-detection instructions into each sub-agent's prompt. Sub-agents don't automatically know what's stale — the orchestrator tells them by only passing the changed data.
+**重要：** 编排器必须将过期检测指令内联到各子 Agent 的 prompt 中。子 Agent 不会自动知道哪些数据已过期——编排器通过只传入变更数据来告知它们。
 
-## Error Handling
+## 错误处理
 
-| Scenario | Action |
+| 场景 | 处理方式 |
 |----------|--------|
-| Stage produces 0 output files | Stop. Report: "Stage N produced no output. Check input data." |
-| Sub-agent returns empty or malformed output | Retry once with the same prompt. If retry fails, stop and report stage + error. |
-| Sub-agent times out or fails | If the stage supports per-entity dispatch (wiki), retry only the failed entity. Otherwise stop. |
-| Domain config YAML fails to parse | Fall back to generic.yaml. Warn user. |
-| quality.confidence < 0.5 on >20% of outputs | Pause pipeline. Show warning count. Ask user: continue, fix and retry, or stop. |
-| Pipeline interrupted mid-run | Check pipeline-output/ for existing files. Resume from the last complete stage whose output passes Between-Stages validation. |
-| No domain matches user's input | Fall back to generic.yaml. Offer to save session rules as a new domain config. |
+| 阶段产生 0 个输出文件 | 停止。报告："阶段 N 未产生任何输出。请检查输入数据。" |
+| 子 Agent 返回空或格式异常的输出 | 用相同 prompt 重试一次。重试仍失败则停止并报告阶段 + 错误详情。 |
+| 子 Agent 超时或失败 | 如果该阶段支持按实体派发（如 Wiki），只重试失败的实体。否则停止。 |
+| 领域配置 YAML 解析失败 | 回退到 generic.yaml。警告用户。 |
+| >20% 的输出 quality.confidence < 0.5 | 暂停管线。显示警告计数。询问用户：继续、修复后重试、或停止。 |
+| 管线中途中断 | 检查 pipeline-output/ 中已有文件。从最后一个完整的、输出通过阶段间验证的阶段恢复。 |
+| 无领域配置匹配用户输入 | 回退到 generic.yaml。询问是否将本次对话规则保存为新领域配置。 |
 
-## Pipeline Resumption
+## 管线断点恢复
 
-Every stage writes to a distinct location. A stage is "complete" if its output exists and passes Between-Stages validation. The pipeline can resume from any stage:
+每个阶段写入不同的位置。一个阶段如果在"完成"后其输出存在且通过阶段间验证，则可跳过。管线可以从任意阶段恢复：
 
 ```
-Before each stage, check:
-  if output exists AND passes validation:
-    skip → proceed to next stage
-  else:
-    run this stage (not from Stage 1 — just this stage)
+在每个阶段前检查：
+  如果输出存在 且 通过验证：
+    跳过 → 进入下一阶段
+  否则：
+    运行本阶段（不是从头重跑——只跑本阶段）
 ```
 
-Example: Stage 1 passes, Stage 2 fails. Fix the issue, re-run — the orchestrator skips Stage 1 (blocks exist + pass validation) and resumes at Stage 2.
+示例：Stage 1 通过，Stage 2 失败。修复问题后重新运行——编排器跳过 Stage 1（blocks 存在 + 通过验证），从 Stage 2 恢复。
 
-**Per-stage resumption logic:**
+**各阶段恢复逻辑：**
 
-| Stage | Output to check | Action if valid |
+| 阶段 | 检查的输出 | 有效时的行为 |
 |-------|----------------|-----------------|
-| 1 | `{output_dir}/blocks/*.json` exists, count > 0, passes Between-Stages | Skip block extraction |
-| 2 | `{output_dir}/entities.json` exists, passes Between-Stages | Skip entity extraction |
-| 3 | `{output_dir}/wiki/*.md` exists, count > 0, passes Between-Stages | Skip wiki compilation. For incremental, only compile stale entities. |
-| 4 | `{output_dir}/qa_pairs.json` exists, passes Between-Stages | Skip QA generation |
+| 1 | `{output_dir}/blocks/*.json` 存在、计数 > 0、通过阶段间验证 | 跳过块提取 |
+| 2 | `{output_dir}/entities.json` 存在、通过阶段间验证 | 跳过实体提取 |
+| 3 | `{output_dir}/wiki/*.md` 存在、计数 > 0、通过阶段间验证 | 跳过 Wiki 编译。增量模式只编译过期实体。 |
+| 4 | `{output_dir}/qa_pairs.json` 存在、通过阶段间验证 | 跳过 QA 生成 |
 
-**Resumption check is the FIRST thing the orchestrator does at each Step.** It must happen before reading prompt templates or domain configs.
+**恢复检查是编排器在每个步骤的第一件事。** 必须在读取 prompt 模板或领域配置之前进行。
 
-## Domain Configuration
+## 领域配置
 
-See [domains/gov-services.yaml](domains/gov-services.yaml) for the gov-services domain template. Each domain config provides: chunking strategy, entity types, relation predicates, wiki skeleton, QA templates, and quality rules.
+参见 [domains/gov-services.yaml](domains/gov-services.yaml) 了解 gov-services 领域模板。每个领域配置提供：分块策略、实体类型、关系谓词、Wiki 骨架、QA 模板、质量规则。
 
-**Dynamic predicates:** The 5 predicates are domain-config-defined, not hardcoded. Different domains may need different predicate sets. Stage 2 will flag relations that don't fit existing predicates as `new_predicate_suggested` in quality warnings. After each run, the orchestrator collects these and offers to add them to the domain config — making the system self-improving across domains.
+**动态谓词：** 5 个谓词由领域配置定义，而非硬编码。不同领域可能需要不同的谓词集。Stage 2 会将不符合现有谓词的关系在质量警告中标记为 `new_predicate_suggested`。每次运行后，编排器收集这些建议并询问是否将其加入领域配置——使系统可以跨领域自我改进。
 
-## Data Model
+## 数据模型
 
-- [data-model.md](data-model.md) — Four-form schemas, cross-reference topology, cascade model
-- [schemas/](schemas/) — Per-stage output schemas (the contract each sub-agent must follow)
+- [data-model.md](data-model.md) — 四种形态的 schema、交叉引用拓扑、级联模型
+- [schemas/](schemas/) — 各阶段输出 schema（子 Agent 必须遵循的契约）
 
-## Anti-Patterns
+## 反模式
 
-| Anti-Pattern | Why It Fails |
+| 反模式 | 失败原因 |
 |-------------|--------------|
-| N independent stores + ETL | N×ETL maintenance; granularity drift; inconsistency |
-| Graph as write-primary | Loses atomic traceability; blocks degrade to text chunks |
-| Wiki as dynamic graph render | Auto-update destroys curation |
-| QA from raw documents | Inherits noise; misses Wiki context |
-| Entity granularity mismatch | Graph coarse, blocks fine → can't trace across forms |
+| N 个独立存储 + ETL | N 倍 ETL 维护成本；粒度漂移；不一致 |
+| 图作为主写入目标 | 丢失原子可追溯性；block 退化为纯文本块 |
+| Wiki 作为动态图渲染 | 自动更新破坏策划质量 |
+| QA 从原始文档生成 | 继承噪声；缺失 Wiki 上下文 |
+| 实体粒度不一致 | 图粗块细 → 无法跨形态追溯 |
 
-## Red Flags
+## 红旗警示
 
-| Rationalization | Reality | Action |
+| 常见合理化理由 | 事实 | 应对 |
 |----------------|---------|--------|
-| "Four databases synced via ETL" | Building N stores. | Surface Rule 1 (one write target). Ask to refactor before proceeding. |
-| "The graph IS the knowledge" | Graph is the *relationship index*. | Point to data-model.md: blocks are the write target, graph is a derived view. |
-| "QA from raw docs is simpler" | Simpler to generate, worse quality. | Suggest deriving from Wiki first. If no Wiki exists, accept the trade-off explicitly. |
-| "Wiki auto-updates from graph" | Auto-update = no curation. | Explain compiled vs rendered. Offer incremental compilation as middle ground. |
-| "Views in different DBs = multi-store" | Different engines for READ are OK. | Confirm: is the write path still unified? If yes, different engines are fine. |
+|"四个数据库通过 ETL 同步就行" | 你是在建 N 个独立存储。 | 指出规则 1（一个写入目标）。要求先重构。 |
+|"图就是知识本身" | 图是*关系索引*。 | 指向 data-model.md：block 是写入目标，图是派生视图。 |
+|"从原始文档直接生成 QA 更简单" | 生成更简单，质量更差。 | 建议先走 Wiki 派生。如果没建 Wiki，明确接受这个质量折衷。 |
+|"Wiki 从图自动更新就行" | 自动更新 = 没有策划。 | 解释编译型 vs 渲染型的区别。提出增量编译作为折衷方案。 |
+|"不同数据库中的视图 = 多存储" | 不同的读取引擎是可以的。 | 确认：写路径是否是统一的？如果是，不同引擎没问题。 |
