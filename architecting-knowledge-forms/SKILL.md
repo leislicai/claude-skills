@@ -158,14 +158,26 @@ mkdir -p {output_dir}/blocks {output_dir}/wiki
       - {domain_config} → 完整领域配置 YAML（内联）
    c. DISPATCH 1 个子 Agent 处理该文档
 5. 同时派发最多 8 个 Agent。等待全部完成。
-6. 所有 Agent 完成后：
-   a. 收集 {output_dir}/blocks/temp/*/ 下所有 .json 文件
-   b. 重新编号为 kb_001.json、kb_002.json……顺序写入 {output_dir}/blocks/
-   c. 删除临时目录
-   d. 运行机械预检：`python3 scripts/mechanical-check.py 1 {output_dir}`
+6. 所有 Agent 完成后，逐文档验证再合并：
+   a. 对每个 temp/{doc_id}/ 子目录，逐一验证其中所有 .json 文件可被 json.load() 解析
+   b. 验证通过的文件 → 重新编号为 kb_001.json……顺序写入 {output_dir}/blocks/
+   c. 验证失败的文件 → 该文档的所有块都不合并，记录失败的 doc_id
+   d. 如果有文档验证失败 → 不删除 temp 目录，进入部分重试
+   e. 如果全部通过 → 删除 temp 目录，运行机械预检
 ```
 
-每个子 Agent 写入**自己的**临时目录——不会发生冲突。编排器拥有最终的编号权，保证全局唯一的顺序 ID。
+#### 部分重试（仅重试失败的文档）
+
+```
+如果某文档产出了坏 JSON：
+  1. 保留 temp/{失败doc_id}/ 目录（不删除）
+  2. 将坏 JSON 的文件名列表注入 Quality Feedback
+  3. 仅对该文档重新派发 Agent（prompt 末尾追加 Quality Feedback）
+  4. 重新验证 → 通过则合并该文档的块（延续当前编号）→ 删除 temp
+  5. 重试最多 3 次，仍失败则跳过该文档，记录到 human-review/
+```
+
+这确保一个文档的 JSON 格式问题不会导致整批重跑，也不会被静默丢弃。
 
 **断点恢复检查：** 如果 `{output_dir}/blocks/` 中已存在通过质量检查的 .json 文件，询问用户："已发现已有 block。全部重新提取，还是只重新提取变更的文档？"如选择仅变更文档，对比源文件时间戳和 block 时间戳，只对新增/修改的文件派发 Agent。
 
@@ -348,6 +360,7 @@ retry_count 从 0 开始
 | 场景 | 处理方式 |
 |----------|--------|
 | 阶段产生 0 个输出文件 | 停止。报告："阶段 N 未产生任何输出。请检查输入数据。" |
+| Stage 1 某文档产出坏 JSON | 部分重试：仅对该文档追加 Quality Feedback 重派 Agent，最多 3 次。仍失败则跳过该文档，记录到 human-review/ |
 | 子 Agent 返回空或格式异常的输出 | 用相同 prompt 重试一次。重试仍失败则停止并报告阶段 + 错误详情。 |
 | 子 Agent 超时或失败 | 如果该阶段支持按实体派发（如 Wiki），只重试失败的实体。否则停止。 |
 | 领域配置 YAML 解析失败 | 回退到 generic.yaml。警告用户。 |
@@ -379,6 +392,10 @@ retry_count 从 0 开始
 | 4 | `{output_dir}/qa_pairs.json` 存在、且质量报告 status=passed | 跳过 QA 生成 |
 
 **恢复检查是编排器在每个步骤的第一件事。** 必须在读取 prompt 模板或领域配置之前进行。
+
+**Stage 1 特殊处理：** 如果 `{output_dir}/blocks/temp/` 中仍有未清理的子目录，说明上次 Stage 1 有文档失败。恢复时优先对这些文档单独重试（用 Quality Feedback），通过后再合并。
+
+若 Stage 1 某文档重试 3 次仍失败，编排器跳过该文档并记录到 `{output_dir}/human-review/skipped-docs.json`，然后继续合并已通过文档的 blocks 并进入 Stage 2。
 
 ## 领域配置
 
