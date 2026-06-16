@@ -1,9 +1,9 @@
 {
-  "report_id": "stage1-0-20260615160717",
+  "report_id": "stage1-0-20260616153645",
   "stage": 1,
   "status": "passed",
   "retry_count": 0,
-  "timestamp": "2026-06-15T16:07:17.468033",
+  "timestamp": "2026-06-16T15:36:45.414736",
   "summary": {
     "total_count": 4,
     "passed_count": 4,
@@ -16,7 +16,7 @@
       "layer": "mechanical",
       "severity": "error",
       "passed": true,
-      "details": "产出 43 个 block",
+      "details": "产出 37 个 block",
       "affected_items": []
     },
     {
@@ -24,7 +24,7 @@
       "layer": "mechanical",
       "severity": "info",
       "passed": true,
-      "details": "均值 0.950, 低于0.5: 0/43 (0.0%)",
+      "details": "均值 0.950, 低于0.5: 0/29 (0.0%)",
       "threshold": {
         "actual": 0.0,
         "expected": 20.0
@@ -35,7 +35,7 @@
       "layer": "mechanical",
       "severity": "warning",
       "passed": true,
-      "details": "string 格式 152, object 格式 0"
+      "details": "string 格式 128, object 格式 0"
     },
     {
       "check_name": "实体命名合规",
@@ -53,5 +53,5 @@
   "feedback": {
     "instruction_blocks": []
   },
-  "output_path": "."
+  "output_path": "/Users/cairuilin/.claude/skills/architecting-knowledge-forms/examples/pipeline-output"
 }

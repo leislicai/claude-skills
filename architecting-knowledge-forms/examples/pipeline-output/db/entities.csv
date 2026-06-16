@@ -1,0 +1,9 @@
+id,name,type,properties,source_block_ids,confidence,warnings,relation_count
+ent_住房公积金,住房公积金,policy,{},kb_001|kb_002|kb_003|kb_004|kb_006|kb_007|kb_008|kb_009|kb_011|kb_012|kb_013|kb_014|kb_015|kb_016|kb_017|kb_018|kb_019|kb_020|kb_022|kb_023|kb_024|kb_025|kb_027,0.9,,2
+ent_住房公积金管理中心,住房公积金管理中心,department,{},kb_003|kb_007|kb_008|kb_009|kb_010|kb_013|kb_014|kb_016|kb_017|kb_018|kb_019|kb_020|kb_021|kb_022|kb_023|kb_024|kb_025|kb_026|kb_027,0.9,,3
+ent_职工,职工,condition,{},kb_002|kb_003|kb_004|kb_005|kb_008|kb_009|kb_010|kb_011|kb_012|kb_013|kb_014|kb_015|kb_016|kb_017|kb_022|kb_023|kb_024|kb_027,0.9,,2
+ent_单位,单位,department,{},kb_002|kb_004|kb_005|kb_009|kb_010|kb_011|kb_012|kb_013|kb_014|kb_015|kb_016|kb_022|kb_023|kb_027,0.9,,1
+ent_住房公积金管理委员会,住房公积金管理委员会,department,{},kb_003|kb_005|kb_006|kb_008|kb_012|kb_013|kb_018|kb_020|kb_021|kb_023|kb_024,0.9,,4
+ent_受委托银行,受委托银行,department,{},kb_008|kb_009|kb_013|kb_016|kb_017|kb_019|kb_022|kb_027,0.9,,2
+ent_国务院建设行政主管部门,国务院建设行政主管部门,department,{},kb_004|kb_023|kb_024|kb_025,0.9,,4
+ent_天水市住房公积金管理中心,天水市住房公积金管理中心,department,{},kb_028|kb_029|kb_030,0.9,no_relations,0

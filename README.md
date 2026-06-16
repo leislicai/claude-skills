@@ -6,7 +6,7 @@ Personal Claude Code skills collection. 个人 Claude Code 技能集合。
 
 | Skill | Version | Description / 描述 |
 |-------|---------|-------------|
-| [`architecting-knowledge-forms`](architecting-knowledge-forms/SKILL.md) | v2.7.0 | 多形态知识管线编排——Block → Entity → Wiki → QA。含领域配置、prompt 模板、schema 契约、质量检查反馈回环。Design + execute multi-form knowledge pipelines with hard-gate quality inspection and feedback loops. |
+| [`architecting-knowledge-forms`](architecting-knowledge-forms/SKILL.md) | v2.8.0 | 多形态知识管线编排——Block → Entity → Wiki → QA + DB Export。含领域配置、prompt 模板、schema 契约、质量检查反馈回环。Design + execute multi-form knowledge pipelines with hard-gate quality inspection and feedback loops. |
 
 **语言说明 / Language:** 实体命名和领域配置假定中文源文档。编排模式（临时目录隔离、断点恢复、质量检查、动态谓词）是语言无关的。Entity naming and domain configs assume Chinese-language source documents. The orchestration pattern is language-agnostic.
 

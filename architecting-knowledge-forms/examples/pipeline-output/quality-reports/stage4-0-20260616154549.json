@@ -1,14 +1,14 @@
 {
-  "report_id": "stage4-0-20260615161702",
+  "report_id": "stage4-0-20260616154549",
   "stage": 4,
   "status": "passed",
   "retry_count": 0,
-  "timestamp": "2026-06-15T16:17:02.699657",
+  "timestamp": "2026-06-16T15:45:49.303484",
   "summary": {
     "total_count": 3,
     "passed_count": 3,
     "failed_count": 0,
-    "avg_confidence": 0.95
+    "avg_confidence": 0.9
   },
   "checks": [
     {
@@ -16,14 +16,14 @@
       "layer": "mechanical",
       "severity": "error",
       "passed": true,
-      "details": "产出 28 个 QA 对"
+      "details": "产出 23 个 QA 对"
     },
     {
       "check_name": "置信度扫描",
       "layer": "mechanical",
       "severity": "info",
       "passed": true,
-      "details": "均值 0.950, 低于0.5: 0/28 (0.0%)",
+      "details": "均值 0.900, 低于0.5: 0/23 (0.0%)",
       "threshold": {
         "actual": 0.0,
         "expected": 20.0
@@ -34,11 +34,11 @@
       "layer": "mechanical",
       "severity": "info",
       "passed": true,
-      "details": "28/28 (100.0%) QA 有 source_block_ids"
+      "details": "23/23 (100.0%) QA 有 source_block_ids"
     }
   ],
   "feedback": {
     "instruction_blocks": []
   },
-  "output_path": "."
+  "output_path": "/Users/cairuilin/.claude/skills/architecting-knowledge-forms/examples/pipeline-output"
 }

@@ -311,6 +311,25 @@ python3 scripts/mechanical-check.py <stage> {output_dir} --domain domains/gov-se
 
 **门控规则：** `{output_dir}/quality-reports/` 中不存在对应阶段且 status=passed 的报告时，编排器不得进入下一阶段。
 
+#### DB 导出
+
+质量报告 `status=passed` 后，编排器立即运行机械性 DB 格式导出脚本：
+
+```bash
+python3 scripts/export-db-formats.py <N> {output_dir}
+```
+
+`<N>` 为当前阶段编号（1/2/3/4），产出的 DB 文件写入 `{output_dir}/db/`：
+
+| 阶段 | 产物 |
+|------|------|
+| Stage 1 | `blocks.jsonl`、`blocks.csv`、`blocks.sql` |
+| Stage 2 | `entities.jsonl`、`entities.csv`、`relations.csv`、`entities.cypher` |
+| Stage 3 | `wiki.jsonl`、`wiki.csv` |
+| Stage 4 | `qa_pairs.jsonl`、`qa_pairs.csv`、`qa_pairs.sql` |
+
+**格式说明：** JSONL 用于 NoSQL / 数据湖；CSV 用于通用导入（Excel / pandas / PostgreSQL COPY）；SQL 为 PostgreSQL DDL + INSERT；Cypher 为 Neo4j 图数据库脚本。导出为纯机械转换，不涉及子 Agent，不改变管线数据模型。
+
 #### 反馈回环
 
 ```

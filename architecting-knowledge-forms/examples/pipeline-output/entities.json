@@ -1,149 +1,240 @@
 {
   "entities": [
     {
-      "id": "ent_住房公积金管理中心",
-      "name": "住房公积金管理中心",
-      "type": "department",
-      "properties": {
-        "description": "直属城市人民政府的不以营利为目的的独立事业单位，负责住房公积金的管理运作"
-      },
+      "id": "ent_住房公积金",
+      "name": "住房公积金",
+      "type": "policy",
+      "properties": {},
       "relations": [
         {
           "target": "ent_单位",
           "predicate": "requires",
           "evidence_block_ids": [
+            "kb_002",
+            "kb_004",
+            "kb_009",
+            "kb_011",
+            "kb_012",
+            "kb_013",
             "kb_014",
             "kb_015",
-            "kb_016"
+            "kb_016",
+            "kb_022",
+            "kb_023",
+            "kb_027"
           ]
         },
         {
           "target": "ent_职工",
           "predicate": "requires",
           "evidence_block_ids": [
+            "kb_002",
+            "kb_003",
+            "kb_004",
+            "kb_008",
+            "kb_009",
+            "kb_011",
+            "kb_012",
+            "kb_013",
             "kb_014",
             "kb_015",
-            "kb_016"
-          ]
-        },
-        {
-          "target": "ent_受委托银行",
-          "predicate": "requires",
-          "evidence_block_ids": [
-            "kb_013",
-            "kb_014",
-            "kb_024"
-          ]
-        },
-        {
-          "target": "ent_住房公积金管理委员会",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_007",
-            "kb_013",
-            "kb_020"
-          ]
-        },
-        {
-          "target": "ent_财政部门",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_027",
-            "kb_028",
-            "kb_032"
-          ]
-        },
-        {
-          "target": "ent_住房城乡建设部",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_032",
-            "kb_033",
-            "kb_034"
+            "kb_016",
+            "kb_017",
+            "kb_022",
+            "kb_023",
+            "kb_024",
+            "kb_027"
           ]
         }
       ],
       "source_block_ids": [
+        "kb_001",
+        "kb_002",
+        "kb_003",
+        "kb_004",
+        "kb_006",
         "kb_007",
+        "kb_008",
+        "kb_009",
         "kb_011",
         "kb_012",
         "kb_013",
         "kb_014",
         "kb_015",
         "kb_016",
+        "kb_017",
+        "kb_018",
+        "kb_019",
         "kb_020",
-        "kb_021",
+        "kb_022",
+        "kb_023",
         "kb_024",
         "kb_025",
-        "kb_026",
-        "kb_027",
-        "kb_028",
-        "kb_029",
-        "kb_030",
-        "kb_031",
-        "kb_032",
-        "kb_033",
-        "kb_034"
+        "kb_027"
       ],
       "quality": {
-        "confidence": 0.95,
+        "confidence": 0.9,
         "warnings": []
       }
     },
     {
-      "id": "ent_住房公积金",
-      "name": "住房公积金",
-      "type": "policy",
-      "properties": {
-        "description": "国家机关、国有企业、城镇集体企业等单位为在职职工缴存的长期住房储金"
-      },
+      "id": "ent_住房公积金管理中心",
+      "name": "住房公积金管理中心",
+      "type": "department",
+      "properties": {},
       "relations": [
         {
-          "target": "ent_职工",
+          "target": "ent_住房公积金",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_003",
+            "kb_007",
+            "kb_008",
+            "kb_009",
+            "kb_013",
+            "kb_014",
+            "kb_016",
+            "kb_017",
+            "kb_018",
+            "kb_019",
+            "kb_020",
+            "kb_022",
+            "kb_023",
+            "kb_024",
+            "kb_025",
+            "kb_027"
+          ]
+        },
+        {
+          "target": "ent_受委托银行",
           "predicate": "requires",
           "evidence_block_ids": [
+            "kb_008",
+            "kb_009",
+            "kb_013",
+            "kb_016",
+            "kb_017",
+            "kb_019",
+            "kb_022",
+            "kb_027"
+          ]
+        },
+        {
+          "target": "ent_住房公积金",
+          "predicate": "amends",
+          "evidence_block_ids": [
+            "kb_003",
             "kb_007",
+            "kb_008",
+            "kb_009",
+            "kb_013",
+            "kb_014",
+            "kb_016",
+            "kb_017",
+            "kb_018",
+            "kb_019",
+            "kb_020",
+            "kb_022",
             "kb_023",
-            "kb_025"
-          ]
-        },
-        {
-          "target": "ent_住房城乡建设部",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_035",
-            "kb_043"
-          ]
-        },
-        {
-          "target": "ent_中国人民银行",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_035",
-            "kb_043"
+            "kb_024",
+            "kb_025",
+            "kb_027"
           ]
         }
       ],
       "source_block_ids": [
-        "kb_006",
+        "kb_003",
         "kb_007",
         "kb_008",
+        "kb_009",
+        "kb_010",
+        "kb_013",
+        "kb_014",
+        "kb_016",
+        "kb_017",
+        "kb_018",
+        "kb_019",
+        "kb_020",
+        "kb_021",
+        "kb_022",
         "kb_023",
+        "kb_024",
         "kb_025",
-        "kb_035",
-        "kb_036",
-        "kb_037",
-        "kb_038",
-        "kb_039",
-        "kb_040",
-        "kb_041",
-        "kb_042",
-        "kb_043"
+        "kb_026",
+        "kb_027"
       ],
       "quality": {
-        "confidence": 0.95,
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_职工",
+      "name": "职工",
+      "type": "condition",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_单位",
+          "predicate": "requires",
+          "evidence_block_ids": [
+            "kb_002",
+            "kb_004",
+            "kb_005",
+            "kb_009",
+            "kb_010",
+            "kb_011",
+            "kb_012",
+            "kb_013",
+            "kb_014",
+            "kb_015",
+            "kb_016",
+            "kb_022",
+            "kb_023",
+            "kb_027"
+          ]
+        },
+        {
+          "target": "ent_住房公积金管理中心",
+          "predicate": "requires",
+          "evidence_block_ids": [
+            "kb_003",
+            "kb_008",
+            "kb_009",
+            "kb_010",
+            "kb_013",
+            "kb_014",
+            "kb_016",
+            "kb_017",
+            "kb_022",
+            "kb_023",
+            "kb_024",
+            "kb_027"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_002",
+        "kb_003",
+        "kb_004",
+        "kb_005",
+        "kb_008",
+        "kb_009",
+        "kb_010",
+        "kb_011",
+        "kb_012",
+        "kb_013",
+        "kb_014",
+        "kb_015",
+        "kb_016",
+        "kb_017",
+        "kb_022",
+        "kb_023",
+        "kb_024",
+        "kb_027"
+      ],
+      "quality": {
+        "confidence": 0.9,
         "warnings": []
       }
     },
@@ -151,130 +242,123 @@
       "id": "ent_单位",
       "name": "单位",
       "type": "department",
-      "properties": {
-        "description": "国家机关、国有企业、城镇集体企业、外商投资企业、城镇私营企业及其他企事业单位等缴存单位"
-      },
+      "properties": {},
       "relations": [
         {
-          "target": "ent_职工",
-          "predicate": "part_of",
-          "evidence_block_ids": [
-            "kb_014",
-            "kb_015",
-            "kb_016"
-          ]
-        },
-        {
-          "target": "ent_受委托银行",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_014",
-            "kb_019",
-            "kb_024"
-          ]
-        }
-      ],
-      "source_block_ids": [
-        "kb_006",
-        "kb_014",
-        "kb_015",
-        "kb_016",
-        "kb_017",
-        "kb_019",
-        "kb_020",
-        "kb_022",
-        "kb_024",
-        "kb_029",
-        "kb_030",
-        "kb_031",
-        "kb_034"
-      ],
-      "quality": {
-        "confidence": 0.85,
-        "warnings": [
-          "实体名称较泛化，指代所有缴存公积金的用人单位"
-        ]
-      }
-    },
-    {
-      "id": "ent_职工",
-      "name": "职工",
-      "type": "department",
-      "properties": {
-        "description": "国家机关、企事业单位等单位的在职职工，为住房公积金的缴存主体"
-      },
-      "relations": [
-        {
-          "target": "ent_受委托银行",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_014",
-            "kb_019",
-            "kb_024"
-          ]
-        },
-        {
-          "target": "ent_住房公积金",
+          "target": "ent_住房公积金管理中心",
           "predicate": "requires",
           "evidence_block_ids": [
-            "kb_007",
+            "kb_009",
+            "kb_010",
+            "kb_013",
+            "kb_014",
+            "kb_016",
+            "kb_022",
             "kb_023",
-            "kb_025"
+            "kb_027"
           ]
         }
       ],
       "source_block_ids": [
-        "kb_007",
+        "kb_002",
+        "kb_004",
+        "kb_005",
+        "kb_009",
+        "kb_010",
+        "kb_011",
+        "kb_012",
+        "kb_013",
         "kb_014",
         "kb_015",
         "kb_016",
-        "kb_017",
-        "kb_019",
-        "kb_021",
+        "kb_022",
         "kb_023",
-        "kb_024",
-        "kb_025",
-        "kb_029",
-        "kb_030"
+        "kb_027"
       ],
       "quality": {
-        "confidence": 0.85,
-        "warnings": [
-          "实体名称较泛化，指代所有参与住房公积金的在职职工"
-        ]
+        "confidence": 0.9,
+        "warnings": []
       }
     },
     {
       "id": "ent_住房公积金管理委员会",
       "name": "住房公积金管理委员会",
       "type": "department",
-      "properties": {
-        "description": "住房公积金管理的决策机构，由人民政府负责人和建设、财政、人民银行等有关部门负责人及相关专家、工会和职工代表、单位代表各占三分之一"
-      },
+      "properties": {},
       "relations": [
         {
+          "target": "ent_住房公积金",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_003",
+            "kb_006",
+            "kb_008",
+            "kb_012",
+            "kb_013",
+            "kb_018",
+            "kb_020",
+            "kb_023",
+            "kb_024"
+          ]
+        },
+        {
           "target": "ent_住房公积金管理中心",
+          "predicate": "requires",
+          "evidence_block_ids": [
+            "kb_003",
+            "kb_008",
+            "kb_013",
+            "kb_018",
+            "kb_020",
+            "kb_021",
+            "kb_023",
+            "kb_024"
+          ]
+        },
+        {
+          "target": "ent_职工",
           "predicate": "references",
           "evidence_block_ids": [
-            "kb_007",
+            "kb_003",
+            "kb_005",
+            "kb_008",
+            "kb_012",
             "kb_013",
-            "kb_020"
+            "kb_023",
+            "kb_024"
+          ]
+        },
+        {
+          "target": "ent_住房公积金",
+          "predicate": "amends",
+          "evidence_block_ids": [
+            "kb_003",
+            "kb_006",
+            "kb_008",
+            "kb_012",
+            "kb_013",
+            "kb_018",
+            "kb_020",
+            "kb_023",
+            "kb_024"
           ]
         }
       ],
       "source_block_ids": [
-        "kb_007",
-        "kb_009",
-        "kb_010",
+        "kb_003",
+        "kb_005",
+        "kb_006",
+        "kb_008",
+        "kb_012",
         "kb_013",
         "kb_018",
         "kb_020",
-        "kb_026",
-        "kb_028",
-        "kb_032"
+        "kb_021",
+        "kb_023",
+        "kb_024"
       ],
       "quality": {
-        "confidence": 0.95,
+        "confidence": 0.9,
         "warnings": []
       }
     },
@@ -282,179 +366,34 @@
       "id": "ent_受委托银行",
       "name": "受委托银行",
       "type": "department",
-      "properties": {
-        "description": "住房公积金管理委员会指定的、受委托办理住房公积金金融业务的商业银行"
-      },
+      "properties": {},
       "relations": [
         {
-          "target": "ent_住房公积金管理中心",
-          "predicate": "requires",
+          "target": "ent_住房公积金",
+          "predicate": "part_of",
           "evidence_block_ids": [
+            "kb_008",
+            "kb_009",
             "kb_013",
-            "kb_014",
-            "kb_024"
+            "kb_016",
+            "kb_017",
+            "kb_019",
+            "kb_022",
+            "kb_027"
           ]
         },
-        {
-          "target": "ent_单位",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_014",
-            "kb_019",
-            "kb_024"
-          ]
-        },
-        {
-          "target": "ent_职工",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_014",
-            "kb_019",
-            "kb_024"
-          ]
-        }
-      ],
-      "source_block_ids": [
-        "kb_013",
-        "kb_014",
-        "kb_019",
-        "kb_024",
-        "kb_025",
-        "kb_027",
-        "kb_029",
-        "kb_030",
-        "kb_034"
-      ],
-      "quality": {
-        "confidence": 0.9,
-        "warnings": []
-      }
-    },
-    {
-      "id": "ent_财政部门",
-      "name": "财政部门",
-      "type": "department",
-      "properties": {
-        "description": "对住房公积金归集、提取和使用进行监督的各级人民政府财政部门"
-      },
-      "relations": [
         {
           "target": "ent_住房公积金管理中心",
           "predicate": "references",
           "evidence_block_ids": [
-            "kb_027",
-            "kb_028",
-            "kb_032"
-          ]
-        },
-        {
-          "target": "ent_住房城乡建设部",
-          "predicate": "references",
-          "evidence_block_ids": [
             "kb_008",
-            "kb_032",
-            "kb_033"
-          ]
-        }
-      ],
-      "source_block_ids": [
-        "kb_008",
-        "kb_022",
-        "kb_027",
-        "kb_028",
-        "kb_032",
-        "kb_033",
-        "kb_034"
-      ],
-      "quality": {
-        "confidence": 0.9,
-        "warnings": []
-      }
-    },
-    {
-      "id": "ent_住房城乡建设部",
-      "name": "住房城乡建设部",
-      "type": "department",
-      "properties": {
-        "description": "国务院建设行政主管部门，会同财政部门、中国人民银行拟定住房公积金政策并监督执行"
-      },
-      "relations": [
-        {
-          "target": "ent_住房公积金管理中心",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_032",
-            "kb_033",
-            "kb_034"
-          ]
-        },
-        {
-          "target": "ent_财政部门",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_032",
-            "kb_033"
-          ]
-        },
-        {
-          "target": "ent_住房公积金",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_035",
-            "kb_043"
-          ]
-        },
-        {
-          "target": "ent_中国人民银行",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_035",
-            "kb_043"
-          ]
-        }
-      ],
-      "source_block_ids": [
-        "kb_008",
-        "kb_032",
-        "kb_033",
-        "kb_034",
-        "kb_035",
-        "kb_043"
-      ],
-      "quality": {
-        "confidence": 0.95,
-        "warnings": [
-          "已合并原实体 ent_国务院建设行政主管部门"
-        ]
-      }
-    },
-    {
-      "id": "ent_中国人民银行",
-      "name": "中国人民银行",
-      "type": "department",
-      "properties": {
-        "description": "中央人民银行，负责提出住房公积金存贷利率，参与住房公积金政策拟定"
-      },
-      "relations": [
-        {
-          "target": "ent_住房公积金",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_035",
-            "kb_043"
-          ]
-        },
-        {
-          "target": "ent_住房城乡建设部",
-          "predicate": "references",
-          "evidence_block_ids": [
-            "kb_008",
-            "kb_035",
-            "kb_043"
+            "kb_009",
+            "kb_013",
+            "kb_016",
+            "kb_017",
+            "kb_019",
+            "kb_022",
+            "kb_027"
           ]
         }
       ],
@@ -462,102 +401,89 @@
         "kb_008",
         "kb_009",
         "kb_013",
-        "kb_035",
-        "kb_043"
+        "kb_016",
+        "kb_017",
+        "kb_019",
+        "kb_022",
+        "kb_027"
       ],
       "quality": {
-        "confidence": 0.95,
-        "warnings": [
-          "已合并原实体 ent_人民银行"
-        ]
+        "confidence": 0.9,
+        "warnings": []
+      }
+    },
+    {
+      "id": "ent_国务院建设行政主管部门",
+      "name": "国务院建设行政主管部门",
+      "type": "department",
+      "properties": {},
+      "relations": [
+        {
+          "target": "ent_住房公积金",
+          "predicate": "part_of",
+          "evidence_block_ids": [
+            "kb_004",
+            "kb_023",
+            "kb_024",
+            "kb_025"
+          ]
+        },
+        {
+          "target": "ent_住房公积金管理中心",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_023",
+            "kb_024",
+            "kb_025"
+          ]
+        },
+        {
+          "target": "ent_住房公积金",
+          "predicate": "references",
+          "evidence_block_ids": [
+            "kb_004",
+            "kb_023",
+            "kb_024",
+            "kb_025"
+          ]
+        },
+        {
+          "target": "ent_住房公积金管理中心",
+          "predicate": "repeals",
+          "evidence_block_ids": [
+            "kb_023",
+            "kb_024",
+            "kb_025"
+          ]
+        }
+      ],
+      "source_block_ids": [
+        "kb_004",
+        "kb_023",
+        "kb_024",
+        "kb_025"
+      ],
+      "quality": {
+        "confidence": 0.9,
+        "warnings": []
       }
     },
     {
       "id": "ent_天水市住房公积金管理中心",
       "name": "天水市住房公积金管理中心",
       "type": "department",
-      "properties": {
-        "description": "天水市住房公积金管理运作机构，负责天水市辖区内住房公积金的缴存、提取、贷款等业务"
-      },
+      "properties": {},
       "relations": [],
       "source_block_ids": [
-        "kb_001",
-        "kb_002",
-        "kb_003",
-        "kb_004",
-        "kb_005"
-      ],
-      "quality": {
-        "confidence": 0.95,
-        "warnings": []
-      }
-    },
-    {
-      "id": "ent_天水市统计局",
-      "name": "天水市统计局",
-      "type": "department",
-      "properties": {
-        "description": "天水市统计局，提供城镇非私营单位在岗职工年平均工资数据用于确定缴存基数上限"
-      },
-      "relations": [],
-      "source_block_ids": [
-        "kb_001",
-        "kb_003"
-      ],
-      "quality": {
-        "confidence": 0.95,
-        "warnings": []
-      }
-    },
-    {
-      "id": "ent_财政部",
-      "name": "财政部",
-      "type": "department",
-      "properties": {
-        "description": "中华人民共和国财政部，与住房城乡建设部、人民银行、公安部联合发布治理违规提取住房公积金通知"
-      },
-      "relations": [],
-      "source_block_ids": [
-        "kb_035",
-        "kb_043"
-      ],
-      "quality": {
-        "confidence": 0.95,
-        "warnings": []
-      }
-    },
-    {
-      "id": "ent_公安部",
-      "name": "公安部",
-      "type": "department",
-      "properties": {
-        "description": "中华人民共和国公安部，参与治理违规提取住房公积金工作，依法查处伪造虚假证明材料等行为"
-      },
-      "relations": [],
-      "source_block_ids": [
-        "kb_035",
-        "kb_043"
-      ],
-      "quality": {
-        "confidence": 0.95,
-        "warnings": []
-      }
-    },
-    {
-      "id": "ent_建金201846号",
-      "name": "建金[2018]46号",
-      "type": "material",
-      "properties": {
-        "description": "住房城乡建设部、财政部、人民银行、公安部联合发布的《关于开展治理违规提取住房公积金工作的通知》文号"
-      },
-      "relations": [],
-      "source_block_ids": [
-        "kb_035",
-        "kb_043"
+        "kb_028",
+        "kb_029",
+        "kb_030"
       ],
       "quality": {
         "confidence": 0.9,
-        "warnings": []
+        "warnings": [
+          "no_relations"
+        ]
       }
     }
   ]

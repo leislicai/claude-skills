@@ -1,14 +1,14 @@
 {
-  "report_id": "stage2-0-20260615161123",
+  "report_id": "stage2-0-20260616154126",
   "stage": 2,
   "status": "need_retry",
   "retry_count": 0,
-  "timestamp": "2026-06-15T16:11:23.148720",
+  "timestamp": "2026-06-16T15:41:26.240623",
   "summary": {
     "total_count": 6,
-    "passed_count": 4,
-    "failed_count": 2,
-    "avg_confidence": 0.925
+    "passed_count": 5,
+    "failed_count": 1,
+    "avg_confidence": 0.9
   },
   "checks": [
     {
@@ -16,34 +16,32 @@
       "layer": "mechanical",
       "severity": "error",
       "passed": true,
-      "details": "产出 14 个实体"
+      "details": "产出 10 个实体"
     },
     {
       "check_name": "孤立实体率",
       "layer": "mechanical",
       "severity": "error",
       "passed": false,
-      "details": "5/14 (35.7%), 阈值 15%",
+      "details": "3/10 (30.0%), 阈值 15%",
       "threshold": {
-        "actual": 35.714285714285715,
+        "actual": 30.0,
         "expected": 15.0
       },
       "affected_items": [
         "ent_天水市住房公积金管理中心",
-        "ent_天水市统计局",
-        "ent_财政部",
-        "ent_公安部",
-        "ent_建金201846号"
+        "ent_天水市住房公积金贷款业务规程",
+        "ent_最高贷款额"
       ]
     },
     {
       "check_name": "关系多样性",
       "layer": "mechanical",
-      "severity": "error",
-      "passed": false,
-      "details": "谓词分布: {'requires': 6, 'references': 18, 'part_of': 1}. 超标: references=72.0% (上限30%)",
+      "severity": "info",
+      "passed": true,
+      "details": "谓词分布: {'requires': 7, 'part_of': 4, 'amends': 2, 'references': 4, 'repeals': 1}. 全部在领域容忍范围内",
       "threshold": {
-        "actual": 72.0,
+        "actual": 38.888888888888886,
         "expected": 60.0
       }
     },
@@ -52,7 +50,7 @@
       "layer": "mechanical",
       "severity": "info",
       "passed": true,
-      "details": "均值 1.8 条/实体, 总计 25 条"
+      "details": "均值 1.8 条/实体, 总计 18 条"
     },
     {
       "check_name": "实体命名合规",
@@ -67,7 +65,7 @@
       "layer": "mechanical",
       "severity": "info",
       "passed": true,
-      "details": "均值 0.925, 低于0.5: 0/14 (0.0%)",
+      "details": "均值 0.900, 低于0.5: 0/10 (0.0%)",
       "threshold": {
         "actual": 0.0,
         "expected": 20.0
@@ -81,20 +79,12 @@
         "check": "孤立实体率",
         "affected": [
           "ent_天水市住房公积金管理中心",
-          "ent_天水市统计局",
-          "ent_财政部",
-          "ent_公安部",
-          "ent_建金201846号"
+          "ent_天水市住房公积金贷款业务规程",
+          "ent_最高贷款额"
         ],
-        "instruction": "5/14 (35.7%), 阈值 15%"
-      },
-      {
-        "severity": "error",
-        "check": "关系多样性",
-        "affected": [],
-        "instruction": "谓词分布: {'requires': 6, 'references': 18, 'part_of': 1}. 超标: references=72.0% (上限30%)"
+        "instruction": "3/10 (30.0%), 阈值 15%"
       }
     ]
   },
-  "output_path": "/Users/cairuilin/Desktop/res4"
+  "output_path": "/Users/cairuilin/.claude/skills/architecting-knowledge-forms/examples/pipeline-output"
 }

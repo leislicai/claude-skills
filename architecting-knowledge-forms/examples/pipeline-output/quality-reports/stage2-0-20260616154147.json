@@ -1,0 +1,77 @@
+{
+  "report_id": "stage2-0-20260616154147",
+  "stage": 2,
+  "status": "passed",
+  "retry_count": 0,
+  "timestamp": "2026-06-16T15:41:47.289475",
+  "summary": {
+    "total_count": 6,
+    "passed_count": 6,
+    "failed_count": 0,
+    "avg_confidence": 0.9
+  },
+  "checks": [
+    {
+      "check_name": "计数",
+      "layer": "mechanical",
+      "severity": "error",
+      "passed": true,
+      "details": "产出 8 个实体"
+    },
+    {
+      "check_name": "孤立实体率",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "1/8 (12.5%), 阈值 15%",
+      "threshold": {
+        "actual": 12.5,
+        "expected": 15.0
+      },
+      "affected_items": [
+        "ent_天水市住房公积金管理中心"
+      ]
+    },
+    {
+      "check_name": "关系多样性",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "谓词分布: {'requires': 7, 'part_of': 4, 'amends': 2, 'references': 4, 'repeals': 1}. 全部在领域容忍范围内",
+      "threshold": {
+        "actual": 38.888888888888886,
+        "expected": 60.0
+      }
+    },
+    {
+      "check_name": "关系密度",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 2.2 条/实体, 总计 18 条"
+    },
+    {
+      "check_name": "实体命名合规",
+      "layer": "semantic",
+      "severity": "info",
+      "passed": true,
+      "details": "全部合规",
+      "affected_items": []
+    },
+    {
+      "check_name": "置信度扫描",
+      "layer": "mechanical",
+      "severity": "info",
+      "passed": true,
+      "details": "均值 0.900, 低于0.5: 0/8 (0.0%)",
+      "threshold": {
+        "actual": 0.0,
+        "expected": 20.0
+      }
+    }
+  ],
+  "feedback": {
+    "instruction_blocks": []
+  },
+  "output_path": "/Users/cairuilin/.claude/skills/architecting-knowledge-forms/examples/pipeline-output"
+}
